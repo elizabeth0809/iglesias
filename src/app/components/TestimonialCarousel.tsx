@@ -44,7 +44,7 @@ export function TestimonialCarousel() {
       <Card className="max-w-2xl mx-auto">
         <CardContent className="pt-6">
           <blockquote className="text-xl italic">
-            "{testimonials[currentIndex].quote}"
+            {testimonials[currentIndex].quote}
           </blockquote>
           <footer className="mt-4 text-right">
             <cite>

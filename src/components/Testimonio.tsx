@@ -22,7 +22,7 @@ export default function Testimonios() {
       <CardContent>
         {testimonios.map((testimonio, index) => (
           <div key={index} className="mb-4">
-            <p className="italic mb-2">"{testimonio.testimonio}"</p>
+            <p className="italic mb-2">{testimonio.testimonio}</p>
             <p className="text-right">- {testimonio.nombre}</p>
           </div>
         ))}

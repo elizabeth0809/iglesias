@@ -1,5 +1,4 @@
 import BibliotecaMedias from "./components/BibliotecaMedias";
-import BlogEspiritual from "../blog/components/BlogEspiritual";
 import SermonesRecientes from "./components/SermonesRecientes";
 
 export default function SermonesMedias() {

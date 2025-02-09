@@ -101,9 +101,9 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Versículo del Día</h2>
           <blockquote className="text-2xl italic mb-4">
-            "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo
+            Porque de tal manera amó Dios al mundo, que ha dado a su Hijo
             unigénito, para que todo aquel que en él cree, no se pierda, mas
-            tenga vida eterna."
+            tenga vida eterna.
           </blockquote>
           <cite>— Juan 3:16</cite>
         </div>

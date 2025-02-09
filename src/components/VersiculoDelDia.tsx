@@ -8,9 +8,9 @@ export default function VersiculoDelDia() {
       </CardHeader>
       <CardContent>
         <p className="text-lg italic">
-          "Porque de tal manera amó Dios al mundo, que ha dado a su Hijo
+          Porque de tal manera amó Dios al mundo, que ha dado a su Hijo
           unigénito, para que todo aquel que en él cree, no se pierda, mas tenga
-          vida eterna."
+          vida eterna.
         </p>
         <p className="text-right mt-2">- Juan 3:16</p>
       </CardContent>
