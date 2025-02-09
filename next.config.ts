@@ -1,7 +1,8 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ["picsum.photos", "placehold.co", "via.placeholder.com"], // Agrega los dominios que usas
+  },
 };
 
 export default nextConfig;
