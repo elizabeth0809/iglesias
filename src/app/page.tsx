@@ -19,23 +19,28 @@ export default function Home() {
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative h-[60vh] bg-gray-900 text-white flex items-center justify-center">
+        {/* Imagen de fondo */}
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('/placeholder.svg?height=600&width=1200')",
+            backgroundImage: "url('/hero/hero-imagen.png')",
           }}
         ></div>
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        <div className="relative z-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Bienvenido a Nuestra Iglesia
+
+        {/* Capa negra encima para contraste */}
+        <div className="absolute inset-0 bg-black/40"></div>
+
+        {/* Contenido del hero */}
+        <div className="relative z-10 text-center px-4">
+          <h1 className=" md:text-6xl font-bold mb-4 font-serif text-4xl text-white">
+          Bem-vindo à Nossa Igreja
           </h1>
-          <p className="text-xl md:text-2xl mb-8">
-            Un lugar de fe, esperanza y amor
+          <p className="text-xl md:text-2xl mb-8 font-sans text-muted-foreground text-white">
+          Um lugar de Fé, Esperança e Amor
           </p>
-          <Button asChild size="lg">
+          {/* <Button asChild size="lg">
             <Link href="/sobre-nosotros">Conócenos</Link>
-          </Button>
+          </Button> */}
         </div>
       </section>
 

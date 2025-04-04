@@ -1,11 +1,22 @@
 import { Header } from "@/components/ui/header"
 import "./globals.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Lora } from "next/font/google";
 
 import type React from "react"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Iglesia Web",
@@ -18,12 +29,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
-      <body className={inter.className}>
-        <Header />
-        <div className="">{children}</div>
-      </body>
-    </html>
+  
+     <html lang="es" className={`${inter.variable} ${lora.variable}`}>
+     <body className="bg-background font-sans text-foreground">
+     <Header />
+      {children}</body>
+   </html>
   )
 }
 
