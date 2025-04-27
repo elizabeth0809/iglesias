@@ -5,18 +5,18 @@ import React from "react";
 
 export const FormularioComponent = () => {
   return (
-    <section className="py-16 bg-gray-100">
+    <section className="py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8 text-center">Contáctanos</h2>
+        <h2 className="text-3xl font-bold mb-8 text-center">Fale Conosco</h2>
         <form className="max-w-md mx-auto space-y-4">
           <div>
             <label
-              htmlFor="nombre"
+              htmlFor="nome"
               className="block text-sm font-medium text-gray-700"
             >
-              Nombre completo
+              Nome Completo
             </label>
-            <Input id="nombre" placeholder="Tu nombre completo" />
+            <Input id="nome" placeholder="Seu nome completo" />
           </div>
           <div>
             <label
@@ -25,18 +25,18 @@ export const FormularioComponent = () => {
             >
               WhatsApp
             </label>
-            <Input id="whatsapp" placeholder="Tu número de WhatsApp" />
+            <Input id="whatsapp" placeholder="Seu número de WhatsApp" />
           </div>
           <div>
             <label
-              htmlFor="descripcion"
+              htmlFor="descricao"
               className="block text-sm font-medium text-gray-700"
             >
-              Descripción
+              Descrição
             </label>
             <Textarea
-              id="descripcion"
-              placeholder="¿En qué podemos ayudarte?"
+              id="descricao"
+              placeholder="Em que podemos ajudar você?"
             />
           </div>
           <Button type="submit" className="w-full">

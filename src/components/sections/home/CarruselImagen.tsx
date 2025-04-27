@@ -6,7 +6,7 @@ export const CarruselImagenComponents = () => {
     <section className="py-16 bg-gray-100">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center">
-          Nuestra Comunidad en Imágenes
+        Um Olhar Sobre Nossa Comunidade
         </h2>
         <ImageCarousel />
       </div>

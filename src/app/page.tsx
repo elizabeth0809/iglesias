@@ -2,7 +2,7 @@
 import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
 import { EnlacesRapidos } from "@/components/sections/home/EnlacesRapidos";
 import { FormularioComponent } from "@/components/sections/home/formulario";
-import { VideosSermones } from "@/components/sections/home/VideosSermones";
+// import { VideosSermones } from "@/components/sections/home/VideosSermones";
 import { VersiculoDelDia } from "@/components/sections/home/VersiculoDelDia";
 import { TestimonioSection } from "@/components/sections/home/TestimonioSection";
 import { ProximosEventosSection } from "@/components/sections/home/ProximosEventosSection";
@@ -46,13 +46,13 @@ export default function Home() {
       <VersiculoDelDia />
 
       {/* Videos de Sermones */}
-      <VideosSermones />
+      {/* <VideosSermones /> */}
 
       {/* Carrusel de Imágenes */}
 
       <CarruselImagenComponents />
       {/* Enlaces Rápidos */}
-      <EnlacesRapidos />
+      {/* <EnlacesRapidos /> */}
 
       {/* Formulario de Contacto */}
       <FormularioComponent />
