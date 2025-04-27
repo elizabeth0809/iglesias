@@ -8,21 +8,21 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const testimonials = [
   {
     quote:
-      "Esta iglesia ha transformado mi vida. Encontré una comunidad amorosa y un propósito más grande.",
-    author: "María González",
-    role: "Miembro desde 2018",
+      "Esta igreja transformou a minha vida. Encontrei uma comunidade acolhedora e um propósito maior.",
+    author: "Maria González",
+    role: "Membro desde 2018",
   },
   {
     quote:
-      "Los sermones son inspiradores y relevantes para mi vida diaria. Me siento renovado cada semana.",
+      "Os sermões são inspiradores e relevantes para o meu dia a dia. Sinto-me renovado a cada semana.",
     author: "Juan Pérez",
-    role: "Miembro desde 2020",
+    role: "Membro desde 2020",
   },
   {
     quote:
-      "El programa juvenil ha sido una bendición para mis hijos. Han crecido tanto en su fe.",
+      "O programa juvenil tem sido uma bênção para os meus filhos. Eles cresceram muito na sua fé.",
     author: "Ana Rodríguez",
-    role: "Madre y miembro desde 2015",
+    role: "Mãe e membro desde 2015",
   },
 ];
 

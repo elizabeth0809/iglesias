@@ -1,18 +1,17 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-export default function VersiculoDelDia() {
+export default function VersiculoDoDia() {
   return (
     <Card className="mb-8">
       <CardHeader>
-        <CardTitle>Versículo del Día</CardTitle>
+        <CardTitle>Versículo do Dia</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-lg italic">
-          Porque de tal manera amó Dios al mundo, que ha dado a su Hijo
-          unigénito, para que todo aquel que en él cree, no se pierda, mas tenga
-          vida eterna.
+          Pois Deus amou o mundo de tal maneira que deu o seu único Filho,
+          para que todo aquele que nele crê não morra, mas tenha a vida eterna.
         </p>
-        <p className="text-right mt-2">- Juan 3:16</p>
+        <p className="text-right mt-2">- João 3:16</p>
       </CardContent>
     </Card>
   );

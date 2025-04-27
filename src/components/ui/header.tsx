@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Navigation } from "../Navigate";
-import { Church } from "lucide-react";
+
 
 export function Header() {
   return (

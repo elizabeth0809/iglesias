@@ -4,13 +4,12 @@ export const VersiculoDelDia = () => {
   return (
     <section className="py-16 bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold mb-4">Versículo del Día</h2>
+        <h2 className="text-3xl font-bold mb-4">Versículo do Dia</h2>
         <blockquote className="text-2xl italic mb-4">
-          Porque de tal manera amó Dios al mundo, que ha dado a su Hijo
-          unigénito, para que todo aquel que en él cree, no se pierda, mas tenga
-          vida eterna.
+          Pois Deus amou o mundo de tal maneira que deu o seu único Filho,
+          para que todo aquele que nele crê não morra, mas tenha a vida eterna.
         </blockquote>
-        <cite>— Juan 3:16</cite>
+        <cite>— João 3:16</cite>
       </div>
     </section>
   );

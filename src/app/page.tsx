@@ -1,18 +1,4 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Clock, ChevronRight } from "lucide-react";
-import { TestimonialCarousel } from "./components/TestimonialCarousel";
-import { ImageCarousel } from "./components/ImageCarousel";
+
 import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
 import { EnlacesRapidos } from "@/components/sections/home/EnlacesRapidos";
 import { FormularioComponent } from "@/components/sections/home/formulario";
