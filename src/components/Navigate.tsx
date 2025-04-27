@@ -7,9 +7,9 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "Inicio" },
-  { href: "/about-us", label: "Sobre Nosotros" },
-  { href: "/servicios", label: "Servicios y Actividades" }
+  { href: "/", label: "Início" },
+  { href: "/about-us", label: "Sobre Nós" },
+  { href: "/servicios", label: " Serviços e Atividades" }
 ];
 
 export function Navigation() {
