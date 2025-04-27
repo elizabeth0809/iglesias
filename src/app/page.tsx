@@ -1,6 +1,6 @@
 
 import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
-import { EnlacesRapidos } from "@/components/sections/home/EnlacesRapidos";
+
 import { FormularioComponent } from "@/components/sections/home/formulario";
 // import { VideosSermones } from "@/components/sections/home/VideosSermones";
 import { VersiculoDelDia } from "@/components/sections/home/VersiculoDelDia";
