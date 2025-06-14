@@ -1,11 +1,14 @@
-
+// src/app/page.tsx
 import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
-
 import { FormularioComponent } from "@/components/sections/home/formulario";
-// import { VideosSermones } from "@/components/sections/home/VideosSermones";
 import { VersiculoDelDia } from "@/components/sections/home/VersiculoDelDia";
 import { TestimonioSection } from "@/components/sections/home/TestimonioSection";
 import { ProximosEventosSection } from "@/components/sections/home/ProximosEventosSection";
+import { HomeCarouselsSection } from "@/components/sections/home/home.components";
+
+
+// Importar componentes que se cargan del cliente
+
 
 export default function Home() {
   return (
@@ -25,37 +28,35 @@ export default function Home() {
 
         {/* Contenido del hero */}
         <div className="relative z-10 text-center px-4">
-          <h1 className=" md:text-6xl font-bold mb-4 font-serif text-4xl text-white">
+          <h1 className="md:text-6xl font-bold mb-4 font-serif text-4xl text-white">
             Bem-vindo à Nossa Igreja
           </h1>
           <p className="text-xl md:text-2xl mb-8 font-sans text-muted-foreground text-white">
             Um lugar de Fé, Esperança e Amor
           </p>
-          {/* <Button asChild size="lg">
-            <Link href="/sobre-nosotros">Conócenos</Link>
-          </Button> */}
         </div>
       </section>
 
-      {/* Próximos Eventos */}
-      <ProximosEventosSection />
+      {/* Sección de Carrouseles que se carga del cliente */}
+      <HomeCarouselsSection />
+
       {/* Testimonio Carrusel */}
       <TestimonioSection />
 
       {/* Versículo del Día */}
       <VersiculoDelDia />
 
-      {/* Videos de Sermones */}
-      {/* <VideosSermones /> */}
-
       {/* Carrusel de Imágenes */}
-
       <CarruselImagenComponents />
-      {/* Enlaces Rápidos */}
-      {/* <EnlacesRapidos /> */}
 
       {/* Formulario de Contacto */}
       <FormularioComponent />
     </main>
   );
 }
+
+// Metadata para SEO
+export const metadata = {
+  title: 'Inicio - Nossa Igreja',
+  description: 'Bem-vindo à nossa igreja - Um lugar de Fé, Esperança e Amor. Descubre nuestros blogs, eventos y sermones.',
+};
