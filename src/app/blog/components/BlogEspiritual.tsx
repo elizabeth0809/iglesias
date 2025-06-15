@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { CalendarIcon } from 'lucide-react';
 import { IBlogResponse } from '@/insfractucture/interfaces/blogs/blog.interfaces';
 import { useEffect, useState } from 'react';
@@ -12,13 +13,12 @@ interface EntradasBlogsComponentProps {
 export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) => {
   const [mounted, setMounted] = useState(false);
 
-  // Evitar problemas de hidratación
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const formatDate = (dateString: string) => {
-    if (!mounted) return ''; // Evitar diferencias servidor/cliente
+    if (!mounted) return '';
     
     return new Date(dateString).toLocaleDateString('es-ES', {
       year: 'numeric',
@@ -28,7 +28,6 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
   };
 
   if (!mounted) {
-    // Renderizar version simplificada en servidor
     return (
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-3xl font-bold mb-8">Últimas Entradas</h2>
@@ -36,10 +35,12 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
           {blogs.map((post) => (
             <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="relative h-48 overflow-hidden">
-                <img
+                <Image
                   src={post.image || "/placeholder.svg"}
                   alt={post.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
               <div className="p-5">
@@ -80,13 +81,12 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
             >
               <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
                 <div className="relative h-48 overflow-hidden">
-                  <img
+                  <Image
                     src={post.image || "/placeholder.svg"}
                     alt={post.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => {
-                      e.currentTarget.src = "/placeholder.svg";
-                    }}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </div>
                 <div className="p-5">

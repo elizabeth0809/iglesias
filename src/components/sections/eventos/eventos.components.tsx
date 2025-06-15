@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, CalendarIcon, Clock, MapPin } from "lucide-react";
 import { IEventoResponse } from "@/insfractucture/interfaces/eventos/eventos.interfaces";
@@ -17,11 +18,11 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
   useEffect(() => {
     const updateVisibleItems = () => {
       if (window.innerWidth < 768) {
-        setVisibleItems(1); // Móvil
+        setVisibleItems(1);
       } else if (window.innerWidth < 1024) {
-        setVisibleItems(2); // Tablet
+        setVisibleItems(2);
       } else {
-        setVisibleItems(3); // Desktop
+        setVisibleItems(3);
       }
     };
 
@@ -96,13 +97,12 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                 <Link href={`/evento/${evento.id}`} className="block group">
                   <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1 border">
                     <div className="relative h-48 overflow-hidden">
-                      <img
+                      <Image
                         src={evento.imagem || "/placeholder.svg"}
                         alt={evento.nome}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        onError={(e) => {
-                          e.currentTarget.src = "/placeholder.svg";
-                        }}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                       
                       {/* Badge de estado */}

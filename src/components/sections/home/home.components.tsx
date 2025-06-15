@@ -5,7 +5,7 @@ import { blogGetAllAction } from "@/insfractucture/actions/blogs/get-blogs.actio
 import { GetEventosAllAction } from "@/insfractucture/actions/eventos/get-eventos.actions";
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 import { IEventoResponse } from "@/insfractucture/interfaces/eventos/eventos.interfaces";
-import { SermonsResponse } from "@/insfractucture/interfaces/sermones/sermones.interfaces";
+import { SermonResponse } from "@/insfractucture/interfaces/sermones/sermones.interfaces";
 import { getAllSermonsAction } from "@/insfractucture/actions/sermones/get-all-sermones.actions";
 import { EventosCarousel } from "../eventos/eventos.components";
 import { SermonesCarousel } from "../sermones/sermones.components";
@@ -14,7 +14,7 @@ import { BlogsCarousel } from "../blog/blog-carousel.components";
 interface HomeData {
   blogs: IBlogResponse[];
   eventos: IEventoResponse[];
-  sermones: SermonsResponse[];
+  sermones: SermonResponse[];
 }
 
 export function HomeCarouselsSection() {

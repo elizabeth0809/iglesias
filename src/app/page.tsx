@@ -1,4 +1,4 @@
-
+// src/app/page.tsx
 import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
 import { FormularioComponent } from "@/components/sections/home/formulario";
 import { VersiculoDelDia } from "@/components/sections/home/VersiculoDelDia";
@@ -12,7 +12,6 @@ import { blogGetAllAction } from "@/insfractucture/actions/blogs/get-blogs.actio
 import { GetEventosAllAction } from "@/insfractucture/actions/eventos/get-eventos.actions";
 import { getAllSermonsAction } from "@/insfractucture/actions/sermones/get-all-sermones.actions";
 
-
 async function getHomePageData() {
   try {
     const [blogsResult, eventosResult, sermonesResult] = await Promise.allSettled([
@@ -24,7 +23,12 @@ async function getHomePageData() {
     return {
       blogs: blogsResult.status === 'fulfilled' ? blogsResult.value.slice(0, 6) : [],
       eventos: eventosResult.status === 'fulfilled' ? eventosResult.value.slice(0, 6) : [],
-      sermones: sermonesResult.status === 'fulfilled' ? sermonesResult.value.slice(0, 6) : [],
+      // ↓ Cambio aquí: acceder al contenido del array si es necesario
+      sermones: sermonesResult.status === 'fulfilled' 
+        ? (Array.isArray(sermonesResult.value[0]) 
+           ? sermonesResult.value[0].slice(0, 6) 
+           : sermonesResult.value.slice(0, 6)) 
+        : [],
     };
   } catch (error) {
     console.error('Error fetching homepage data:', error);
@@ -37,7 +41,6 @@ async function getHomePageData() {
 }
 
 export default async function Home() {
- 
   const { blogs, eventos, sermones } = await getHomePageData();
 
   return (
@@ -61,16 +64,14 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Ahora puedes cambiar el orden como quieras */}
-      
       {/* Próximos Eventos Carousel */}
       <EventosCarousel eventos={eventos} />
 
-      {/* Testimonio Carrusel */}
-      <TestimonioSection />
-
       {/* Últimos Sermones Carousel */}
       <SermonesCarousel sermones={sermones} />
+
+      {/* Testimonio Carrusel */}
+      <TestimonioSection />
 
       {/* Versículo del Día */}
       <VersiculoDelDia />

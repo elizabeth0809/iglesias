@@ -10,8 +10,6 @@ export interface IEventoPayload {
   status?: EventoStatus;
 }
 
-export interface IEventoFormData extends FormData {}
-
 export interface IEventoResponse {
   id: number;
   nome: string;

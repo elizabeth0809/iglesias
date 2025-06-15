@@ -1,4 +1,3 @@
-// Interface para la respuesta de sermón individual
 export interface SermonResponse {
   id: number;
   titulo: string;
@@ -12,10 +11,8 @@ export interface SermonResponse {
   youtube_thumbnail: string;
 }
 
-// Interface para la respuesta de lista de sermones
-export interface SermonsResponse extends Array<SermonResponse> {}
+export type SermonsResponse = SermonResponse[];
 
-// Interface para crear/actualizar sermón
 export interface CreateSermonPayload {
   titulo: string;
   descripcion: string;

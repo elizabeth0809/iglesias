@@ -8,8 +8,6 @@ export interface IBlogPayload {
   status: BlogStatus;
   description: string;
 }
-export interface IBlogFormData extends FormData {}
-
 
 export interface IBlogResponse {
   id: number;
@@ -20,6 +18,6 @@ export interface IBlogResponse {
   slug: string;
   status: BlogStatus;
   category_id: string;
-  created_at: string; 
-  updated_at: string; 
+  created_at: string;
+  updated_at: string;
 }

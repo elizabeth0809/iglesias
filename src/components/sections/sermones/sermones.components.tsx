@@ -1,13 +1,14 @@
+"use client";
 
-"use client"
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, CalendarIcon, Play } from "lucide-react";
-import { SermonsResponse } from "@/insfractucture/interfaces/sermones/sermones.interfaces";
+import { SermonResponse } from "@/insfractucture/interfaces/sermones/sermones.interfaces";
 
 interface SermonesCarouselProps {
-  sermones: SermonsResponse[];
+  sermones: SermonResponse[]; // ← Cambio aquí: SermonResponse[] en lugar de SermonsResponse[]
 }
 
 export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
@@ -17,11 +18,11 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
   useEffect(() => {
     const updateVisibleItems = () => {
       if (window.innerWidth < 768) {
-        setVisibleItems(1); // Móvil
+        setVisibleItems(1);
       } else if (window.innerWidth < 1024) {
-        setVisibleItems(2); // Tablet
+        setVisibleItems(2);
       } else {
-        setVisibleItems(3); // Desktop
+        setVisibleItems(3);
       }
     };
 
@@ -80,7 +81,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
               transform: `translateX(-${currentIndex * (100 / visibleItems)}%)`,
             }}
           >
-            {sermones.map((sermon ) => (
+            {sermones.map((sermon) => (
               <div
                 key={sermon.id}
                 className="px-3 flex-shrink-0"
@@ -89,13 +90,12 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
                 <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 group">
                   {/* Thumbnail del video de YouTube */}
                   <div className="relative h-48 overflow-hidden bg-gray-100">
-                    <img
+                    <Image
                       src={sermon.youtube_thumbnail}
                       alt={sermon.titulo}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      onError={(e) => {
-                        e.currentTarget.src = "/placeholder.svg";
-                      }}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     
                     {/* Overlay con botón de play */}

@@ -1,4 +1,4 @@
-// src/app/blog/page.tsx
+
 import { blogGetAllAction } from '@/insfractucture/actions/blogs/get-blogs.actions';
 import { IBlogResponse } from '@/insfractucture/interfaces/blogs/blog.interfaces';
 import { EntradasBlogsComponent } from './components/BlogEspiritual';
@@ -18,11 +18,12 @@ async function getBlogs(page: number = 1): Promise<{ blogs: IBlogResponse[]; err
 }
 
 interface BlogsPageProps {
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string }>; // ← Cambio aquí: Promise<>
 }
 
 export default async function BlogsPage({ searchParams }: BlogsPageProps) {
-  const page = Number(searchParams.page) || 1;
+  const resolvedSearchParams = await searchParams; // ← Resolver la Promise
+  const page = Number(resolvedSearchParams.page) || 1;
   const { blogs, error } = await getBlogs(page);
 
   if (error) {

@@ -16,7 +16,7 @@ const images = [
 
 export function ImageCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [visibleImages, setVisibleImages] = useState(4); // Por defecto en desktop
+  const [visibleImages, setVisibleImages] = useState(3); // Por defecto en desktop
 
   // Ajusta el número de imágenes visibles según el tamaño de la pantalla
   useEffect(() => {
