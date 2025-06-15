@@ -1,6 +1,6 @@
-"use client";
 
-import { useState, useEffect } from "react";
+"use client"
+import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, CalendarIcon, Play } from "lucide-react";
@@ -80,7 +80,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
               transform: `translateX(-${currentIndex * (100 / visibleItems)}%)`,
             }}
           >
-            {sermones.map((sermon) => (
+            {sermones.map((sermon ) => (
               <div
                 key={sermon.id}
                 className="px-3 flex-shrink-0"

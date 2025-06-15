@@ -1,3 +1,4 @@
+"use client";
 import { ImageCarousel } from "@/app/components/ImageCarousel";
 import React from "react";
 

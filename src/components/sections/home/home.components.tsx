@@ -1,13 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-// Importar actions
 import { blogGetAllAction } from "@/insfractucture/actions/blogs/get-blogs.actions";
 import { GetEventosAllAction } from "@/insfractucture/actions/eventos/get-eventos.actions";
-
-
-// Importar interfaces
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 import { IEventoResponse } from "@/insfractucture/interfaces/eventos/eventos.interfaces";
 import { SermonsResponse } from "@/insfractucture/interfaces/sermones/sermones.interfaces";
