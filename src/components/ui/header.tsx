@@ -14,6 +14,7 @@ export function Header() {
             height={40}
             className="rounded-full" 
           />
+           <span className="text-xl ">Igreja Batista Renovada Sonho de Deus</span>
         </Link>
         <Navigation />
       </div>

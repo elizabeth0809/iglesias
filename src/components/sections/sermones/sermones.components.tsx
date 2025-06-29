@@ -54,7 +54,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
 
   if (!sermones || sermones.length === 0) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 ">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Últimos Sermões</h2>
           <div className="text-center text-gray-500">
@@ -66,7 +66,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 ">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold">Últimos Sermões</h2>

@@ -62,9 +62,9 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/favicon_io/android-chrome-192x192.png" />
       </head>
-      <body className="bg-background font-sans text-foreground">
-        <Header />
-        {children}
+      <body className="bg-background font-sans text-foreground"> 
+        <Header /> 
+        {children} 
         <Footer/>
       </body>
     </html>

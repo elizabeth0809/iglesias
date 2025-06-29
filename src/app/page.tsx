@@ -61,29 +61,31 @@ export default async function Home() {
           </h1>
           <p className="text-xl md:text-2xl mb-8 font-sans text-muted-foreground text-white">
             Um lugar de Fé, Esperança e Amor
-          </p>
+          </p>      
         </div>
       </section>
 
       {/* Carrossel de Próximos Eventos */}
       <EventosCarousel eventos={eventos} />
-
-      {/* Carrossel de Últimos Sermões */}
-      <SermonesCarousel sermones={sermones} />
-
-      {/* Seção de Testemunhos */}
+       <CarruselImagenComponents />
       <TestimonioSection />
+    <VersiculoDelDia />
+       <LocationSectionComplete />
+      {/* Carrossel de Últimos Sermões */}
+    
+      {/* Seção de Testemunhos */}
 
       {/* Versículo do Dia */}
-      <VersiculoDelDia />
+  
 
       {/* Carrossel de Últimas Entradas do Blog */}
       <BlogsCarousel blogs={blogs} />
-      <CarruselImagenComponents />
+     
+            <SermonesCarousel sermones={sermones} />
 
       {/* Formulário de Contato */}
       <FormularioComponent />
-      <LocationSectionComplete />
+   
     </main>
   );
 }
