@@ -28,10 +28,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const resolvedParams = await params; // ← Resolver la Promise
   const { slug } = resolvedParams;
   
-  const { blog, error } = await getBlogDetails(slug);
+  const { blog } = await getBlogDetails(slug); // Removido 'error' ya que no se usa
 
   // Si hay error o no se encuentra el blog, mostrar 404
-  if (error || !blog) {
+  if (!blog) {
     notFound();
   }
 
@@ -45,6 +45,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         day: "numeric",
       });
     } catch (error) {
+      console.error('Error formatting date:', error);
       return dateString;
     }
   };
@@ -112,7 +113,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               {/* Descripción como extracto destacado */}
               {blog.description && (
                 <div className="text-xl text-gray-700 font-medium mb-8 p-6 bg-gray-50 border-l-4 border-blue-500 rounded-r-lg italic">
-                  "{blog.description}"
+                  &ldquo;{blog.description}&rdquo;
                 </div>
               )}
 

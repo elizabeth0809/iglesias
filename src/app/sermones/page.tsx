@@ -44,9 +44,8 @@ interface SermonesPageProps {
 }
 
 export default async function SermonesPage({ searchParams }: SermonesPageProps) {
-  const resolvedSearchParams = await searchParams;
-  const page = Number(resolvedSearchParams.page) || 1;
-  
+
+  console.log('SermonesPage rendered', searchParams);
   const { sermones, error } = await getSermones();
 
   if (error) {
