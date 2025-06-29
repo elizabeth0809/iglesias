@@ -90,7 +90,8 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
             }}
           >
             {eventos.map((evento) => (
-              <div
+              <Link
+                href={`/eventos/${evento.id}`}
                 key={evento.id}
                 className="px-3 flex-shrink-0"
                 style={{ width: `${100 / visibleItems}%` }}
@@ -159,7 +160,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

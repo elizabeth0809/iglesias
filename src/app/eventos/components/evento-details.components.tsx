@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { CalendarIcon, MapPinIcon, ArrowLeftIcon, ClockIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { IEventoResponse } from '@/insfractucture/interfaces/eventos/eventos.interfaces';
+import { useEffect, useState } from 'react';
 
 interface EventoDetailComponentProps {
   evento: IEventoResponse;
@@ -49,6 +49,23 @@ export const EventoDetailComponent = ({ evento }: EventoDetailComponentProps) =>
     });
   };
 
+  const formatDescription = (description: string | null) => {
+    if (!description) return '';
+    
+    // Formatear texto que venga después de "tema :" o "TEMA :" en negrita
+    const formattedText = description
+      .replace(/(tema\s*:\s*)(.*?)(\r?\n|$)/gi, '<strong>Tema:</strong> <strong>$2</strong>$3')
+      .replace(/(TEMA\s*:\s*)(.*?)(\r?\n|$)/gi, '<strong>TEMA:</strong> <strong>$2</strong>$3')
+      // También formatear otras palabras clave comunes
+      .replace(/(horário\s*:\s*)(.*?)(\r?\n|$)/gi, '<strong>Horário:</strong> $2$3')
+      .replace(/(local\s*:\s*)(.*?)(\r?\n|$)/gi, '<strong>Local:</strong> $2$3')
+      .replace(/(data\s*:\s*)(.*?)(\r?\n|$)/gi, '<strong>Data:</strong> $2$3')
+      // Preservar saltos de línea
+      .replace(/\r?\n/g, '<br>');
+    
+    return formattedText;
+  };
+
   if (!mounted) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -88,15 +105,16 @@ export const EventoDetailComponent = ({ evento }: EventoDetailComponentProps) =>
         {/* Card principal del evento */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Imagen del evento */}
-          <div className="relative w-full h-96 md:h-[500px] lg:h-[600px]">
+          <div className="relative w-full h-auto">
             <Image
-              src={evento.imagem || "/placeholder.svg"}
-              alt={evento.nome}
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority
-            />
+                src={evento.imagem || "/placeholder.svg"}
+                alt={evento.nome}
+                width={1200}
+                height={800}
+                className="w-auto h-auto max-w-full max-h-[600px] object-contain mx-auto"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 1200px"
+                priority
+              />
             {/* Overlay con estado del evento */}
             <div className="absolute top-4 right-4">
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -149,9 +167,12 @@ export const EventoDetailComponent = ({ evento }: EventoDetailComponentProps) =>
             <div className="mb-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Sobre o Evento</h3>
               <div className="prose max-w-none">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {evento.descricao}
-                </p>
+                <div 
+                  className="text-gray-700 leading-relaxed"
+                  dangerouslySetInnerHTML={{ 
+                    __html: formatDescription(evento.descricao) 
+                  }}
+                />
               </div>
             </div>
 
