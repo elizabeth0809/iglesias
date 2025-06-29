@@ -1,5 +1,4 @@
-// src/app/page.tsx
-import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
+
 import { FormularioComponent } from "@/components/sections/home/formulario";
 import { VersiculoDelDia } from "@/components/sections/home/VersiculoDelDia";
 import { TestimonioSection } from "@/components/sections/home/TestimonioSection";
@@ -11,6 +10,7 @@ import { BlogsCarousel } from "@/components/sections/blog/blog-carousel.componen
 import { blogGetAllAction } from "@/insfractucture/actions/blogs/get-blogs.actions";
 import { GetEventosAllAction } from "@/insfractucture/actions/eventos/get-eventos.actions";
 import { getAllSermonsAction } from "@/insfractucture/actions/sermones/get-all-sermones.actions";
+import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
 
 async function getHomePageData() {
   try {
@@ -23,15 +23,15 @@ async function getHomePageData() {
     return {
       blogs: blogsResult.status === 'fulfilled' ? blogsResult.value.slice(0, 6) : [],
       eventos: eventosResult.status === 'fulfilled' ? eventosResult.value.slice(0, 6) : [],
-      // ↓ Cambio aquí: acceder al contenido del array si es necesario
-      sermones: sermonesResult.status === 'fulfilled' 
-        ? (Array.isArray(sermonesResult.value[0]) 
-           ? sermonesResult.value[0].slice(0, 6) 
-           : sermonesResult.value.slice(0, 6)) 
+      // ↓ Mudança aqui: acessar o conteúdo do array se necessário
+      sermones: sermonesResult.status === 'fulfilled'
+        ? (Array.isArray(sermonesResult.value[0])
+          ? sermonesResult.value[0].slice(0, 6)
+          : sermonesResult.value.slice(0, 6))
         : [],
     };
   } catch (error) {
-    console.error('Error fetching homepage data:', error);
+    console.error('Erro ao buscar dados da página inicial:', error);
     return {
       blogs: [],
       eventos: [],
@@ -45,7 +45,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section */}
+      {/* Seção Hero */}
       <section className="relative h-[60vh] bg-gray-900 text-white flex items-center justify-center">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -64,30 +64,28 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Próximos Eventos Carousel */}
+      {/* Carrossel de Próximos Eventos */}
       <EventosCarousel eventos={eventos} />
 
-      {/* Últimos Sermones Carousel */}
+      {/* Carrossel de Últimos Sermões */}
       <SermonesCarousel sermones={sermones} />
 
-      {/* Testimonio Carrusel */}
+      {/* Seção de Testemunhos */}
       <TestimonioSection />
 
-      {/* Versículo del Día */}
+      {/* Versículo do Dia */}
       <VersiculoDelDia />
 
-      {/* Últimas Entradas del Blog Carousel */}
+      {/* Carrossel de Últimas Entradas do Blog */}
       <BlogsCarousel blogs={blogs} />
       <CarruselImagenComponents />
 
-      {/* Formulario de Contacto */}
+      {/* Formulário de Contato */}
       <FormularioComponent />
     </main>
   );
 }
-
-// Metadata para SEO
 export const metadata = {
-  title: 'Inicio - Nossa Igreja',
-  description: 'Bem-vindo à nossa igreja - Um lugar de Fé, Esperança e Amor. Descubre nuestros blogs, eventos y sermones.',
+  title: 'Início - Nossa Igreja',
+  description: 'Bem-vindo à nossa igreja - Um lugar de Fé, Esperança e Amor. Descubra nossos blogs, eventos e sermões.',
 };

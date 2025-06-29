@@ -6,53 +6,52 @@
 //     <main className="min-h-screen bg-white">
 //       <div className="container mx-auto px-4 py-8">
 //         <h1 className="text-4xl font-bold mb-8 text-center">
-//           Sermones y Medios
+//           Sermões e Mídias
 //         </h1>
 //         <SermonesRecientes />
-//         <BibliotecaMedias />
-
+//         <BibliotecaMedias /> 
 //       </div>
 //     </main>
 //   );
 // }
+
 import { Metadata } from 'next';
 import { getAllSermonsAction } from '@/insfractucture/actions/sermones/get-all-sermones.actions';
 import { SermonResponse } from '@/insfractucture/interfaces/sermones/sermones.interfaces';
 import { SermonesListComponent } from './components/SermonesList';
- // Asume que existe esta interfaz
 
-// Esta función se ejecuta en el servidor
+// Esta função executa no servidor
 async function getSermones(): Promise<{ sermones: SermonResponse[]; error?: string }> {
   try {
     const sermonesData = await getAllSermonsAction();
-    
-    // Manejar diferentes formatos de respuesta
+        
+    // Manejar diferentes formatos de resposta
     const sermones = Array.isArray(sermonesData[0]) ? sermonesData[0] : sermonesData;
-    
+        
     return { sermones: Array.isArray(sermones) ? sermones : [] };
   } catch (error) {
-    console.error('Error fetching sermones:', error);
+    console.error('Erro ao buscar sermões:', error);
     return {
       sermones: [],
-      error: 'Error al cargar los sermones'
+      error: 'Erro ao carregar os sermões'
     };
   }
 }
 
 interface SermonesPageProps {
-  searchParams: Promise<{ page?: string }>; // Para paginación futura
+  searchParams: Promise<{ page?: string }>; // Para paginação futura
 }
 
 export default async function SermonesPage({ searchParams }: SermonesPageProps) {
-
-  console.log('SermonesPage rendered', searchParams);
+  
+  console.log('SermonesPage renderizada', searchParams);
   const { sermones, error } = await getSermones();
 
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Erro</h2>
           <p className="text-gray-600">{error}</p>
         </div>
       </div>
@@ -67,18 +66,18 @@ export default async function SermonesPage({ searchParams }: SermonesPageProps) 
 }
 
 export const metadata: Metadata = {
-  title: 'Sermones | Nossa Igreja',
-  description: 'Escucha nuestros sermones y predicas espirituales. Encuentra inspiración y enseñanzas bíblicas.',
-  keywords: 'sermones, predicas, igreja, biblia, enseñanzas, espiritual',
+  title: 'Sermões | Nossa Igreja',
+  description: 'Ouça nossos sermões e pregações espirituais. Encontre inspiração e ensinamentos bíblicos.',
+  keywords: 'sermões, pregações, igreja, bíblia, ensinamentos, espiritual',
   openGraph: {
-    title: 'Sermones | Nossa Igreja',
-    description: 'Escucha nuestros sermones y predicas espirituales. Encuentra inspiración y enseñanzas bíblicas.',
+    title: 'Sermões | Nossa Igreja',
+    description: 'Ouça nossos sermões e pregações espirituais. Encontre inspiração e ensinamentos bíblicos.',
     type: 'website',
     url: '/sermones',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sermones | Nossa Igreja',
-    description: 'Escucha nuestros sermones y predicas espirituales.',
+    title: 'Sermões | Nossa Igreja',
+    description: 'Ouça nossos sermões e pregações espirituais.',
   },
 };

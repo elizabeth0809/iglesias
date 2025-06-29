@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,7 +9,7 @@ import { ChevronLeft, ChevronRight, CalendarIcon, Play } from "lucide-react";
 import { SermonResponse } from "@/insfractucture/interfaces/sermones/sermones.interfaces";
 
 interface SermonesCarouselProps {
-  sermones: SermonResponse[]; // ← Cambio aquí: SermonResponse[] en lugar de SermonsResponse[]
+  sermones: SermonResponse[];
 }
 
 export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
@@ -32,7 +33,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
   }, []);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -55,9 +56,9 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
     return (
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Últimos Sermones</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">Últimos Sermões</h2>
           <div className="text-center text-gray-500">
-            No hay sermones disponibles
+            Nenhum sermão disponível
           </div>
         </div>
       </section>
@@ -68,7 +69,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Últimos Sermones</h2>
+          <h2 className="text-3xl font-bold">Últimos Sermões</h2>
           <Link href="/sermones" className="text-red-600 hover:text-red-800 font-medium">
             Ver todos →
           </Link>
@@ -88,7 +89,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
                 style={{ width: `${100 / visibleItems}%` }}
               >
                 <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 group">
-                  {/* Thumbnail del video de YouTube */}
+                  {/* Thumbnail do vídeo do YouTube */}
                   <div className="relative h-48 overflow-hidden bg-gray-100">
                     <Image
                       src={sermon.youtube_thumbnail}
@@ -98,7 +99,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     
-                    {/* Overlay con botón de play */}
+                    {/* Overlay com botão de play */}
                     <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <a
                         href={sermon.url_youtube}
@@ -110,7 +111,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
                       </a>
                     </div>
                     
-                    {/* Badge de estado */}
+                    {/* Badge de status */}
                     <div className="absolute top-3 right-3">
                       <span
                         className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold ${
@@ -119,12 +120,12 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
                             : "bg-gray-500 text-white"
                         }`}
                       >
-                        {sermon.activo ? "Activo" : "Inactivo"}
+                        {sermon.activo ? "Ativo" : "Inativo"}
                       </span>
                     </div>
                   </div>
 
-                  {/* Contenido del card */}
+                  {/* Conteúdo do card */}
                   <div className="p-5">
                     <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
                       {sermon.titulo}
@@ -141,7 +142,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
                       {sermon.descripcion}
                     </p>
                     
-                    {/* Acciones */}
+                    {/* Ações */}
                     <div className="flex items-center justify-between">
                       <a
                         href={sermon.url_youtube}
@@ -150,7 +151,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
                         className="inline-flex items-center text-red-600 hover:text-red-700 text-sm font-medium transition-colors duration-300"
                       >
                         <Play className="h-4 w-4 mr-1" />
-                        Ver en YouTube
+                        Ver no YouTube
                       </a>
                     </div>
                   </div>
@@ -159,7 +160,7 @@ export function SermonesCarousel({ sermones }: SermonesCarouselProps) {
             ))}
           </div>
 
-          {/* Botones de navegación */}
+          {/* Botões de navegação */}
           {sermones.length > visibleItems && (
             <>
               <Button

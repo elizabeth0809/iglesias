@@ -32,7 +32,7 @@ export function BlogsCarousel({ blogs }: BlogsCarouselProps) {
   }, []);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -55,9 +55,9 @@ export function BlogsCarousel({ blogs }: BlogsCarouselProps) {
     return (
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Últimas Entradas del Blog</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">Últimas Entradas do Blog</h2>
           <div className="text-center text-gray-500">
-            No hay entradas disponibles
+            Nenhuma entrada disponível
           </div>
         </div>
       </section>
@@ -68,7 +68,7 @@ export function BlogsCarousel({ blogs }: BlogsCarouselProps) {
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Últimas Entradas del Blog</h2>
+          <h2 className="text-3xl font-bold">Últimas Entradas do Blog</h2>
           <Link href="/blog" className="text-blue-600 hover:text-blue-800 font-medium">
             Ver todas →
           </Link>

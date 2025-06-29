@@ -21,6 +21,30 @@ const lora = Lora({
 export const metadata: Metadata = {
   title: "Iglesia Web",
   description: "Bienvenido a nuestra comunidad de fe",
+  icons: {
+    icon: [
+      {
+        url: "/favicon_io/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png"
+      },
+      {
+        url: "/favicon_io/favicon-32x32.png", 
+        sizes: "32x32",
+        type: "image/png"
+      },
+      {
+        url: "/favicon_io/favicon.ico",
+        sizes: "any"
+      }
+    ],
+    apple: {
+      url: "/favicon_io/android-chrome-192x192.png",
+      sizes: "192x192",
+      type: "image/png"
+    },
+    shortcut: "/favicon_io/favicon.ico"
+  }
 }
 
 export default function RootLayout({
@@ -29,12 +53,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-  
-     <html lang="es" className={`${inter.variable} ${lora.variable}`}>
-     <body className="bg-background font-sans text-foreground">
-     <Header />
-      {children}</body>
-   </html>
+    <html lang="es" className={`${inter.variable} ${lora.variable}`}>
+      <head>
+        {/* Enlaces adicionales para favicon (opcional, por compatibilidad) */}
+        <link rel="icon" type="image/x-icon" href="/favicon_io/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/favicon_io/android-chrome-192x192.png" />
+      </head>
+      <body className="bg-background font-sans text-foreground">
+        <Header />
+        {children}
+      </body>
+    </html>
   )
 }
-

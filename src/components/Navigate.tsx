@@ -12,7 +12,7 @@ const navItems = [
 
   { href: "/eventos", label: "Atividades" },
       { href: "/blog", label: "Blogs" },
-  { href: "/sermones", label: " Sermones" },
+  { href: "/sermones", label: " Sermões" },
 
 ];
 

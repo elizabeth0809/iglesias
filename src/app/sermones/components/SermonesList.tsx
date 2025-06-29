@@ -4,7 +4,7 @@ import { CalendarIcon, Play, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Interfaz para sermones (ajústala según tu estructura de datos)
+// Interface para sermões (ajuste conforme sua estrutura de dados)
 interface ISermonResponse {
   id: number;
   titulo: string;
@@ -14,7 +14,7 @@ interface ISermonResponse {
   activo: boolean;
   created_at: string;
   updated_at: string;
-  slug?: string; // Si tienes slug para URLs amigables
+  slug?: string; // Se você tem slug para URLs amigáveis
 }
 
 interface SermonesListComponentProps {
@@ -23,7 +23,7 @@ interface SermonesListComponentProps {
 
 export function SermonesListComponent({ sermones }: SermonesListComponentProps) {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -48,21 +48,21 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Sermones
+              Sermões
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Encuentra inspiración y enseñanzas bíblicas a través de nuestros sermones
+              Encontre inspiração e ensinamentos bíblicos através dos nossos sermões
             </p>
           </div>
 
-          {/* Estado vacío */}
+          {/* Estado vazio */}
           <div className="text-center py-12">
             <Play className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-600 mb-2">
-              No hay sermones disponibles
+              Nenhum sermão disponível
             </h3>
             <p className="text-gray-500">
-              Los sermones aparecerán aquí cuando estén disponibles.
+              Os sermões aparecerão aqui quando estiverem disponíveis.
             </p>
           </div>
         </div>
@@ -76,26 +76,26 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Sermones
+            Sermões
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Encuentra inspiración y enseñanzas bíblicas a través de nuestros sermones
+            Encontre inspiração e ensinamentos bíblicos através dos nossos sermões
           </p>
           <div className="mt-6">
             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-              {sermones.length} sermón{sermones.length !== 1 ? 'es' : ''} disponible{sermones.length !== 1 ? 's' : ''}
+              {sermones.length} sermã{sermones.length !== 1 ? 'o' : 'o'} disponível{sermones.length !== 1 ? 'eis' : ''}
             </span>
           </div>
         </div>
 
-        {/* Grid de sermones */}
+        {/* Grid de sermões */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {sermones.map((sermon) => (
             <div
               key={sermon.id}
               className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group"
             >
-              {/* Thumbnail del video */}
+              {/* Thumbnail do vídeo */}
               <div className="relative h-48 overflow-hidden bg-gray-100">
                 <Image
                   src={sermon.youtube_thumbnail || getYouTubeThumbnail(sermon.url_youtube)}
@@ -109,7 +109,7 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
                   }}
                 />
                 
-                {/* Overlay con botón de play */}
+                {/* Overlay com botão de play */}
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 flex items-center justify-center transition-all duration-300">
                   <div className="transform scale-0 group-hover:scale-100 transition-transform duration-300">
                     <div className="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-lg">
@@ -118,7 +118,7 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
                   </div>
                 </div>
                 
-                {/* Badge de estado */}
+                {/* Badge de status */}
                 <div className="absolute top-3 right-3">
                   <span
                     className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold ${
@@ -127,12 +127,12 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
                         : "bg-gray-500 text-white"
                     }`}
                   >
-                    {sermon.activo ? "Activo" : "Inactivo"}
+                    {sermon.activo ? "Ativo" : "Inativo"}
                   </span>
                 </div>
               </div>
 
-              {/* Contenido del card */}
+              {/* Conteúdo do card */}
               <div className="p-5">
                 <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 min-h-[3.5rem]">
                   {sermon.titulo}
@@ -151,7 +151,7 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
                   </p>
                 )}
                 
-                {/* Acciones */}
+                {/* Ações */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                   <a
                     href={sermon.url_youtube}
@@ -160,7 +160,7 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
                     className="inline-flex items-center text-red-600 hover:text-red-700 text-sm font-medium transition-colors duration-300 group/link"
                   >
                     <Play className="h-4 w-4 mr-1 group-hover/link:scale-110 transition-transform" />
-                    Ver sermón
+                    Ver sermão
                   </a>
                   
                   <a
@@ -168,7 +168,7 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-300"
-                    title="Abrir en YouTube"
+                    title="Abrir no YouTube"
                   >
                     <ExternalLink className="h-4 w-4" />
                   </a>
@@ -182,16 +182,16 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
         <div className="mt-16 text-center">
           <div className="bg-white rounded-lg shadow-sm border p-8 max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              ¿Te gustaría recibir notificaciones?
+              Gostaria de receber notificações?
             </h3>
             <p className="text-gray-600 mb-6">
-              Suscríbete para recibir notificaciones cuando publiquemos nuevos sermones
+              Inscreva-se para receber notificações quando publicarmos novos sermões
             </p>
             <Link
               href="/contacto"
               className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
             >
-              Contactar
+              Entrar em Contato
             </Link>
           </div>
         </div>

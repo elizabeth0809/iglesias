@@ -32,7 +32,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
   }, []);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -40,7 +40,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
   };
 
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('es-ES', {
+    return new Date(dateString).toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit'
     });
@@ -65,7 +65,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
           <h2 className="text-3xl font-bold mb-8 text-center">Próximos Eventos</h2>
           
           <div className="text-center text-gray-500">
-            No hay eventos programados
+            Nenhum evento programado
           </div>
         </div>
       </section>
@@ -107,7 +107,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                       
-                      {/* Badge de estado */}
+                      {/* Badge de status */}
                       <div className="absolute top-3 right-3">
                         <span
                           className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold ${
@@ -116,7 +116,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                               : "bg-gray-500 text-white"
                           }`}
                         >
-                          {evento.status === "ativo" ? "Activo" : "Inactivo"}
+                          {evento.status === "ativo" ? "Ativo" : "Inativo"}
                         </span>
                       </div>
                     </div>
@@ -126,7 +126,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                         {evento.nome}
                       </h3>
                       
-                      {/* Fecha y hora */}
+                      {/* Data e hora */}
                       <div className="flex items-center text-gray-500 mb-2">
                         <CalendarIcon className="h-4 w-4 mr-2 flex-shrink-0" />
                         <span className="text-sm">
@@ -141,7 +141,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                         </span>
                       </div>
 
-                      {/* Ubicación */}
+                      {/* Localização */}
                       {evento.localizacao && (
                         <div className="flex items-center text-gray-500 mb-3">
                           <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
@@ -151,7 +151,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                         </div>
                       )}
                       
-                      {/* Descripción */}
+                      {/* Descrição */}
                       {evento.descricao && (
                         <p className="text-gray-600 line-clamp-3">
                           {evento.descricao}
