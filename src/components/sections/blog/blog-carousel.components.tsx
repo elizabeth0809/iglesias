@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -88,9 +87,9 @@ export function BlogsCarousel({ blogs }: BlogsCarouselProps) {
                 className="px-3 flex-shrink-0"
                 style={{ width: `${100 / visibleItems}%` }}
               >
-                <Link href={`/blog/${post.id}`} className="block group">
+                <Link href={`/blog/${post.slug}`} className="block group">
                   <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-64 md:h-72 lg:h-80 overflow-hidden">
                       <Image
                         src={post.image || "/placeholder.svg"}
                         alt={post.title}

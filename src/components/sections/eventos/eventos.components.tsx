@@ -60,9 +60,10 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
 
   if (!eventos || eventos.length === 0) {
     return (
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white container mx-auto">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Próximos Eventos</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center">Próximos Eventos</h2>
+          
           <div className="text-center text-gray-500">
             No hay eventos programados
           </div>
@@ -94,9 +95,9 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                 className="px-3 flex-shrink-0"
                 style={{ width: `${100 / visibleItems}%` }}
               >
-                <Link href={`/evento/${evento.id}`} className="block group">
+                <div className="block group">
                   <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1 border">
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-64 md:h-72 lg:h-80 overflow-hidden">
                       <Image
                         src={evento.imagem || "/placeholder.svg"}
                         alt={evento.nome}
@@ -157,12 +158,11 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                       )}
                     </div>
                   </div>
-                </Link>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Botones de navegación */}
           {eventos.length > visibleItems && (
             <>
               <Button

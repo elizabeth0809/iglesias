@@ -75,8 +75,8 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((post) => (
             <Link
-              key={post.id}
-              href={`/blog/${post.id}`}
+              key={post.slug}
+              href={`/blog/${post.slug}`}
               className="block group"
             >
               <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1">

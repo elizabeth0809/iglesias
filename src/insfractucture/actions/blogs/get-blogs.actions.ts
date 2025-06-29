@@ -2,7 +2,7 @@
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 import axios from "axios";
 
-const baseURL = "http://127.0.0.1:8000";
+const baseURL = "http://nkkcoc4wskok8kw04cs4oows.31.97.168.219.sslip.io";
 interface BlogAllProps {
   page?: number;
 }
