@@ -66,18 +66,18 @@ export default async function SermonesPage({ searchParams }: SermonesPageProps) 
 }
 
 export const metadata: Metadata = {
-  title: 'Sermões | Nossa Igreja',
+  title: 'Sermões | Igreja Batista Renovada Sonho de Deus',
   description: 'Ouça nossos sermões e pregações espirituais. Encontre inspiração e ensinamentos bíblicos.',
   keywords: 'sermões, pregações, igreja, bíblia, ensinamentos, espiritual',
   openGraph: {
-    title: 'Sermões | Nossa Igreja',
+    title: 'Sermões | Igreja Batista Renovada Sonho de Deus',
     description: 'Ouça nossos sermões e pregações espirituais. Encontre inspiração e ensinamentos bíblicos.',
     type: 'website',
     url: '/sermones',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sermões | Nossa Igreja',
+    title: 'Sermões | Igreja Batista Renovada Sonho de Deus',
     description: 'Ouça nossos sermões e pregações espirituais.',
   },
 };

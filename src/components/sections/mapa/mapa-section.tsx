@@ -14,7 +14,7 @@ export const LocationSection = () => {
           <MapboxLocation
             latitude={-23.6743587}
             longitude={-46.4922899}
-            title="Nossa Igreja"
+            title="Igreja Batista Renovada Sonho de Deus"
             description="Estamos esperando sua visita"
             address="São Paulo - SP"
             zoom={15}
@@ -47,11 +47,12 @@ export const LocationSectionComplete = () => {
                   <MapPin className="h-5 w-5 text-blue-600 mr-2" />
                   Endereço
                 </h3>
-                <p className="text-gray-700 mb-4">
-                  Rua/Avenida Exemplo, 123<br />
-                  Bairro - São Paulo, SP<br />
-                  CEP: 00000-000
-                </p>
+                <div className="text-sm ">
+  <p>Rua Luis Gomes Pain, nº 300</p>
+  <p>Jardim Marek - Santo André, SP</p>
+  <p>CEP: 09111-580</p>
+</div>
+
                 
                <div>
                     <h4 className="font-medium text-gray-900 mb-1">Horários de Cultos:</h4>
@@ -68,14 +69,14 @@ export const LocationSectionComplete = () => {
 
             
 
-              <div className="bg-white rounded-lg shadow-sm p-6">
+              {/* <div className="bg-white rounded-lg shadow-sm p-6">
                 <h3 className="text-xl font-semibold mb-4">Contato</h3>
                 <div className="space-y-2 text-sm text-gray-600">
                   <p><strong>Telefone:</strong> (11) 9999-9999</p>
                   <p><strong>WhatsApp:</strong> (11) 9999-9999</p>
                   <p><strong>Email:</strong> contato@igreja.com</p>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Mapa */}
@@ -83,7 +84,7 @@ export const LocationSectionComplete = () => {
               <MapboxLocation
                 latitude={-23.6743587}
                 longitude={-46.4922899}
-                title="Nossa Igreja"
+                title="Igreja Batista Renovada Sonho de Deus"
                 description="Venha nos conhecer!"
                 address="São Paulo - SP"
                 zoom={16}

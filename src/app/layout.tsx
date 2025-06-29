@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 import { Inter, Lora } from "next/font/google";
 
 import type React from "react"
+import { Footer } from "@/components/sections/footer/footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,6 +65,7 @@ export default function RootLayout({
       <body className="bg-background font-sans text-foreground">
         <Header />
         {children}
+        <Footer/>
       </body>
     </html>
   )

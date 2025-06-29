@@ -57,7 +57,7 @@ export default async function Home() {
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative z-10 text-center px-4">
           <h1 className="md:text-6xl font-bold mb-4 font-serif text-4xl text-white">
-            Bem-vindo à Nossa Igreja
+            Bem-vindo à Igreja Batista Renovada Sonho de Deus
           </h1>
           <p className="text-xl md:text-2xl mb-8 font-sans text-muted-foreground text-white">
             Um lugar de Fé, Esperança e Amor
@@ -88,6 +88,6 @@ export default async function Home() {
   );
 }
 export const metadata = {
-  title: 'Início - Nossa Igreja',
-  description: 'Bem-vindo à nossa igreja - Um lugar de Fé, Esperança e Amor. Descubra nossos blogs, eventos e sermões.',
+  title: 'Início - Igreja Batista Renovada Sonho de Deus',
+  description: 'Bem-vindo à Igreja Batista Renovada Sonho de Deus - Um lugar de Fé, Esperança e Amor. Descubra nossos blogs, eventos e sermões.',
 };

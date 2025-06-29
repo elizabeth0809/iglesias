@@ -244,7 +244,7 @@ export const ChurchLocationMap = () => {
               <MapboxLocation
                 latitude={-23.5505}  // Coordenadas de exemplo (São Paulo)
                 longitude={-46.6333}
-                title="Nossa Igreja"
+                title="Igreja Batista Renovada Sonho de Deus"
                 description="Venha nos conhecer!"
                 address="Rua das Flores, 123 - Centro, São Paulo - SP"
                 zoom={16}
