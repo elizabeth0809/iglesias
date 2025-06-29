@@ -11,6 +11,7 @@ import { blogGetAllAction } from "@/insfractucture/actions/blogs/get-blogs.actio
 import { GetEventosAllAction } from "@/insfractucture/actions/eventos/get-eventos.actions";
 import { getAllSermonsAction } from "@/insfractucture/actions/sermones/get-all-sermones.actions";
 import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
+import {  LocationSectionComplete } from "@/components/sections/mapa/mapa-section";
 
 async function getHomePageData() {
   try {
@@ -82,6 +83,7 @@ export default async function Home() {
 
       {/* Formulário de Contato */}
       <FormularioComponent />
+      <LocationSectionComplete />
     </main>
   );
 }

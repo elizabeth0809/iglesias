@@ -60,13 +60,14 @@ export const useContactForm = () => {
       }
 
       const result = await response.json();
+      console.log('Formulário enviado com sucesso:', result);
       toast.success('Mensagem enviada com sucesso!');
       toast.success('Entraremos em contato em breve.');
       reset(); // Limpar formulário após sucesso
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('Erro ao enviar formulário:', error);
-      toast.error(error.message || 'Erro ao enviar mensagem. Tente novamente.');
+      toast.error( 'Erro ao enviar mensagem. Tente novamente.');
     } finally {
       setIsSubmitting(false);
     }
