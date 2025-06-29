@@ -10,7 +10,7 @@ const navItems = [
   { href: "/", label: "Início" },
   { href: "/about-us", label: "Sobre Nós" },
 
-  { href: "/servicios", label: " Serviços e Atividades" },
+  { href: "/eventos", label: "Atividades" },
       { href: "/blog", label: "Blogs" },
   { href: "/sermones", label: " Sermones" },
 
