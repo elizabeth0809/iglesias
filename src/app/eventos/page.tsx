@@ -40,7 +40,7 @@ export default async function EventosPage({ searchParams }: EventosPageProps) {
   const page = Number(resolvedSearchParams.page) || 1;
   
   console.log('🔄 Usando GraphQL API para Eventos...');
-  const { eventos, pagination, error } = await getEventosGraphQL(page);
+  const { eventos,  error } = await getEventosGraphQL(page);
   
   if (error) {
     return (
