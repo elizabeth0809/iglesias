@@ -1,9 +1,16 @@
+// app/eventos/page.tsx
 import { IEventoResponse } from "@/insfractucture/interfaces/eventos/eventos.interfaces";
+
 import { EventosListComponent } from "./components/evento-list.components";
 import { eventoGetAllGraphQLAction } from "@/insfractucture/actions/eventos/graphql/get-eventos.actions";
+import { PaginationMeta } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 
 // Función para obtener eventos desde GraphQL
-async function getEventosGraphQL(page: number = 1): Promise<{ eventos: IEventoResponse[]; pagination?: any; error?: string }> {
+async function getEventosGraphQL(page: number = 1): Promise<{ 
+  eventos: IEventoResponse[]; 
+  pagination?: PaginationMeta; 
+  error?: string 
+}> {
   try {
     const response = await eventoGetAllGraphQLAction({ page, pageSize: 10 });
     
@@ -59,7 +66,19 @@ export default async function EventosPage({ searchParams }: EventosPageProps) {
 
   return (
     <div suppressHydrationWarning={true}>
-     
+      {/* Información de la fuente de datos */}
+      <div className="bg-green-50 border border-green-200 p-3 text-center text-sm text-green-700 mb-4 rounded-lg">
+        <div className="flex items-center justify-center gap-2">
+          <span>🚀</span>
+          <strong>Dados obtidos desde GraphQL</strong>
+        </div>
+        <div className="mt-1 text-xs">
+          Página: {page} | Total de eventos: {eventos.length}
+          {pagination && (
+            <span> | Total disponível: {pagination.total}</span>
+          )}
+        </div>
+      </div>
       
       <EventosListComponent eventos={eventos} />
     </div>

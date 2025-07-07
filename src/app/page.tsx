@@ -1,4 +1,3 @@
-
 import { FormularioComponent } from "@/components/sections/home/formulario";
 import { VersiculoDelDia } from "@/components/sections/home/VersiculoDelDia";
 import { TestimonioSection } from "@/components/sections/home/TestimonioSection";
@@ -7,32 +6,45 @@ import { EventosCarousel } from "@/components/sections/eventos/eventos.component
 import { SermonesCarousel } from "@/components/sections/sermones/sermones.components";
 import { BlogsCarousel } from "@/components/sections/blog/blog-carousel.components";
 
-import { blogGetAllAction } from "@/insfractucture/actions/blogs/get-blogs.actions";
-import { GetEventosAllAction } from "@/insfractucture/actions/eventos/get-eventos.actions";
-import { getAllSermonsAction } from "@/insfractucture/actions/sermones/get-all-sermones.actions";
+// Importações GraphQL para blogs, eventos E sermões
+import { blogGetAllGraphQLAction } from "@/insfractucture/actions/blogs/graphql/get-blogs-actions";
+import { eventoGetAllGraphQLAction } from "@/insfractucture/actions/eventos/graphql/get-eventos.actions";
+
 import { CarruselImagenComponents } from "@/components/sections/home/CarruselImagen";
-import {  LocationSectionComplete } from "@/components/sections/mapa/mapa-section";
+import { LocationSectionComplete } from "@/components/sections/mapa/mapa-section";
+import { sermonGetAllGraphQLAction } from "@/insfractucture/actions/sermones/graphql/get-all-sermones.actions";
 
 async function getHomePageData() {
   try {
     const [blogsResult, eventosResult, sermonesResult] = await Promise.allSettled([
-      blogGetAllAction({ page: 1 }),
-      GetEventosAllAction({ page: 1 }),
-      getAllSermonsAction(),
+      blogGetAllGraphQLAction({ page: 1, pageSize: 6 }),
+      eventoGetAllGraphQLAction({ page: 1, pageSize: 6 }),
+      sermonGetAllGraphQLAction({ page: 1, pageSize: 6 }), 
     ]);
 
+    // Processar resultado dos blogs
+    const blogs = blogsResult.status === 'fulfilled' 
+      ? blogsResult.value.blogs.slice(0, 6)
+      : [];
+
+    // Processar resultado dos eventos
+    const eventos = eventosResult.status === 'fulfilled'
+      ? eventosResult.value.eventos.slice(0, 6)
+      : [];
+
+    // 👈 ATUALIZADO: Processar resultado dos sermões com GraphQL
+    const sermones = sermonesResult.status === 'fulfilled'
+      ? sermonesResult.value.sermones.slice(0, 6)
+      : [];
+
+
     return {
-      blogs: blogsResult.status === 'fulfilled' ? blogsResult.value.slice(0, 6) : [],
-      eventos: eventosResult.status === 'fulfilled' ? eventosResult.value.slice(0, 6) : [],
-      // ↓ Mudança aqui: acessar o conteúdo do array se necessário
-      sermones: sermonesResult.status === 'fulfilled'
-        ? (Array.isArray(sermonesResult.value[0])
-          ? sermonesResult.value[0].slice(0, 6)
-          : sermonesResult.value.slice(0, 6))
-        : [],
+      blogs,
+      eventos,
+      sermones,
     };
   } catch (error) {
-    console.error('Erro ao buscar dados da página inicial:', error);
+    console.error('❌ Erro ao buscar dados da página inicial:', error);
     return {
       blogs: [],
       eventos: [],
@@ -46,6 +58,8 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-white">
+    
+
       {/* Seção Hero */}
       <section className="relative h-[60vh] bg-gray-900 text-white flex items-center justify-center">
         <div
@@ -67,36 +81,27 @@ export default async function Home() {
 
       {/* Carrossel de Próximos Eventos */}
       <EventosCarousel eventos={eventos} />
-       <CarruselImagenComponents />
+      
+      <CarruselImagenComponents />
+      
       <TestimonioSection />
-    <VersiculoDelDia />
-       <LocationSectionComplete />
-      {/* Carrossel de Últimos Sermões */}
-    
-      {/* Seção de Testemunhos */}
-
-      {/* Versículo do Dia */}
-  
-
-      {/* Carrossel de Últimas Entradas do Blog */}
+      
+      
+      
+      <LocationSectionComplete />
       <BlogsCarousel blogs={blogs} />
-     
-            <SermonesCarousel sermones={sermones} />
-
-      {/* Formulário de Contato */}
+      <VersiculoDelDia />
+      <SermonesCarousel sermones={sermones} />
       <FormularioComponent />
-   
     </main>
   );
 }
-
 
 export const metadata: Metadata = {
   // Título e Descrição Base
   title: 'Igreja Batista Renovada Sonho de Deus | Santo André - SP',
   description: 'Bem-vindo à Igreja Batista Renovada Sonho de Deus em Santo André. Um lugar de fé, esperança e amor onde você encontrará comunhão, crescimento espiritual e a presença de Deus. Participe dos nossos cultos, eventos e estudos bíblicos.',
-  
-  // Keywords para SEO
+
   keywords: [
     'Igreja Batista Renovada',
     'Sonho de Deus',

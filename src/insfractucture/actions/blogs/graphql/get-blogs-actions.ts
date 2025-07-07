@@ -68,8 +68,7 @@ export const blogGetAllGraphQLAction = async ({
       }
     `;
 
-    console.log('🚀 Enviando query GraphQL:', query);
-    console.log('📊 Variables:', { page, pageSize });
+
 
     const response = await axios.post(
       strapiGraphQLURL,
@@ -87,18 +86,18 @@ export const blogGetAllGraphQLAction = async ({
       }
     );
 
-    console.log('📥 Respuesta raw de Strapi:', JSON.stringify(response.data, null, 2));
+   
 
-    // Verificar si hay errores en la respuesta GraphQL
+
     if (response.data.errors) {
       console.error("GraphQL errors:", response.data.errors);
       throw new Error("GraphQL query failed");
     }
 
-    // Usar el mapper para convertir la respuesta
+ 
     const mappedResponse = BlogMappers.fromStrapiGraphQLResponseToEntity(response.data);
     
-    console.log('✨ Datos después del mapper:', JSON.stringify(mappedResponse, null, 2));
+  
 
     return mappedResponse;
   } catch (error) {

@@ -1,51 +1,48 @@
-// import BibliotecaMedias from "./components/BibliotecaMedias";
-// import SermonesRecientes from "./components/SermonesRecientes";
-
-// export default function SermonesMedias() {
-//   return (
-//     <main className="min-h-screen bg-white">
-//       <div className="container mx-auto px-4 py-8">
-//         <h1 className="text-4xl font-bold mb-8 text-center">
-//           Sermões e Mídias
-//         </h1>
-//         <SermonesRecientes />
-//         <BibliotecaMedias /> 
-//       </div>
-//     </main>
-//   );
-// }
-
+// app/sermones/page.tsx
 import { Metadata } from 'next';
-import { getAllSermonsAction } from '@/insfractucture/actions/sermones/get-all-sermones.actions';
 import { SermonResponse } from '@/insfractucture/interfaces/sermones/sermones.interfaces';
-import { SermonesListComponent } from './components/SermonesList';
 
-// Esta função executa no servidor
-async function getSermones(): Promise<{ sermones: SermonResponse[]; error?: string }> {
+import { SermonesListComponent } from './components/SermonesList';
+import { PaginationMeta } from '@/insfractucture/interfaces/blogs/blog.interfaces';
+import { sermonGetAllGraphQLAction } from '@/insfractucture/actions/sermones/graphql/get-all-sermones.actions';
+
+// Função para obter sermões desde GraphQL
+async function getSermones(page: number = 1): Promise<{ 
+  sermones: SermonResponse[]; 
+  pagination?: PaginationMeta; 
+  error?: string 
+}> {
   try {
-    const sermonesData = await getAllSermonsAction();
-        
-    // Manejar diferentes formatos de resposta
-    const sermones = Array.isArray(sermonesData[0]) ? sermonesData[0] : sermonesData;
-        
-    return { sermones: Array.isArray(sermones) ? sermones : [] };
+    console.log('🔄 Obtendo sermões desde GraphQL...');
+    const response = await sermonGetAllGraphQLAction({ page, pageSize: 10 });
+    
+    console.log('🔥 Resposta completa de GraphQL Sermões:', JSON.stringify(response, null, 2));
+    console.log('📝 Sermões mapeados:', response.sermones);
+    console.log('📊 Paginação:', response.pagination);
+    
+    return { 
+      sermones: response.sermones,
+      pagination: response.pagination
+    };
   } catch (error) {
-    console.error('Erro ao buscar sermões:', error);
+    console.error('Erro ao buscar sermões desde GraphQL:', error);
     return {
       sermones: [],
-      error: 'Erro ao carregar os sermões'
+      error: 'Erro ao carregar os sermões desde GraphQL'
     };
   }
 }
 
 interface SermonesPageProps {
-  searchParams: Promise<{ page?: string }>; // Para paginação futura
+  searchParams: Promise<{ page?: string }>;
 }
 
 export default async function SermonesPage({ searchParams }: SermonesPageProps) {
+  const resolvedSearchParams = await searchParams;
+  const page = Number(resolvedSearchParams.page) || 1;
   
-  console.log('SermonesPage renderizada', searchParams);
-  const { sermones, error } = await getSermones();
+  console.log('🔄 Usando GraphQL API para Sermões...');
+  const { sermones, pagination, error } = await getSermones(page);
 
   if (error) {
     return (
@@ -53,6 +50,17 @@ export default async function SermonesPage({ searchParams }: SermonesPageProps) 
         <div className="text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-4">Erro</h2>
           <p className="text-gray-600">{error}</p>
+          <div className="mt-4">
+            <p className="text-sm text-gray-500">
+              Não foi possível carregar os sermões desde GraphQL
+            </p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Tentar novamente
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -60,7 +68,21 @@ export default async function SermonesPage({ searchParams }: SermonesPageProps) 
 
   return (
     <div suppressHydrationWarning={true}>
-      <SermonesListComponent sermones={sermones} />
+      {/* Informação da fonte de dados */}
+      <div className="bg-green-50 border border-green-200 p-3 text-center text-sm text-green-700 mb-4 rounded-lg">
+        <div className="flex items-center justify-center gap-2">
+          <span>🚀</span>
+          <strong>Dados obtidos desde GraphQL</strong>
+        </div>
+        <div className="mt-1 text-xs">
+          Página: {page} | Total de sermões: {sermones.length}
+          {pagination && (
+            <span> | Total disponível: {pagination.total}</span>
+          )}
+        </div>
+      </div>
+      
+      <SermonesListComponent sermones={sermones}  />
     </div>
   );
 }

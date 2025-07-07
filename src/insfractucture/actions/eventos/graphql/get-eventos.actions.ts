@@ -3,7 +3,7 @@ import axios from "axios";
 import { EventoMappers } from "@/insfractucture/mappers/eventos/eventos.mappers";
 import { IEventoResponse } from "@/insfractucture/interfaces/eventos/eventos.interfaces";
 
-const strapiGraphQLURL = "http://localhost:1337/graphql";
+const strapiGraphQLURL = process.env.NEXT_PUBLIC_API_URL_GRAPHQL || "http://strapi-strapibackend-qgcuz6-1680e6-31-97-168-219.traefik.me/graphql";
 
 interface EventoGraphQLProps {
   page?: number;
@@ -63,8 +63,7 @@ export const eventoGetAllGraphQLAction = async ({
       }
     `;
 
-    console.log('🚀 Enviando query GraphQL Eventos:', query);
-    console.log('📊 Variables:', { page, pageSize });
+   
 
     const response = await axios.post(
       strapiGraphQLURL,
@@ -82,7 +81,6 @@ export const eventoGetAllGraphQLAction = async ({
       }
     );
 
-    console.log('📥 Respuesta raw de Strapi Eventos:', JSON.stringify(response.data, null, 2));
 
     // Verificar si hay errores en la respuesta GraphQL
     if (response.data.errors) {
@@ -93,7 +91,7 @@ export const eventoGetAllGraphQLAction = async ({
     // Usar el mapper para convertir la respuesta
     const mappedResponse = EventoMappers.fromStrapiGraphQLResponseToEntity(response.data);
     
-    console.log('✨ Datos después del mapper:', JSON.stringify(mappedResponse, null, 2));
+
 
     return mappedResponse;
   } catch (error) {

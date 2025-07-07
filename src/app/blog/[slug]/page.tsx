@@ -4,34 +4,44 @@ import Link from "next/link";
 import { notFound } from 'next/navigation';
 import { CalendarIcon, Clock, ArrowLeft } from "lucide-react";
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
-import { blogGetBlogDetailsAction } from '@/insfractucture/actions/blogs/get-blogs-details.actions';
+import { blogGetBySlugGraphQLAction } from '@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions';
 
-// Esta función se ejecuta en el servidor
+
+// Función para obtener blog por slug usando GraphQL
 async function getBlogDetails(slug: string): Promise<{ blog: IBlogResponse | null; error?: string }> {
   try {
-    const blog = await blogGetBlogDetailsAction({ page: slug });
+    console.log('🔄 Obteniendo blog por slug desde GraphQL:', slug);
+    const blog = await blogGetBySlugGraphQLAction(slug);
+    
+    if (!blog) {
+      console.log('❌ Blog no encontrado con slug:', slug);
+      return { blog: null };
+    }
+    
+    console.log('✅ Blog encontrado:', blog.title);
     return { blog };
   } catch (error) {
-    console.error('Error fetching blog details:', error);
+    console.error('Error fetching blog details from GraphQL:', error);
     return {
       blog: null,
-      error: 'Error al cargar el blog'
+      error: 'Error al cargar el blog desde GraphQL'
     };
   }
 }
 
 interface BlogDetailPageProps {
-  params: Promise<{ slug: string }>; // ← Promise para params en Next.js 15+
+  params: Promise<{ slug: string }>;
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const resolvedParams = await params; // ← Resolver la Promise
+  const resolvedParams = await params;
   const { slug } = resolvedParams;
   
-  const { blog } = await getBlogDetails(slug); // Removido 'error' ya que no se usa
+  const { blog, error } = await getBlogDetails(slug);
 
   // Si hay error o no se encuentra el blog, mostrar 404
-  if (!blog) {
+  if (error || !blog) {
+    console.log('❌ Blog no encontrado o error:', { slug, error });
     notFound();
   }
 
@@ -39,7 +49,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString("es-ES", {
+      return date.toLocaleDateString("pt-BR", {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -55,11 +65,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     const wordsPerMinute = 200;
     const wordCount = content.split(/\s+/).length;
     const minutes = Math.ceil(wordCount / wordsPerMinute);
-    return `${minutes} min de lectura`;
+    return `${minutes} min de leitura`;
   };
 
   return (
     <div className="min-h-screen bg-gray-50" suppressHydrationWarning={true}>
+   
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Botón de volver */}
         <div className="mb-6">
@@ -68,7 +79,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             className="inline-flex items-center text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver al blog
+            Voltar ao blog
           </Link>
         </div>
 
@@ -103,9 +114,16 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 <span className="text-sm">
                   {blog.content
                     ? estimateReadingTime(blog.content)
-                    : "5 min de lectura"}
+                    : "5 min de leitura"}
                 </span>
               </div>
+              {blog.category_id && (
+                <div className="flex items-center">
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                    {blog.category_id}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Contenido */}
@@ -130,7 +148,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   />
                 ) : (
                   <div className="text-center py-8 text-gray-500">
-                    <p>No hay contenido disponible para esta entrada.</p>
+                    <p>Não há conteúdo disponível para esta entrada.</p>
                   </div>
                 )}
               </div>
@@ -140,14 +158,14 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <div className="mt-12 pt-6 border-t border-gray-200">
               <div className="flex flex-wrap items-center justify-between">
                 <div className="text-sm text-gray-500">
-                  Publicado el {formatDate(blog.created_at)}
+                  Publicado em {formatDate(blog.created_at)}
                   {blog.updated_at !== blog.created_at && (
-                    <span> • Actualizado el {formatDate(blog.updated_at)}</span>
+                    <span> • Atualizado em {formatDate(blog.updated_at)}</span>
                   )}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                    {blog.status === 'published' ? 'Publicado' : 'Borrador'}
+                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                    {blog.status === 'published' ? 'Publicado' : 'Rascunho'}
                   </span>
                 </div>
               </div>
@@ -161,7 +179,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             href="/blog"
             className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
           >
-            Ver más entradas del blog
+            Ver mais entradas do blog
           </Link>
         </div>
       </div>
@@ -179,19 +197,19 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
     
     if (!blog) {
       return {
-        title: 'Blog no encontrado',
-        description: 'La entrada del blog que buscas no existe.'
+        title: 'Blog não encontrado',
+        description: 'A entrada do blog que você procura não existe.',
       };
     }
 
     return {
       title: `${blog.title} | Blog Espiritual`,
-      description: blog.description || `Lee ${blog.title} en nuestro blog espiritual`,
-      keywords: `blog, espiritual, ${blog.title}`,
+      description: blog.description || `Leia ${blog.title} em nosso blog espiritual`,
+      keywords: `blog, espiritual, ${blog.title}, ${blog.category_id}`,
       authors: [{ name: 'Blog Espiritual' }],
       openGraph: {
         title: blog.title,
-        description: blog.description || `Lee ${blog.title} en nuestro blog espiritual`,
+        description: blog.description || `Leia ${blog.title} em nosso blog espiritual`,
         type: 'article',
         publishedTime: blog.created_at,
         modifiedTime: blog.updated_at,
@@ -208,7 +226,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
       twitter: {
         card: 'summary_large_image',
         title: blog.title,
-        description: blog.description || `Lee ${blog.title} en nuestro blog espiritual`,
+        description: blog.description || `Leia ${blog.title} em nosso blog espiritual`,
         images: blog.image ? [blog.image] : [],
       },
       robots: {
@@ -219,8 +237,8 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   } catch (error) {
     console.error('Error generating metadata:', error);
     return {
-      title: 'Error | Blog Espiritual',
-      description: 'Error al cargar la entrada del blog'
+      title: 'Erro | Blog Espiritual',
+      description: 'Erro ao carregar a entrada do blog'
     };
   }
 }

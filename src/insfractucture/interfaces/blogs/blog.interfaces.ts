@@ -21,3 +21,19 @@ export interface IBlogResponse {
   created_at: string;
   updated_at: string;
 }
+
+// ==============================================
+// ARCHIVO: infrastructure/interfaces/shared/pagination.interfaces.ts
+// ==============================================
+
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  pageSize: number;
+  pageCount: number;
+}
+
+export interface PaginationResponse<T> {
+  data: T[];
+  pagination: PaginationMeta;
+}
