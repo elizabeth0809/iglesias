@@ -2,7 +2,7 @@ import axios from "axios";
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 import { BlogMappers } from "@/insfractucture/mappers/blogs/blogs.mappers";
 
-const strapiGraphQLURL = "http://localhost:1337/graphql";
+const strapiGraphQLURL = process.env.NEXT_PUBLIC_API_URL_GRAPHQL || "http://strapi-strapibackend-qgcuz6-1680e6-31-97-168-219.traefik.me/graphql";
 
 interface BlogGraphQLProps {
   page?: number;
