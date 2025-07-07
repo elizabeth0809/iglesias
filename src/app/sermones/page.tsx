@@ -68,19 +68,7 @@ export default async function SermonesPage({ searchParams }: SermonesPageProps) 
 
   return (
     <div suppressHydrationWarning={true}>
-      {/* Informação da fonte de dados */}
-      <div className="bg-green-50 border border-green-200 p-3 text-center text-sm text-green-700 mb-4 rounded-lg">
-        <div className="flex items-center justify-center gap-2">
-          <span>🚀</span>
-          <strong>Dados obtidos desde GraphQL</strong>
-        </div>
-        <div className="mt-1 text-xs">
-          Página: {page} | Total de sermões: {sermones.length}
-          {pagination && (
-            <span> | Total disponível: {pagination.total}</span>
-          )}
-        </div>
-      </div>
+     
       
       <SermonesListComponent sermones={sermones}  />
     </div>
