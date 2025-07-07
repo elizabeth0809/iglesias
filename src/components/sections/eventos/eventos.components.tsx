@@ -91,7 +91,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
           >
             {eventos.map((evento) => (
               <Link
-                href={`/eventos/${evento.id}`}
+                href={`/eventos/${evento.slug}`}
                 key={evento.id}
                 className="px-3 flex-shrink-0"
                 style={{ width: `${100 / visibleItems}%` }}
