@@ -33,7 +33,7 @@ async function getHomePageData() {
       : [];
 
     // 👈 ATUALIZADO: Processar resultado dos sermões com GraphQL
-    const sermones = sermonesResult.status === 'fulfilled'
+    const sermones = sermonesResult?.status === 'fulfilled'
       ? sermonesResult.value.sermones.slice(0, 6)
       : [];
 

@@ -36,7 +36,7 @@ export const sermonGetAllGraphQLAction = async ({
               url_youtube
               url_facebook
               type
-              descriptions
+              contents
               activo
               createdAt
               updatedAt
@@ -102,7 +102,7 @@ export const sermonGetAllGraphQLSimpleAction = async (): Promise<SermonResponse[
               url_youtube
               url_facebook
               type
-              descriptions
+              contents
               activo
               createdAt
               updatedAt
@@ -151,7 +151,7 @@ export const sermonGetByIdGraphQLAction = async (id: string): Promise<SermonResp
               url_youtube
               url_facebook
               type
-              descriptions
+              contents
               activo
               createdAt
               updatedAt
