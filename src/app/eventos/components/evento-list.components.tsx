@@ -98,7 +98,7 @@ export const EventosListComponent = ({ eventos }: EventosListComponentProps) => 
           {eventos.map((evento) => (
             <Link
               key={evento.id}
-              href={`/eventos/${evento.id}`}
+              href={`/eventos/${evento.slug}`}
               className="block group"
             >
               <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-2">
