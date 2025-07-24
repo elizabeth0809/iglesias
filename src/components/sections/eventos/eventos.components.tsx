@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, CalendarIcon, Clock, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarIcon, Clock, MapPin, Sparkles } from "lucide-react";
 import { IEventoResponse } from "@/insfractucture/interfaces/eventos/eventos.interfaces";
 
 interface EventosCarouselProps {
@@ -14,8 +14,11 @@ interface EventosCarouselProps {
 export function EventosCarousel({ eventos }: EventosCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleItems, setVisibleItems] = useState(3);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    setIsLoaded(true);
+    
     const updateVisibleItems = () => {
       if (window.innerWidth < 768) {
         setVisibleItems(1);
@@ -60,12 +63,16 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
 
   if (!eventos || eventos.length === 0) {
     return (
-      <section className="py-16 bg-white container mx-auto">
+      <section className="py-16 bg-gradient-to-br from-church-sky-50 to-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Próximos Eventos</h2>
-          
-          <div className="text-center text-gray-500">
-            Nenhum evento programado
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-church-gold-100 rounded-full mb-4">
+              <CalendarIcon className="w-8 h-8 text-church-gold-600" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4 text-church-blue-900">Próximos Eventos</h2>
+            <p className="text-church-blue-600 text-lg">
+              Nenhum evento programado no momento
+            </p>
           </div>
         </div>
       </section>
@@ -73,90 +80,132 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
   }
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-gradient-to-br from-church-sky-50 via-white to-church-blue-50">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Próximos Eventos</h2>
-          <Link href="/eventos" className="text-blue-600 hover:text-blue-800 font-medium">
-            Ver todos →
+        {/* Header animado */}
+        <div className={`flex justify-between items-center mb-12 transition-all duration-1000 ease-out ${
+          isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
+        }`}>
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center w-12 h-12 bg-church-gold-500 rounded-lg shadow-lg">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold text-church-blue-900">Próximos Eventos</h2>
+              <p className="text-church-blue-600">Participe da nossa comunidade</p>
+            </div>
+          </div>
+          <Link 
+            href="/eventos" 
+            className="group relative px-6 py-3 bg-church-gold-500 text-white font-semibold rounded-lg hover:bg-church-gold-600 transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+          >
+            <span className="relative z-10">Ver todos</span>
+            <ChevronRight className="inline-block w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            <div className="absolute inset-0 bg-church-gold-600 rounded-lg transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </Link>
         </div>
 
         <div className="relative w-full overflow-hidden">
           <div
-            className="flex transition-transform duration-300 ease-in-out"
+            className="flex transition-transform duration-500 ease-in-out"
             style={{
               transform: `translateX(-${currentIndex * (100 / visibleItems)}%)`,
             }}
           >
-            {eventos.map((evento) => (
+            {eventos.map((evento, index) => (
               <Link
                 href={`/eventos/${evento.slug}`}
                 key={evento.id}
                 className="px-3 flex-shrink-0"
                 style={{ width: `${100 / visibleItems}%` }}
               >
-                <div className="block group">
-                  <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1 border">
+                <div className={`block group transition-all duration-700 ease-out ${
+                  isLoaded 
+                    ? 'transform translate-y-0 opacity-100' 
+                    : 'transform translate-y-12 opacity-0'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2 border border-church-sky-200 relative">
+                    {/* Gradient overlay sutil */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-church-gold-400 via-church-blue-400 to-church-gold-400"></div>
+                    
                     <div className="relative h-64 md:h-72 lg:h-80 overflow-hidden">
                       <Image
                         src={evento.imagem || "/placeholder.svg"}
                         alt={evento.nome}
                         fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="object-cover transition-all duration-500 group-hover:scale-110"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                       
-                      {/* Badge de status */}
-                      <div className="absolute top-3 right-3">
+                      {/* Overlay gradient en la imagen */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      
+                      {/* Badge de status mejorado */}
+                      <div className="absolute top-4 right-4">
                         <span
-                          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold ${
+                          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shadow-lg backdrop-blur-sm ${
                             evento.status === "ativo"
-                              ? "bg-green-500 text-white"
+                              ? "bg-church-gold-500 text-white"
                               : "bg-gray-500 text-white"
                           }`}
                         >
-                          {evento.status === "ativo" ? "Ativo" : "Inativo"}
+                          {evento.status === "ativo" ? "✨ Ativo" : "⏸️ Inativo"}
                         </span>
                       </div>
                     </div>
 
-                    <div className="p-5">
-                      <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold mb-3 text-church-blue-900 group-hover:text-church-gold-600 transition-colors duration-300 line-clamp-2">
                         {evento.nome}
                       </h3>
                       
-                      {/* Data e hora */}
-                      <div className="flex items-center text-gray-500 mb-2">
-                        <CalendarIcon className="h-4 w-4 mr-2 flex-shrink-0" />
-                        <span className="text-sm">
-                          {formatDate(evento.data_inicio)}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center text-gray-500 mb-3">
-                        <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
-                        <span className="text-sm">
-                          {formatTime(evento.data_inicio)}
-                        </span>
-                      </div>
-
-                      {/* Localização */}
-                      {evento.localizacao && (
-                        <div className="flex items-center text-gray-500 mb-3">
-                          <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                          <span className="text-sm truncate">
-                            {evento.localizacao}
+                      {/* Info com ícones coloridos */}
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center text-church-blue-600">
+                          <div className="flex items-center justify-center w-8 h-8 bg-church-sky-100 rounded-lg mr-3">
+                            <CalendarIcon className="h-4 w-4 text-church-blue-500" />
+                          </div>
+                          <span className="text-sm font-medium">
+                            {formatDate(evento.data_inicio)}
                           </span>
                         </div>
-                      )}
+
+                        <div className="flex items-center text-church-blue-600">
+                          <div className="flex items-center justify-center w-8 h-8 bg-church-gold-100 rounded-lg mr-3">
+                            <Clock className="h-4 w-4 text-church-gold-600" />
+                          </div>
+                          <span className="text-sm font-medium">
+                            {formatTime(evento.data_inicio)}
+                          </span>
+                        </div>
+
+                        {evento.localizacao && (
+                          <div className="flex items-center text-church-blue-600">
+                            <div className="flex items-center justify-center w-8 h-8 bg-church-red-100 rounded-lg mr-3">
+                              <MapPin className="h-4 w-4 text-church-red-500" />
+                            </div>
+                            <span className="text-sm font-medium truncate">
+                              {evento.localizacao}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                       
                       {/* Descrição */}
                       {evento.descricao && (
-                        <p className="text-gray-600 line-clamp-3">
+                        <p className="text-church-blue-700 line-clamp-3 leading-relaxed">
                           {evento.descricao}
                         </p>
                       )}
+
+                      {/* Call to action implícito */}
+                      <div className="mt-4 pt-4 border-t border-church-sky-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <p className="text-church-gold-600 font-medium text-sm">
+                          Clique para ver detalhes →
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -169,7 +218,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/70 hover:bg-white transition z-10"
+                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/90 hover:bg-church-gold-500 hover:text-white transition-all duration-300 border-church-gold-300 shadow-lg backdrop-blur-sm z-10"
                 onClick={prevSlide}
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -177,7 +226,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/70 hover:bg-white transition z-10"
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/90 hover:bg-church-gold-500 hover:text-white transition-all duration-300 border-church-gold-300 shadow-lg backdrop-blur-sm z-10"
                 onClick={nextSlide}
               >
                 <ChevronRight className="h-5 w-5" />
@@ -185,15 +234,17 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
             </>
           )}
 
-          {/* Indicadores */}
+          {/* Indicadores mejorados */}
           {eventos.length > visibleItems && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
               {Array.from({ length: eventos.length - (visibleItems - 1) }).map(
                 (_, index) => (
                   <button
                     key={index}
-                    className={`w-3 h-3 rounded-full transition ${
-                      index === currentIndex ? "bg-blue-600" : "bg-gray-400"
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === currentIndex 
+                        ? "bg-church-gold-500 scale-125 shadow-lg" 
+                        : "bg-church-sky-300 hover:bg-church-gold-400"
                     }`}
                     onClick={() => setCurrentIndex(index)}
                   />
