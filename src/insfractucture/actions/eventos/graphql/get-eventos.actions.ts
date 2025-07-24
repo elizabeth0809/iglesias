@@ -3,7 +3,9 @@ import axios from "axios";
 import { EventoMappers } from "@/insfractucture/mappers/eventos/eventos.mappers";
 import { IEventoResponse } from "@/insfractucture/interfaces/eventos/eventos.interfaces";
 
-const strapiGraphQLURL = process.env.NEXT_PUBLIC_API_URL_GRAPHQL || "http://strapi-strapibackend-qgcuz6-1680e6-31-97-168-219.traefik.me/graphql";
+const strapiGraphQLURL =
+  process.env.NEXT_PUBLIC_API_URL_GRAPHQL ||
+  "http://strapi-strapibackend-qgcuz6-1680e6-31-97-168-219.traefik.me/graphql";
 
 interface EventoGraphQLProps {
   page?: number;
@@ -27,43 +29,38 @@ export const eventoGetAllGraphQLAction = async ({
 }: EventoGraphQLProps): Promise<EventoGraphQLActionResponse> => {
   try {
     const query = `
-      query GetEventos($page: Int, $pageSize: Int) {
-        eventos(pagination: { page: $page, pageSize: $pageSize }) {
-          data {
-            id
-            attributes {
-              name
-              descriptions
-              data_inicio
-              localizacao
-              slug
-              status
-              createdAt
-              updatedAt
-              publishedAt
-              imagem {
-                data {
-                  attributes {
-                    name
-                    url
-                  }
-                }
-              }
-            }
-          }
-          meta {
-            pagination {
-              total
-              page
-              pageSize
-              pageCount
+   query {
+    eventos(sort: "rank:asc"){
+    data {
+      id
+      attributes {
+        name,
+        descriptions,
+        data_inicio,
+        localizacao,
+        slug,
+        status,
+        imagem{
+          data{
+            attributes{
+              name,
+              url
             }
           }
         }
       }
+    }
+    meta {
+      pagination {
+        total
+        page
+        pageSize
+        pageCount
+      }
+    }
+  }
+}
     `;
-
-   
 
     const response = await axios.post(
       strapiGraphQLURL,
@@ -81,7 +78,6 @@ export const eventoGetAllGraphQLAction = async ({
       }
     );
 
-
     // Verificar si hay errores en la respuesta GraphQL
     if (response.data.errors) {
       console.error("GraphQL errors:", response.data.errors);
@@ -89,9 +85,9 @@ export const eventoGetAllGraphQLAction = async ({
     }
 
     // Usar el mapper para convertir la respuesta
-    const mappedResponse = EventoMappers.fromStrapiGraphQLResponseToEntity(response.data);
-    
-
+    const mappedResponse = EventoMappers.fromStrapiGraphQLResponseToEntity(
+      response.data
+    );
 
     return mappedResponse;
   } catch (error) {
@@ -101,35 +97,41 @@ export const eventoGetAllGraphQLAction = async ({
 };
 
 // Action simplificado que devuelve solo el array de eventos (sin paginación)
-export const eventoGetAllGraphQLSimpleAction = async (): Promise<IEventoResponse[]> => {
+export const eventoGetAllGraphQLSimpleAction = async (): Promise<
+  IEventoResponse[]
+> => {
   try {
     const query = `
-      query {
-        eventos {
-          data {
-            id
-            attributes {
-              name
-              descriptions
-              data_inicio
-              localizacao
-              slug
-              status
-              createdAt
-              updatedAt
-              publishedAt
-              imagem {
-                data {
-                  attributes {
-                    name
-                    url
-                  }
-                }
-              }
+   query {
+    eventos(sort: "rank:asc"){
+    data {
+      id
+      attributes {
+        name,
+        descriptions,
+        data_inicio,
+        localizacao,
+        slug,
+        imagem{
+          data{
+            attributes{
+              name,
+              url
             }
           }
         }
       }
+    }
+    meta {
+      pagination {
+        total
+        page
+        pageSize
+        pageCount
+      }
+    }
+  }
+}
     `;
 
     const response = await axios.post(
@@ -148,7 +150,9 @@ export const eventoGetAllGraphQLSimpleAction = async (): Promise<IEventoResponse
     }
 
     // Usar el mapper para convertir solo los eventos
-    const mappedEventos = EventoMappers.fromStrapiGraphQLArrayToEntity(response.data.data.eventos.data);
+    const mappedEventos = EventoMappers.fromStrapiGraphQLArrayToEntity(
+      response.data.data.eventos.data
+    );
 
     return mappedEventos;
   } catch (error) {
