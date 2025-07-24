@@ -20,14 +20,10 @@ async function getHomePageData() {
         eventoGetAllGraphQLAction({ page: 1, pageSize: 6 }),
         sermonGetAllGraphQLAction({ page: 1, pageSize: 6 }),
       ]);
-
-    // Processar resultado dos blogs
     const blogs =
       blogsResult.status === "fulfilled"
         ? blogsResult.value.blogs.slice(0, 6)
         : [];
-
-    // Processar resultado dos eventos
     const eventos =
       eventosResult.status === "fulfilled"
         ? eventosResult.value.eventos.slice(0, 6)
@@ -36,14 +32,12 @@ async function getHomePageData() {
       sermonesResult?.status === "fulfilled"
         ? sermonesResult.value.sermones.slice(0, 6)
         : [];
-
     return {
       blogs,
       eventos,
       sermones,
     };
   } catch (error) {
-    console.error("❌ Erro ao buscar dados da página inicial:", error);
     return {
       blogs: [],
       eventos: [],
@@ -54,11 +48,9 @@ async function getHomePageData() {
 
 export default async function Home() {
   const { blogs, eventos, sermones } = await getHomePageData();
-
   return (
     <main className="min-h-screen bg-white">
       <MinimalHero />
-      {/* Carrossel de Próximos Eventos */}
       <EventosCarousel eventos={eventos} />
       <CarruselImagenComponents backgroundVariant="dark" />
       <TestimonioSection backgroundVariant="gradient" />
@@ -72,7 +64,6 @@ export default async function Home() {
 }
 
 export const metadata: Metadata = {
-  // Título e Descrição Base
   title: "Igreja Batista Renovada Sonho de Deus | Santo André - SP",
   description:
     "Bem-vindo à Igreja Batista Renovada Sonho de Deus em Santo André. Um lugar de fé, esperança e amor onde você encontrará comunhão, crescimento espiritual e a presença de Deus. Participe dos nossos cultos, eventos e estudos bíblicos.",
@@ -91,18 +82,12 @@ export const metadata: Metadata = {
     "EBD",
     "Jardim Marek",
   ],
-
-  // Informações do site
   applicationName: "Igreja Batista Renovada Sonho de Deus",
   category: "Religion",
   classification: "Igreja Evangélica",
-
-  // Configurações do autor/organização
   authors: [{ name: "Igreja Batista Renovada Sonho de Deus" }],
   creator: "Igreja Batista Renovada Sonho de Deus",
   publisher: "Igreja Batista Renovada Sonho de Deus",
-
-  // Localização e contato
   other: {
     "geo.region": "BR-SP",
     "geo.placename": "Santo André",
@@ -111,15 +96,13 @@ export const metadata: Metadata = {
     address:
       "Rua Luis Gomes Pain, nº 300, Jardim Marek, Santo André - SP, 09111-580",
   },
-
-  // Open Graph (Facebook, WhatsApp, etc.)
   openGraph: {
     type: "website",
     locale: "pt_BR",
     title: "Igreja Batista Renovada Sonho de Deus | Santo André - SP",
     description:
       "Um lugar de fé, esperança e amor em Santo André. Venha fazer parte da nossa comunidade cristã e crescer espiritualmente conosco.",
-    url: "https://seudominio.com.br", // Substitua pelo seu domínio real
+    url: "https://seudominio.com.br", 
     siteName: "Igreja Batista Renovada Sonho de Deus",
     images: [
       {
@@ -148,21 +131,14 @@ export const metadata: Metadata = {
     images: ["/logo.jpg"],
     creator: "@ibr_sonhodedeus", // Se tiverem Twitter
   },
-
-  // Ícones e manifestos
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
+  
       { url: "/logo.jpg", sizes: "32x32", type: "image/jpeg" },
     ],
     apple: [{ url: "/logo.jpg", sizes: "180x180", type: "image/jpeg" }],
-    shortcut: "/favicon.ico",
   },
-
-  // Informações adicionais para PWA
-  manifest: "/manifest.json", // Se você tiver um arquivo manifest
-
-  // Configurações de robôs
+  manifest: "/manifest.json",
   robots: {
     index: true,
     follow: true,
@@ -174,20 +150,14 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-
-  // Links alternativos
   alternates: {
-    canonical: "https://seudominio.com.br", // Substitua pelo seu domínio real
+    canonical: "https://seudominio.com.br", 
   },
-
-  // Configurações de visualização
   viewport: {
     width: "device-width",
     initialScale: 1,
     maximumScale: 1,
   },
-
-  // Verificação de proprietário (Google, Bing, etc.)
   verification: {
     // google: 'seu-codigo-google-aqui',
     // bing: 'seu-codigo-bing-aqui',
