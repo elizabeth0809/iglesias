@@ -221,9 +221,7 @@ export const EventoDetailComponent = ({ evento }: EventoDetailComponentProps) =>
                     <p className="text-church-blue-700 font-medium">
                       {evento.localizacao}
                     </p>
-                    <p className="text-church-blue-600 text-sm mt-2">
-                      📍 Fácil acesso e estacionamento
-                    </p>
+             
                   </div>
                 </div>
               </div>
