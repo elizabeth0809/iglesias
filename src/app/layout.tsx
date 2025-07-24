@@ -56,7 +56,6 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${inter.variable} ${lora.variable}`}>
       <head>
-        {/* Enlaces adicionales para favicon (opcional, por compatibilidad) */}
         <link rel="icon" type="image/x-icon" href="/favicon_io/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
