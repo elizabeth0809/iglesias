@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MapPin, Navigation, ExternalLink, Heart, Compass, Phone } from 'lucide-react';
+import { MapPin, Navigation, ExternalLink, Heart, Compass } from 'lucide-react';
 
 interface MapboxLocationProps {
   latitude: number;
@@ -148,7 +148,7 @@ export const MapboxLocation: React.FC<MapboxLocationProps> = ({
         document.head.removeChild(style);
       }
     };
-  }, [latitude, longitude, title, address, zoom]);
+  }, [latitude, longitude, title, description, address, zoom]); // Agregamos 'description' a las dependencias
 
   // Funções para abrir em outros mapas
   const openInGoogleMaps = () => {

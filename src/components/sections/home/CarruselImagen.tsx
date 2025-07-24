@@ -136,7 +136,7 @@ export const CarruselImagenComponents = ({
           isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
         }`}>
           <p className={`text-sm ${subtextClasses[backgroundVariant]} italic`}>
-            "Cada imagem conta uma história de fé, amor e comunhão"
+            &ldquo;Cada imagem conta uma história de fé, amor e comunhão&rdquo;
           </p>
         </div>
       </div>

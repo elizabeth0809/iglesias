@@ -193,4 +193,3 @@ export const metadata: Metadata = {
     // bing: 'seu-codigo-bing-aqui',
   },
 };
-2

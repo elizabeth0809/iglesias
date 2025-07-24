@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from 'react';
 
 const MinimalHero = () => {
@@ -28,8 +29,8 @@ const MinimalHero = () => {
       <div className="relative z-10 text-center px-4 max-w-5xl">
         <h1 
           className={`md:text-6xl font-bold mb-6 font-serif text-4xl text-white transition-all duration-1000 ease-out ${
-            isLoaded 
-              ? 'transform translate-y-0 opacity-100' 
+            isLoaded
+              ? 'transform translate-y-0 opacity-100'
               : 'transform translate-y-8 opacity-0'
           }`}
           style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.6)' }}
@@ -39,27 +40,27 @@ const MinimalHero = () => {
           <span className="text-church-gold-400 font-light">Renovada Sonho de Deus</span>
         </h1>
 
-        <div 
+        <div
           className={`transition-all duration-1000 ease-out delay-300 ${
-            isLoaded 
-              ? 'transform translate-y-0 opacity-100' 
+            isLoaded
+              ? 'transform translate-y-0 opacity-100'
               : 'transform translate-y-8 opacity-0'
           }`}
         >
-          <p className="text-xl md:text-2xl mb-2 font-light text-gray-100" 
+          <p className="text-xl md:text-2xl mb-2 font-light text-gray-100"
              style={{ textShadow: '1px 1px 4px rgba(0,0,0,0.7)' }}>
-            <em>"Eu e a minha casa serviremos ao Senhor"</em>
+            <em>&ldquo;Eu e a minha casa serviremos ao Senhor&rdquo;</em>
           </p>
           <p className="text-lg text-church-gold-300 font-medium">Josué 24:15</p>
         </div>
 
         {/* Simple CTA */}
         <div className={`mt-10 transition-all duration-1000 ease-out delay-500 ${
-          isLoaded 
-            ? 'transform translate-y-0 opacity-100' 
+          isLoaded
+            ? 'transform translate-y-0 opacity-100'
             : 'transform translate-y-8 opacity-0'
         }`}>
-      
+               
         </div>
       </div>
     </section>

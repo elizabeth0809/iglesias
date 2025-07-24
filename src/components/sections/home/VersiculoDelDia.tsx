@@ -135,7 +135,7 @@ export const VersiculoDelDia = ({
             }`}
             style={{ textShadow: isDark ? '2px 2px 4px rgba(0,0,0,0.3)' : 'none' }}
             >
-              "{versiculo.texto}"
+              &ldquo;{versiculo.texto}&rdquo;
             </blockquote>
             
             <div className="absolute -bottom-4 -right-4 w-16 h-16 text-church-gold-400 opacity-50 transform rotate-180">

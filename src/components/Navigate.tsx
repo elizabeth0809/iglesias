@@ -46,7 +46,7 @@ export function Navigation() {
     <nav className="flex items-center">
       {/* Navegación Desktop */}
       <div className="hidden md:flex items-center space-x-2">
-        {navItems.map((item, index) => {
+        {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           

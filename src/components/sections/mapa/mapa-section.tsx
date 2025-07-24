@@ -3,7 +3,10 @@ import { Calendar, Clock, Heart, MapPin, NavigationIcon } from "lucide-react";
 import { MapboxLocation } from "./mapa";
 import { BackgroundVariantProps, getVariantClasses } from "@/lib/styles";
 import { useEffect, useState } from "react";
-interface LocationSectionProps extends BackgroundVariantProps {}
+
+// Arreglamos la interface vacía usando type
+type LocationSectionProps = BackgroundVariantProps;
+
 export const LocationSectionComplete = ({ 
   backgroundVariant = 'light' 
 }: LocationSectionProps) => {
@@ -16,7 +19,7 @@ export const LocationSectionComplete = ({
 
   return (
     <section className={`py-20 ${background} relative overflow-hidden`}>
-      {/* Decoración de fondo */}
+      {/* Decoração de fundo */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 right-10 w-32 h-32 bg-church-red-400 rounded-full"></div>
         <div className="absolute bottom-20 left-10 w-24 h-24 bg-church-gold-400 rounded-full"></div>
@@ -210,7 +213,7 @@ export const LocationSectionComplete = ({
                 isDark ? 'text-church-sky-300' : 'text-church-blue-600'
               }`} />
               <p className={`text-sm font-medium ${subtext}`}>
-                "Venha como você está, saia transformado pelo amor de Deus"
+                &ldquo;Venha como você está, saia transformado pelo amor de Deus&rdquo;
               </p>
             </div>
           </div>

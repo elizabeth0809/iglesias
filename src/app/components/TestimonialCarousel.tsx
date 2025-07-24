@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Quote, Star, Heart } from "lucide-react";
@@ -48,20 +48,21 @@ export function TestimonialCarousel({ backgroundVariant = 'light' }: Testimonial
 
   const isDark = backgroundVariant === 'dark';
 
+  // Usar useCallback para estabilizar la función nextTestimonial
+  const nextTestimonial = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+    setTimeout(() => setIsAnimating(false), 500);
+  }, [isAnimating]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       nextTestimonial();
     }, 6000); // Auto-advance cada 6 segundos
 
     return () => clearInterval(interval);
-  }, [currentIndex]);
-
-  const nextTestimonial = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
+  }, [nextTestimonial]);
 
   const prevTestimonial = () => {
     if (isAnimating) return;
@@ -131,7 +132,7 @@ export function TestimonialCarousel({ backgroundVariant = 'light' }: Testimonial
           <blockquote className={`text-xl md:text-2xl italic leading-relaxed text-center mb-8 transition-all duration-500 ${
             isDark ? 'text-church-sky-100' : 'text-church-blue-800'
           } ${isAnimating ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
-            "{currentTestimonial.quote}"
+            &ldquo;{currentTestimonial.quote}&rdquo;
           </blockquote>
 
           {/* Author info */}

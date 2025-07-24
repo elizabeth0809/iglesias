@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Clock, Facebook, Instagram, Heart, Phone, Mail, ChevronRight, Star } from "lucide-react";
+import { MapPin, Clock, Facebook, Instagram, Heart,  ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navItems = [
@@ -20,14 +20,14 @@ export function Footer() {
 
   return (
     <footer className="bg-gradient-to-br from-church-blue-900 via-church-blue-800 to-black text-white relative overflow-hidden">
-      {/* Decoración de fondo */}
+      {/* Decoração de fundo */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-32 h-32 bg-church-gold-400 rounded-full animate-pulse"></div>
         <div className="absolute bottom-10 right-10 w-24 h-24 bg-church-red-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-church-sky-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      {/* Pattern de fondo sutil */}
+      {/* Pattern de fundo sutil */}
       <div className="absolute inset-0 opacity-5" style={{
         backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
         backgroundSize: '20px 20px'
@@ -108,7 +108,7 @@ export function Footer() {
               <h3 className="text-lg font-semibold text-church-gold-400">Navegação</h3>
             </div>
             <ul className="space-y-3">
-              {navItems.map((item, index) => (
+              {navItems.map((item) => (
                 <li key={item.href}>
                   <Link 
                     href={item.href}
@@ -210,7 +210,7 @@ export function Footer() {
           {/* Quote inspiracional */}
           <div className="text-center mb-8">
             <p className="text-church-gold-300 italic text-lg mb-2">
-              "Eu e a minha casa serviremos ao Senhor"
+              &ldquo;Eu e a minha casa serviremos ao Senhor&rdquo;
             </p>
             <p className="text-church-sky-300 text-sm">Josué 24:15</p>
           </div>
@@ -307,7 +307,7 @@ export function SimpleFooter() {
             © {new Date().getFullYear()} Igreja Batista Renovada Sonho de Deus. Todos os direitos reservados.
           </p>
           <p className="text-church-gold-300 italic text-sm">
-            "Eu e a minha casa serviremos ao Senhor" - Josué 24:15
+            &ldquo;Eu e a minha casa serviremos ao Senhor&rdquo; - Josué 24:15
           </p>
         </div>
       </div>

@@ -9,7 +9,8 @@ import { useContactForm } from "@/hooks/useContactForm.hooks";
 import { Mail, MessageCircle, User, Send, Heart, Phone, CheckCircle } from "lucide-react";
 import { BackgroundVariantProps, getVariantClasses } from "@/lib/styles";
 
-interface FormularioComponentProps extends BackgroundVariantProps {}
+// Arreglamos la interface vacía agregando una propiedad opcional o usando type
+type FormularioComponentProps = BackgroundVariantProps;
 
 export const FormularioComponent = ({ 
   backgroundVariant = 'light' 
@@ -26,7 +27,7 @@ export const FormularioComponent = ({
 
   return (
     <section className={`py-20 ${background} relative overflow-hidden`}>
-      {/* Decoración de fondo */}
+      {/* Decoração de fundo */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-32 h-32 bg-church-blue-400 rounded-full"></div>
         <div className="absolute bottom-20 right-10 w-24 h-24 bg-church-gold-400 rounded-full"></div>
@@ -43,7 +44,7 @@ export const FormularioComponent = ({
           <div className="flex justify-center mb-6">
             <div className="relative bg-church-blue-500 rounded-full p-4 shadow-xl">
               <Mail className="w-8 h-8 text-white" />
-              {/* Decoraciones flotantes */}
+              {/* Decorações flotantes */}
               <div className="absolute -top-1 -right-1 w-6 h-6 bg-church-gold-500 rounded-full flex items-center justify-center animate-pulse">
                 <Heart className="w-3 h-3 text-white" />
               </div>
@@ -308,7 +309,7 @@ export const FormularioComponent = ({
               isDark ? 'text-church-gold-300' : 'text-church-red-500'
             }`} />
             <p className={`text-sm font-medium ${subtext}`}>
-              "Estamos aqui para caminhar junto com você"
+              &ldquo;Estamos aqui para caminhar junto com você&rdquo;
             </p>
           </div>
         </div>
