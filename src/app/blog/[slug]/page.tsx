@@ -3,10 +3,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from 'next/navigation';
 import { CalendarIcon, Clock, ArrowLeft, BookOpen, Share2, Heart, Eye, Sparkles } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 import { blogGetBySlugGraphQLAction } from '@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions';
 
-// Función para obtener blog por slug usando GraphQL
+// Tipos para los componentes de ReactMarkdown
+interface MarkdownComponentProps {
+  children?: React.ReactNode;
+}
+
+interface LinkProps extends MarkdownComponentProps {
+  href?: string;
+}
+
+interface CodeProps extends MarkdownComponentProps {
+  className?: string;
+}
+
+interface ImageProps extends MarkdownComponentProps {
+  src?: string;
+  alt?: string;
+}
+
 async function getBlogDetails(slug: string): Promise<{ blog: IBlogResponse | null; error?: string }> {
   try {
     console.log('🔄 Obteniendo blog por slug desde GraphQL:', slug);
@@ -38,13 +58,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   
   const { blog, error } = await getBlogDetails(slug);
 
-  // Si hay error o no se encuentra el blog, mostrar 404
+  
   if (error || !blog) {
     console.log('❌ Blog no encontrado o error:', { slug, error });
     notFound();
   }
 
-  // Función para formatear la fecha
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -59,12 +78,128 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     }
   };
 
-  // Función para estimar tiempo de lectura
   const estimateReadingTime = (content: string) => {
     const wordsPerMinute = 200;
     const wordCount = content.split(/\s+/).length;
     const minutes = Math.ceil(wordCount / wordsPerMinute);
     return `${minutes} min de leitura`;
+  };
+
+  // Componentes personalizados para el markdown
+  const markdownComponents = {
+    h1: ({ children }: MarkdownComponentProps) => (
+      <h1 className="text-3xl font-bold text-church-blue-900 mb-6 mt-8 border-b-2 border-church-gold-500 pb-2">
+        {children}
+      </h1>
+    ),
+    h2: ({ children }: MarkdownComponentProps) => (
+      <h2 className="text-2xl font-bold text-church-blue-800 mb-4 mt-6">
+        {children}
+      </h2>
+    ),
+    h3: ({ children }: MarkdownComponentProps) => (
+      <h3 className="text-xl font-semibold text-church-blue-700 mb-3 mt-5">
+        {children}
+      </h3>
+    ),
+    p: ({ children }: MarkdownComponentProps) => (
+      <p className="text-church-blue-700 mb-4 leading-relaxed text-lg">
+        {children}
+      </p>
+    ),
+    blockquote: ({ children }: MarkdownComponentProps) => (
+      <blockquote className="border-l-4 border-church-gold-500 bg-church-gold-50 pl-6 py-4 my-6 italic text-church-blue-800 rounded-r-lg">
+        {children}
+      </blockquote>
+    ),
+    ul: ({ children }: MarkdownComponentProps) => (
+      <ul className="list-disc list-inside text-church-blue-700 mb-4 space-y-2 ml-4">
+        {children}
+      </ul>
+    ),
+    ol: ({ children }: MarkdownComponentProps) => (
+      <ol className="list-decimal list-inside text-church-blue-700 mb-4 space-y-2 ml-4">
+        {children}
+      </ol>
+    ),
+    li: ({ children }: MarkdownComponentProps) => (
+      <li className="mb-1 leading-relaxed">
+        {children}
+      </li>
+    ),
+    strong: ({ children }: MarkdownComponentProps) => (
+      <strong className="font-bold text-church-blue-900">
+        {children}
+      </strong>
+    ),
+    em: ({ children }: MarkdownComponentProps) => (
+      <em className="italic text-church-blue-800">
+        {children}
+      </em>
+    ),
+    a: ({ href, children }: LinkProps) => (
+      <a 
+        href={href} 
+        className="text-church-blue-600 hover:text-church-gold-600 underline font-medium transition-colors duration-200"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    ),
+    code: ({ children, className }: CodeProps) => {
+      const isInline = !className;
+      if (isInline) {
+        return (
+          <code className="bg-church-sky-100 text-church-blue-800 px-2 py-1 rounded text-sm font-mono">
+            {children}
+          </code>
+        );
+      }
+      return (
+        <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4">
+          <code className={className}>
+            {children}
+          </code>
+        </pre>
+      );
+    },
+    table: ({ children }: MarkdownComponentProps) => (
+      <div className="overflow-x-auto my-6">
+        <table className="min-w-full bg-white border border-church-sky-200 rounded-lg">
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children }: MarkdownComponentProps) => (
+      <thead className="bg-church-blue-500 text-white">
+        {children}
+      </thead>
+    ),
+    th: ({ children }: MarkdownComponentProps) => (
+      <th className="px-4 py-3 text-left font-semibold">
+        {children}
+      </th>
+    ),
+    td: ({ children }: MarkdownComponentProps) => (
+      <td className="px-4 py-3 border-t border-church-sky-200 text-church-blue-700">
+        {children}
+      </td>
+    ),
+    hr: () => (
+      <hr className="my-8 border-t-2 border-church-gold-300" />
+    ),
+    img: ({ src, alt }: ImageProps) => (
+      <div className="my-6">
+        <Image
+          src={src || ''}
+          alt={alt || 'Imagen del blog'}
+          width={800}
+          height={400}
+          className="rounded-lg shadow-lg mx-auto"
+        />
+      </div>
+    ),
   };
 
   return (
@@ -117,7 +252,6 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </button>
             </div>
 
-            {/* Información sobre la imagen */}
             <div className="absolute bottom-6 left-6 right-6">
               <div className="bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-lg">
                 <div className="flex items-center justify-between">
@@ -217,19 +351,18 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 </div>
               )}
 
-              {/* Contenido principal */}
+              {/* Contenido principal con Markdown */}
               <div className="bg-white/80 rounded-xl p-8 border border-church-sky-200 shadow-lg">
-                <div className="text-church-blue-700 leading-relaxed space-y-6">
+                <div className="text-church-blue-700 leading-relaxed">
                   {blog.content ? (
-                    <div
-                      className="whitespace-pre-wrap prose prose-lg max-w-none"
-                      style={{
-                        lineHeight: "1.8",
-                        fontSize: "1.1rem",
-                        color: "#1e40af"
-                      }}
-                      dangerouslySetInnerHTML={{ __html: blog.content }}
-                    />
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeRaw]}
+                      components={markdownComponents}
+      
+                    >
+                      {blog.content}
+                    </ReactMarkdown>
                   ) : (
                     <div className="text-center py-12">
                       <div className="w-16 h-16 bg-church-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">

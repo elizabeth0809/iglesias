@@ -38,6 +38,7 @@ async function getHomePageData() {
       sermones,
     };
   } catch (error) {
+    console.error(error);
     return {
       blogs: [],
       eventos: [],
@@ -121,15 +122,13 @@ export const metadata: Metadata = {
       },
     ],
   },
-
-  // Twitter Card
   twitter: {
     card: "summary_large_image",
     title: "Igreja Batista Renovada Sonho de Deus",
     description:
       "Um lugar de fé, esperança e amor em Santo André - SP. Venha nos conhecer!",
     images: ["/logo.jpg"],
-    creator: "@ibr_sonhodedeus", // Se tiverem Twitter
+    creator: "@ibr_sonhodedeus", 
   },
   icons: {
     icon: [
