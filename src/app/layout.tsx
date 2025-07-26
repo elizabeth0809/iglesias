@@ -1,4 +1,4 @@
-import { Header } from "@/components/ui/header"
+import {  MinimalHeader } from "@/components/ui/header"
 import "./globals.css"
 import type { Metadata } from "next"
 import { Inter, Lora } from "next/font/google";
@@ -62,7 +62,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="192x192" href="/favicon_io/android-chrome-192x192.png" />
       </head>
       <body className="bg-background font-sans text-foreground"> 
-        <Header /> 
+        <MinimalHeader /> 
         {children} 
         <Footer/>
       </body>

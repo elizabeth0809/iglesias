@@ -27,8 +27,6 @@ export function Header() {
         : 'bg-white/90 backdrop-blur-sm border-b border-church-sky-100'
     } supports-[backdrop-filter]:bg-white/80`}>
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
-        
-        {/* Logo y Nombre */}
         <Link href="/" className={`flex items-center space-x-4 group transition-all duration-500 ease-out ${
           isLoaded ? 'transform translate-x-0 opacity-100' : 'transform -translate-x-8 opacity-0'
         }`}>
@@ -83,18 +81,16 @@ export function Header() {
         </div>
       </div>
 
-      {/* Línea decorativa inferior */}
       <div className={`h-1 bg-gradient-to-r from-church-blue-500 via-church-gold-400 to-church-blue-500 transition-all duration-300 ${
         isScrolled ? 'opacity-100' : 'opacity-0'
       }`}></div>
 
-      {/* Badge flotante opcional - solo visible en scroll */}
+ 
      
     </header>
   );
 }
 
-// Versión alternativa más minimalista
 export function MinimalHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
 
