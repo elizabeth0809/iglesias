@@ -47,8 +47,7 @@ export default async function EventoPage({ params }: EventoPageProps) {
   return (
     <div suppressHydrationWarning={true}>
       <EventoDetailComponent evento={evento} />
-      
-      {/* Agregar la galería de imágenes */}
+
       <ImagenEventoGaleria
         eventoSlug={slug}
         backgroundVariant="gradient" 

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, CalendarIcon, Play, Volume2, Heart, Users, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarIcon, Play, Volume2, Heart, Users, ArrowRight, Video } from "lucide-react";
 import { SermonResponse } from "@/insfractucture/interfaces/sermones/sermones.interfaces";
 import { BackgroundVariantProps, getVariantClasses } from "@/lib/styles";
 
@@ -43,6 +43,18 @@ export function SermonesCarousel({ sermones, backgroundVariant = 'gradient' }: S
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  // Función para verificar si la thumbnail es válida
+  const hasValidThumbnail = (thumbnailUrl: string | null | undefined): boolean => {
+    return !!(thumbnailUrl && thumbnailUrl.trim() !== '');
+  };
+
+  // Función para generar thumbnail por defecto basada en el título
+  const generateDefaultThumbnail = (title: string): string => {
+    // Podrías usar un servicio como placeholder.com o crear una imagen dinámica
+    const encodedTitle = encodeURIComponent(title.substring(0, 50));
+    return `https://via.placeholder.com/640x480/1e40af/ffffff?text=${encodedTitle}`;
   };
 
   const nextSlide = () => {
@@ -196,13 +208,38 @@ export function SermonesCarousel({ sermones, backgroundVariant = 'gradient' }: S
                     
                     {/* Thumbnail do vídeo */}
                     <div className="relative h-48 md:h-56 lg:h-64 overflow-hidden bg-gray-100">
-                      <Image
-                        src={sermon.youtube_thumbnail}
-                        alt={sermon.titulo}
-                        fill
-                        className="object-cover transition-all duration-500 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
+                      {hasValidThumbnail(sermon.youtube_thumbnail) ? (
+                        <Image
+                          src={sermon.youtube_thumbnail}
+                          alt={sermon.titulo}
+                          fill
+                          className="object-cover transition-all duration-500 group-hover:scale-110"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          onError={(e) => {
+                            // Si la imagen falla al cargar, mostrar el placeholder
+                            e.currentTarget.style.display = 'none';
+                            const fallback = e.currentTarget.parentNode?.querySelector('.fallback-thumbnail');
+                            if (fallback) {
+                              (fallback as HTMLElement).style.display = 'flex';
+                            }
+                          }}
+                        />
+                      ) : null}
+                      
+                      {/* Fallback cuando no hay thumbnail o falla la carga */}
+                      <div 
+                        className={`fallback-thumbnail absolute inset-0 bg-gradient-to-br from-church-blue-600 to-church-red-600 flex flex-col items-center justify-center text-white transition-all duration-500 group-hover:scale-110 ${
+                          hasValidThumbnail(sermon.youtube_thumbnail) ? 'hidden' : 'flex'
+                        }`}
+                      >
+                        <Video className="w-16 h-16 mb-4 opacity-80" />
+                        <h4 className="text-lg font-bold text-center px-4 leading-tight">
+                          {sermon.titulo}
+                        </h4>
+                        <p className="text-sm opacity-75 mt-2">
+                          Clique para assistir
+                        </p>
+                      </div>
                       
                       {/* Overlay gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -236,7 +273,7 @@ export function SermonesCarousel({ sermones, backgroundVariant = 'gradient' }: S
                       <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                         <div className="bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
                           <Play className="w-3 h-3 text-white fill-current" />
-                          <span className="text-xs text-white font-medium">~45 min</span>
+                          {/* <span className="text-xs text-white font-medium">~45 min</span> */}
                         </div>
                       </div>
                     </div>

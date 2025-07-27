@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarIcon, Play, ExternalLink, Volume2, Heart, Sparkles, Users, Clock, ArrowRight } from "lucide-react";
+import { CalendarIcon, Play, ExternalLink, Volume2, Heart, Sparkles, Users, Clock, ArrowRight, Video } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -45,7 +45,21 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
 
   const getYouTubeThumbnail = (url: string) => {
     const videoId = extractYouTubeVideoId(url);
-    return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '/placeholder.svg';
+    return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
+  };
+
+  // Función para verificar si la thumbnail es válida
+  const hasValidThumbnail = (thumbnailUrl: string | null | undefined): boolean => {
+    return !!(thumbnailUrl && thumbnailUrl.trim() !== '');
+  };
+
+  // Función para obtener la mejor thumbnail disponible
+  const getBestThumbnail = (sermon: ISermonResponse): string | null => {
+    if (hasValidThumbnail(sermon.youtube_thumbnail)) {
+      return sermon.youtube_thumbnail;
+    }
+    const youtubeThumb = getYouTubeThumbnail(sermon.url_youtube);
+    return hasValidThumbnail(youtubeThumb) ? youtubeThumb : null;
   };
 
   if (!sermones || sermones.length === 0) {
@@ -183,130 +197,155 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
 
         {/* Grid de sermões */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {sermones.map((sermon, index) => (
-            <div
-              key={sermon.id}
-              className={`transition-all duration-700 ease-out ${
-                isLoaded 
-                  ? 'transform translate-y-0 opacity-100' 
-                  : 'transform translate-y-12 opacity-0'
-              }`}
-              style={{ transitionDelay: `${index * 100}ms` }}
-            >
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-3 group border border-church-sky-200 relative">
-                {/* Línea decorativa superior */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-church-red-400 via-church-gold-400 to-church-red-400"></div>
-                
-                {/* Thumbnail do vídeo */}
-                <div className="relative h-48 md:h-56 overflow-hidden bg-church-sky-100">
-                  <Image
-                    src={sermon.youtube_thumbnail || getYouTubeThumbnail(sermon.url_youtube)}
-                    alt={sermon.titulo}
-                    fill
-                    className="object-cover transition-all duration-500 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/placeholder.svg";
-                    }}
-                  />
+          {sermones.map((sermon, index) => {
+            const thumbnailUrl = getBestThumbnail(sermon);
+            
+            return (
+              <div
+                key={sermon.id}
+                className={`transition-all duration-700 ease-out ${
+                  isLoaded 
+                    ? 'transform translate-y-0 opacity-100' 
+                    : 'transform translate-y-12 opacity-0'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
+              >
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-3 group border border-church-sky-200 relative">
+                  {/* Línea decorativa superior */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-church-red-400 via-church-gold-400 to-church-red-400"></div>
                   
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
-                  {/* Botão de play central */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                    <a
-                      href={sermon.url_youtube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-church-red-500 hover:bg-church-red-600 text-white rounded-full p-4 transition-all duration-300 transform hover:scale-110 shadow-2xl backdrop-blur-sm"
-                    >
-                      <Play className="h-8 w-8 fill-current ml-1" />
-                    </a>
-                  </div>
-                  
-                  {/* Badge de status */}
-                  <div className="absolute top-4 right-4">
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shadow-lg backdrop-blur-sm ${
-                        sermon.activo
-                          ? "bg-church-gold-500 text-white"
-                          : "bg-gray-500 text-white"
+                  {/* Thumbnail do vídeo */}
+                  <div className="relative h-48 md:h-56 overflow-hidden bg-church-sky-100">
+                    {thumbnailUrl ? (
+                      <Image
+                        src={thumbnailUrl}
+                        alt={sermon.titulo}
+                        fill
+                        className="object-cover transition-all duration-500 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                        onError={(e) => {
+                          // Si la imagen falla al cargar, mostrar el fallback
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.parentNode?.querySelector('.fallback-thumbnail');
+                          if (fallback) {
+                            (fallback as HTMLElement).style.display = 'flex';
+                          }
+                        }}
+                      />
+                    ) : null}
+                    
+                    {/* Fallback cuando no hay thumbnail o falla la carga */}
+                    <div 
+                      className={`fallback-thumbnail absolute inset-0 bg-gradient-to-br from-church-blue-600 to-church-red-600 flex flex-col items-center justify-center text-white transition-all duration-500 group-hover:scale-110 ${
+                        thumbnailUrl ? 'hidden' : 'flex'
                       }`}
                     >
-                      {sermon.activo ? "🔴 Ativo" : "⏸️ Inativo"}
-                    </span>
-                  </div>
-
-                  {/* Duração estimada */}
-                  <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <div className="bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
-                      <Clock className="w-3 h-3 text-white" />
-                      <span className="text-xs text-white font-medium">~30 min</span>
+                      <Video className="w-12 h-12 mb-3 opacity-80" />
+                      <h4 className="text-sm font-bold text-center px-4 leading-tight line-clamp-3">
+                        {sermon.titulo}
+                      </h4>
+                      <p className="text-xs opacity-75 mt-2">
+                        Clique para assistir
+                      </p>
                     </div>
-                  </div>
-                </div>
-
-                {/* Conteúdo do card */}
-                <div className="p-6">
-                  <h3 className="text-lg font-bold mb-3 text-church-blue-900 group-hover:text-church-red-500 transition-colors duration-300 line-clamp-2 min-h-[3.5rem] leading-tight">
-                    {sermon.titulo}
-                  </h3>
-                  
-                  {/* Data com ícone melhorado */}
-                  <div className="flex items-center mb-4 text-church-blue-600">
-                    <div className="w-8 h-8 bg-church-red-100 rounded-lg flex items-center justify-center mr-3">
-                      <CalendarIcon className="h-4 w-4 text-church-red-600" />
-                    </div>
-                    <span className="text-sm font-medium">
-                      {formatDate(sermon.created_at)}
-                    </span>
-                  </div>
-                  
-                  {sermon.descripcion && (
-                    <p className="text-church-blue-700 line-clamp-3 mb-4 text-sm min-h-[4.5rem] leading-relaxed">
-                      {sermon.descripcion}
-                    </p>
-                  )}
-                  
-                  {/* Call to action */}
-                  <div className="pt-4 border-t border-church-sky-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="flex items-center justify-between">
+                    
+                    {/* Overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Botão de play central */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <a
                         href={sermon.url_youtube}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center text-church-red-500 hover:text-church-red-600 font-medium transition-colors duration-300 group/link"
+                        className="bg-church-red-500 hover:bg-church-red-600 text-white rounded-full p-4 transition-all duration-300 transform hover:scale-110 shadow-2xl backdrop-blur-sm"
                       >
-                        <div className="w-8 h-8 bg-church-red-100 rounded-lg flex items-center justify-center mr-2 group-hover/link:bg-church-red-200 transition-colors duration-300">
-                          <Play className="h-4 w-4 text-church-red-600 fill-current" />
-                        </div>
-                        <span>Assistir sermão</span>
-                      </a>
-                      
-                      <a
-                        href={sermon.url_youtube}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center text-church-blue-400 hover:text-church-blue-600 transition-colors duration-300"
-                        title="Abrir no YouTube"
-                      >
-                        <ExternalLink className="h-5 w-5" />
+                        <Play className="h-8 w-8 fill-current ml-1" />
                       </a>
                     </div>
-                  </div>
-                </div>
+                    
+                    {/* Badge de status */}
+                    <div className="absolute top-4 right-4">
+                      <span
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shadow-lg backdrop-blur-sm ${
+                          sermon.activo
+                            ? "bg-church-gold-500 text-white"
+                            : "bg-gray-500 text-white"
+                        }`}
+                      >
+                        {sermon.activo ? "🔴 Ativo" : "⏸️ Inativo"}
+                      </span>
+                    </div>
 
-                {/* Decoración flotante */}
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <div className="w-8 h-8 bg-church-gold-500 rounded-full flex items-center justify-center shadow-lg">
-                    <Sparkles className="w-4 h-4 text-white" />
+                    {/* Duração estimada */}
+                    <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <div className="bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
+                        <Clock className="w-3 h-3 text-white" />
+                        <span className="text-xs text-white font-medium">~30 min</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Conteúdo do card */}
+                  <div className="p-6 flex flex-col">
+                    <h3 className="text-lg font-bold mb-3 text-church-blue-900 group-hover:text-church-red-500 transition-colors duration-300 leading-tight">
+                      {sermon.titulo}
+                    </h3>
+                    
+                    {/* Data com ícone melhorado */}
+                    <div className="flex items-center mb-4 text-church-blue-600">
+                      <div className="w-8 h-8 bg-church-red-100 rounded-lg flex items-center justify-center mr-3">
+                        <CalendarIcon className="h-4 w-4 text-church-red-600" />
+                      </div>
+                      <span className="text-sm font-medium">
+                        {formatDate(sermon.created_at)}
+                      </span>
+                    </div>
+                    
+                    {sermon.descripcion && (
+                      <p className="text-church-blue-700 mb-4 text-sm leading-relaxed flex-grow">
+                        {sermon.descripcion}
+                      </p>
+                    )}
+                    
+                    {/* Call to action */}
+                    <div className="pt-4 border-t border-church-sky-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-auto">
+                      <div className="flex items-center justify-between">
+                        <a
+                          href={sermon.url_youtube}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-church-red-500 hover:text-church-red-600 font-medium transition-colors duration-300 group/link"
+                        >
+                          <div className="w-8 h-8 bg-church-red-100 rounded-lg flex items-center justify-center mr-2 group-hover/link:bg-church-red-200 transition-colors duration-300">
+                            <Play className="h-4 w-4 text-church-red-600 fill-current" />
+                          </div>
+                          <span>Assistir sermão</span>
+                        </a>
+                        
+                        <a
+                          href={sermon.url_youtube}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-church-blue-400 hover:text-church-blue-600 transition-colors duration-300"
+                          title="Abrir no YouTube"
+                        >
+                          <ExternalLink className="h-5 w-5" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Decoración flotante */}
+                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <div className="w-8 h-8 bg-church-gold-500 rounded-full flex items-center justify-center shadow-lg">
+                      <Sparkles className="w-4 h-4 text-white" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Call to action final */}
@@ -330,11 +369,16 @@ export function SermonesListComponent({ sermones }: SermonesListComponentProps) 
                   <Volume2 className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
                   Entrar em Contato
                 </Link>
-                <button className="group inline-flex items-center justify-center px-8 py-3 bg-church-blue-500 hover:bg-church-blue-600 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <a
+                  href="https://www.youtube.com/@ibrsonhodedeus-k4c2f"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center justify-center px-8 py-3 bg-church-blue-500 hover:bg-church-blue-600 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
                   <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300 fill-current" />
                   Ver no YouTube
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
+                </a>
               </div>
             </div>
           </div>
