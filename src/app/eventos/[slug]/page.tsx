@@ -1,9 +1,10 @@
 // app/eventos/[slug]/page.tsx
-
 import { IEventoResponse } from '@/insfractucture/interfaces/eventos/eventos.interfaces';
 import { notFound } from 'next/navigation';
 import { EventoDetailComponent } from '../components/evento-details.components';
+
 import { eventoGetBySlugGraphQLAction } from '@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions';
+import { ImagenEventoGaleria } from '@/components/sections/eventos/ImagenEventoGaleria.components';
 
 // Función para obtener evento por slug usando GraphQL
 async function getEventoBySlug(slug: string): Promise<{ evento: IEventoResponse | null; error?: string }> {
@@ -45,9 +46,13 @@ export default async function EventoPage({ params }: EventoPageProps) {
 
   return (
     <div suppressHydrationWarning={true}>
-     
-
       <EventoDetailComponent evento={evento} />
+      
+      {/* Agregar la galería de imágenes */}
+      <ImagenEventoGaleria
+        eventoSlug={slug}
+        backgroundVariant="gradient" 
+      />
     </div>
   );
 }

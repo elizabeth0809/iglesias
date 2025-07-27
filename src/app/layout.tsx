@@ -1,11 +1,10 @@
-import {  MinimalHeader } from "@/components/ui/header"
-import "./globals.css"
-import type { Metadata } from "next"
+import { MinimalHeader } from "@/components/ui/header";
+import "./globals.css";
+import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
-
-import type React from "react"
+import type React from "react";
 import { Footer } from "@/components/sections/footer/footer";
-
+import QueryProvider from "@/providers/QueryProvider"; 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -30,12 +29,12 @@ export const metadata: Metadata = {
         type: "image/png"
       },
       {
-        url: "/favicon_io/favicon-32x32.png", 
+        url: "/favicon_io/favicon-32x32.png",
         sizes: "32x32",
         type: "image/png"
       },
       {
-        url: "/favicon_io/favicon.ico",
+        url: "/favicon_io/favicon-16x16.png",
         sizes: "any"
       }
     ],
@@ -44,14 +43,14 @@ export const metadata: Metadata = {
       sizes: "192x192",
       type: "image/png"
     },
-    shortcut: "/favicon_io/favicon.ico"
+    shortcut: "/favicon_io/favicon-16x16.png"
   }
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="es" className={`${inter.variable} ${lora.variable}`}>
@@ -61,11 +60,13 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="/favicon_io/android-chrome-192x192.png" />
       </head>
-      <body className="bg-background font-sans text-foreground"> 
-        <MinimalHeader /> 
-        {children} 
-        <Footer/>
+      <body className="bg-background font-sans text-foreground">
+        <QueryProvider>
+          <MinimalHeader />
+          {children}
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
-  )
+  );
 }
