@@ -16,7 +16,6 @@ export const TestimonioSection = ({
 
   return (
     <section className={`py-20 ${background} relative overflow-hidden`}>
-      {/* Decoración de fondo */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-32 h-32 bg-church-gold-400 rounded-full"></div>
         <div className="absolute bottom-20 right-10 w-24 h-24 bg-church-blue-400 rounded-full"></div>
@@ -58,7 +57,7 @@ export const TestimonioSection = ({
           }`}>
             <div className="text-center">
               <div className={`text-2xl md:text-3xl font-bold ${text} mb-1`}>
-                500+
+                60+
               </div>
               <p className={`text-sm ${subtext}`}>
                 Vidas Transformadas
@@ -69,7 +68,7 @@ export const TestimonioSection = ({
 
             <div className="text-center">
               <div className={`text-2xl md:text-3xl font-bold ${text} mb-1`}>
-                15+
+                17
               </div>
               <p className={`text-sm ${subtext}`}>
                 Anos de Ministério

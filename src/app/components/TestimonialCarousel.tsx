@@ -7,23 +7,23 @@ import { ChevronLeft, ChevronRight, Quote, Star, Heart } from "lucide-react";
 
 const testimonials = [
   {
-    quote: "Esta igreja transformou a minha vida. Encontrei uma comunidade acolhedora e um propósito maior. Cada domingo sinto o amor de Deus através dos irmãos.",
-    author: "Maria González",
-    role: "Membro desde 2018",
+    quote: "Desde que comecei a fazer parte do Ministério de Mulheres, em janeiro, o Senhor tem realizado grandes coisas em minha vida. Tenho aprendido, dia após dia, a conhecer quem Deus é de verdade. Descobri que posso descansar n'Ele, porque o Senhor cuida de tudo. Tive experiências marcantes ao lado das minhas irmãs em Cristo. Juntas, temos buscado não apenas um relacionamento superficial, mas uma intimidade profunda com Deus.",
+    author: "Renata Célia",
+    role: "Ministério de Mulheres",
     rating: 5,
-    highlight: "Comunidade acolhedora"
+    highlight: "Intimidade com Deus"
   },
   {
-    quote: "Os sermões são inspiradores e relevantes para o meu dia a dia. Sinto-me renovado a cada semana e minha fé cresceu enormemente.",
-    author: "Juan Pérez", 
-    role: "Membro desde 2020",
+    quote: "O ministério infantil tem me ajudado muito com minha filha. Graças a ele, ela pôde interagir com outras crianças e se aproximar de mais pessoas, o que foi muito importante para nós, já que somos imigrantes e não conhecíamos ninguém. Lá, ela se sentiu mais segura e tranquila.",
+    author: "Kervis Vásquez",
+    role: "Pai e membro",
     rating: 5,
-    highlight: "Sermões inspiradores"
+    highlight: "Ministério infantil"
   },
   {
     quote: "O programa juvenil tem sido uma bênção para os meus filhos. Eles cresceram muito na sua fé e encontraram amigos verdadeiros.",
     author: "Ana Rodríguez",
-    role: "Mãe e membro desde 2015", 
+    role: "Mãe e membro desde 2015",
     rating: 5,
     highlight: "Programa juvenil"
   },
