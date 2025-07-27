@@ -51,11 +51,11 @@ export function SermonesCarousel({ sermones, backgroundVariant = 'gradient' }: S
   };
 
   // Función para generar thumbnail por defecto basada en el título
-  const generateDefaultThumbnail = (title: string): string => {
-    // Podrías usar un servicio como placeholder.com o crear una imagen dinámica
-    const encodedTitle = encodeURIComponent(title.substring(0, 50));
-    return `https://via.placeholder.com/640x480/1e40af/ffffff?text=${encodedTitle}`;
-  };
+  // const generateDefaultThumbnail = (title: string): string => {
+  //   // Podrías usar un servicio como placeholder.com o crear una imagen dinámica
+  //   const encodedTitle = encodeURIComponent(title.substring(0, 50));
+  //   return `https://via.placeholder.com/640x480/1e40af/ffffff?text=${encodedTitle}`;
+  // };
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>

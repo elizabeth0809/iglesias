@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Expand, Heart } from "lucide-react";
 
 const images = [
-  "/fotos/iglesia1.jpeg",
-  "/fotos/iglesia2.jpeg",
-  "/fotos/iglesia3.jpeg",
-  "/fotos/iglesia4.jpeg",
-  "/fotos/iglesia5.jpeg",
-  "/fotos/iglesia6.jpeg",
+  "/fotos/image1.jpeg",
+  "/fotos/image2.jpeg",
+  "/fotos/image3.jpeg",
+  "/fotos/image4.jpeg",
+  "/fotos/image5.jpeg",
+  "/fotos/image6.jpeg",
+    "/fotos/image7.jpeg",
+     "/fotos/image8.jpeg",
 ];
 
 type BackgroundVariant = 'light' | 'dark' | 'gradient' | 'white';
@@ -102,16 +104,7 @@ export function ImageCarousel({ backgroundVariant = 'gradient' }: ImageCarouselP
               </div>
 
               {/* Información en hover */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
-                  <h3 className="font-semibold text-church-blue-900 mb-1">
-                    Momento Especial {index + 1}
-                  </h3>
-                  <p className="text-church-blue-600 text-sm">
-                    Compartilhando momentos de fé e comunhão
-                  </p>
-                </div>
-              </div>
+            
 
               {/* Border decorativo animado */}
               <div className={`absolute inset-0 rounded-2xl border-2 transition-all duration-300 ${
