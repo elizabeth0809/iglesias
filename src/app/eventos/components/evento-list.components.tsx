@@ -193,7 +193,7 @@ export const EventosListComponent = ({ eventos }: EventosListComponentProps) => 
                             ? 'bg-church-gold-500 text-white' 
                             : 'bg-gray-500 text-white'
                         }`}>
-                          {evento.status === 'ativo' ? '✨ Ativo' : '⏸️ Inativo'}
+                          {evento.status === 'ativo' ? '✨ Ativo' : '✅ Concluído'}
                         </span>
                       </div>
 

@@ -151,7 +151,7 @@ export function EventosCarousel({ eventos }: EventosCarouselProps) {
                               : "bg-gray-500 text-white"
                           }`}
                         >
-                          {evento.status === "ativo" ? "✨ Ativo" : "⏸️ Inativo"}
+                          {evento.status === 'ativo' ? '✨ Ativo' : '✅ Concluído'}
                         </span>
                       </div>
                     </div>
