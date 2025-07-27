@@ -2,12 +2,13 @@ import { Metadata } from 'next';
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from 'next/navigation';
-import { CalendarIcon, Clock, ArrowLeft, BookOpen, Share2, Heart, Eye, Sparkles } from "lucide-react";
+import { CalendarIcon, Clock, ArrowLeft, BookOpen, Heart, Eye, Sparkles } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 import { blogGetBySlugGraphQLAction } from '@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions';
+import { BlogShareWrapper } from '@/app/components/blogShared';
 
 // Tipos para los componentes de ReactMarkdown
 interface MarkdownComponentProps {
@@ -246,10 +247,18 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </span>
             </div>
 
+            {/* ShareButton flotante reemplazando el botón original */}
             <div className="absolute top-6 right-6">
-              <button className="bg-church-gold-500/80 backdrop-blur-sm text-white p-3 rounded-full hover:bg-church-gold-600 transition-all duration-300 shadow-lg hover:scale-110">
-                <Share2 className="w-5 h-5" />
-              </button>
+              <BlogShareWrapper
+                title={blog.title}
+                description={blog.description}
+                variant="floating"
+                size="md"
+                className="bg-church-gold-500/80 hover:bg-church-gold-600"
+                shareText="Compartilhar Reflexão"
+                copyText="Copiar Link do Blog"
+                toastMessage="Link da reflexão copiado para a área de transferência!"
+              />
             </div>
 
             <div className="absolute bottom-6 left-6 right-6">
@@ -423,13 +432,28 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <p className="text-lg mb-6 opacity-90">
               Explore mais conteúdos espirituais em nosso blog
             </p>
-            <Link
-              href="/blog"
-              className="group inline-flex items-center justify-center px-8 py-3 bg-white text-church-blue-600 rounded-lg font-semibold hover:bg-church-sky-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              <BookOpen className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-              Ver mais entradas do blog
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/blog"
+                className="group inline-flex items-center justify-center px-8 py-3 bg-white text-church-blue-600 rounded-lg font-semibold hover:bg-church-sky-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <BookOpen className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                Ver mais entradas do blog
+              </Link>
+              
+              {/* ShareButton adicional en el CTA */}
+              <BlogShareWrapper
+                title={blog.title}
+                description={blog.description}
+                variant="primary"
+                size="md"
+                className="bg-church-gold-500 hover:bg-church-gold-600"
+                shareText="Compartilhar Reflexão"
+                copyText="Copiar Link"
+                successText="Reflexão Compartilhada!"
+                toastMessage="Link da reflexão espiritual copiado!"
+              />
+            </div>
           </div>
         </div>
       </div>

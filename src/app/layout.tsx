@@ -5,6 +5,7 @@ import { Inter, Lora } from "next/font/google";
 import type React from "react";
 import { Footer } from "@/components/sections/footer/footer";
 import QueryProvider from "@/providers/QueryProvider"; 
+import { Toaster } from "sonner";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -64,6 +65,7 @@ export default function RootLayout({
         <QueryProvider>
           <MinimalHeader />
           {children}
+          <Toaster  richColors={false} />
           <Footer />
         </QueryProvider>
       </body>
