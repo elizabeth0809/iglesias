@@ -6,6 +6,7 @@ import type React from "react";
 import { Footer } from "@/components/sections/footer/footer";
 import QueryProvider from "@/providers/QueryProvider"; 
 import { Toaster } from "sonner";
+import { Matomo } from "@/analytics/Matomo";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -67,6 +68,7 @@ export default function RootLayout({
           {children}
           <Toaster  richColors={false} />
           <Footer />
+           {process.env.NODE_ENV === 'production' && <Matomo />}
         </QueryProvider>
       </body>
     </html>
