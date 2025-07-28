@@ -4,7 +4,6 @@ import { MapboxLocation } from "./mapa";
 import { BackgroundVariantProps, getVariantClasses } from "@/lib/styles";
 import { useEffect, useState } from "react";
 
-// Arreglamos la interface vacía usando type
 type LocationSectionProps = BackgroundVariantProps;
 
 export const LocationSectionComplete = ({ 

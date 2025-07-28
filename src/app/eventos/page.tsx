@@ -5,7 +5,7 @@ import { EventosListComponent } from "./components/evento-list.components";
 import { eventoGetAllGraphQLAction } from "@/insfractucture/actions/eventos/graphql/get-eventos.actions";
 import { PaginationMeta } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 
-// Función para obtener eventos desde GraphQL
+
 async function getEventosGraphQL(page: number = 1): Promise<{ 
   eventos: IEventoResponse[]; 
   pagination?: PaginationMeta; 
@@ -66,8 +66,6 @@ export default async function EventosPage({ searchParams }: EventosPageProps) {
 
   return (
     <div suppressHydrationWarning={true}>
-    
-      
       <EventosListComponent eventos={eventos} />
     </div>
   );
