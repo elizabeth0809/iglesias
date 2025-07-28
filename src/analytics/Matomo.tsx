@@ -5,6 +5,32 @@ import Script from 'next/script';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
+// Tipos específicos para Matomo
+type MatomoCommand = 
+  | ['trackPageView']
+  | ['enableLinkTracking']
+  | ['setDoNotTrack', boolean]
+  | ['disableCookies']
+  | ['setDocumentTitle', string]
+  | ['setCookieDomain', string]
+  | ['disableCampaignParameters']
+  | ['setCustomUrl', string]
+  | ['setTrackerUrl', string]
+  | ['setSiteId', string | number]
+  | ['trackEvent', string, string, string?, number?]
+  | ['trackGoal', number, number?]
+  | ['trackLink', string, string]
+  | ['trackDownload', string]
+  | ['setCustomDimension', number, string]
+  | ['setUserId', string];
+
+// Extensión del objeto Window
+declare global {
+  interface Window {
+    _paq: MatomoCommand[];
+  }
+}
+
 export function Matomo() {
   const pathname = usePathname();
 
@@ -47,11 +73,39 @@ export function Matomo() {
   );
 }
 
-// Hook para eventos personalizados de la iglesia
+// Hook para eventos personalizados de la iglesia con tipos seguros
 export function useChurchAnalytics() {
   const trackEvent = (category: string, action: string, name?: string, value?: number) => {
     if (typeof window !== 'undefined' && window._paq) {
-      window._paq.push(['trackEvent', category, action, name, value]);
+      if (name !== undefined && value !== undefined) {
+        window._paq.push(['trackEvent', category, action, name, value]);
+      } else if (name !== undefined) {
+        window._paq.push(['trackEvent', category, action, name]);
+      } else {
+        window._paq.push(['trackEvent', category, action]);
+      }
+    }
+  };
+
+  const trackGoal = (goalId: number, customRevenue?: number) => {
+    if (typeof window !== 'undefined' && window._paq) {
+      if (customRevenue !== undefined) {
+        window._paq.push(['trackGoal', goalId, customRevenue]);
+      } else {
+        window._paq.push(['trackGoal', goalId]);
+      }
+    }
+  };
+
+  const trackDownload = (url: string) => {
+    if (typeof window !== 'undefined' && window._paq) {
+      window._paq.push(['trackLink', url, 'download']);
+    }
+  };
+
+  const trackOutlink = (url: string) => {
+    if (typeof window !== 'undefined' && window._paq) {
+      window._paq.push(['trackLink', url, 'link']);
     }
   };
 
@@ -92,8 +146,15 @@ export function useChurchAnalytics() {
     trackEvent('Blog', 'Ver Todas', 'Carousel');
   };
 
+  const trackViewAllSermons = () => {
+    trackEvent('Sermões', 'Ver Todos', 'Carousel');
+  };
+
   return {
     trackEvent,
+    trackGoal,
+    trackDownload,
+    trackOutlink,
     trackEventRegistration,
     trackPrayerRequest,
     trackDonation,
@@ -103,11 +164,6 @@ export function useChurchAnalytics() {
     trackBlogRead,
     trackViewAllEvents,
     trackViewAllBlogs,
+    trackViewAllSermons,
   };
-}
-
-declare global {
-  interface Window {
-    _paq: any[];
-  }
 }
