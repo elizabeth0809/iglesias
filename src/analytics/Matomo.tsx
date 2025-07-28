@@ -1,4 +1,4 @@
-// components/analytics/Matomo.tsx
+// src/analytics/Matomo.tsx
 'use client';
 
 import Script from 'next/script';
@@ -24,7 +24,6 @@ type MatomoCommand =
   | ['setCustomDimension', number, string]
   | ['setUserId', string];
 
-// Extensión del objeto Window
 declare global {
   interface Window {
     _paq: MatomoCommand[];
@@ -34,7 +33,7 @@ declare global {
 export function Matomo() {
   const pathname = usePathname();
 
-  // Track page views on route changes in Next.js
+  // Track page views on route changes
   useEffect(() => {
     if (typeof window !== 'undefined' && window._paq) {
       window._paq.push(['setCustomUrl', pathname]);
@@ -44,36 +43,48 @@ export function Matomo() {
   }, [pathname]);
 
   return (
-    <Script
-      id="matomo-analytics"
-      strategy="afterInteractive"
-      dangerouslySetInnerHTML={{
-        __html: `
-          var _paq = window._paq = window._paq || [];
-          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-          _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-          _paq.push(["setCookieDomain", "*.www.ibrsonhodedeus.com.br"]);
-          _paq.push(["disableCampaignParameters"]);
-          _paq.push(["setDoNotTrack", true]);
-          _paq.push(["disableCookies"]);
-          _paq.push(['trackPageView']);
-          _paq.push(['enableLinkTracking']);
-          (function() {
-            var u="https://ibrsonhodedeus.matomo.cloud/";
-            _paq.push(['setTrackerUrl', u+'matomo.php']);
-            _paq.push(['setSiteId', '1']);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-            g.async=true; 
-            g.src='https://cdn.matomo.cloud/ibrsonhodedeus.matomo.cloud/matomo.js'; 
-            s.parentNode.insertBefore(g,s);
-          })();
-        `,
-      }}
-    />
+    <>
+      {/* Script de inicialización */}
+      <Script
+        id="matomo-init"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            var _paq = window._paq = window._paq || [];
+          `,
+        }}
+      />
+      
+      {/* Script principal de Matomo */}
+      <Script
+        id="matomo-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+            _paq.push(["setCookieDomain", "*.www.ibrsonhodedeus.com.br"]);
+            _paq.push(["disableCampaignParameters"]);
+            _paq.push(["setDoNotTrack", true]);
+            _paq.push(["disableCookies"]);
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+              var u="https://ibrsonhodedeus.matomo.cloud/";
+              _paq.push(['setTrackerUrl', u+'matomo.php']);
+              _paq.push(['setSiteId', '1']);
+              var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+              g.async=true; 
+              g.src='https://cdn.matomo.cloud/ibrsonhodedeus.matomo.cloud/matomo.js'; 
+              s.parentNode.insertBefore(g,s);
+            })();
+          `,
+        }}
+      />
+    </>
   );
 }
 
-// Hook para eventos personalizados de la iglesia con tipos seguros
 export function useChurchAnalytics() {
   const trackEvent = (category: string, action: string, name?: string, value?: number) => {
     if (typeof window !== 'undefined' && window._paq) {
@@ -84,28 +95,6 @@ export function useChurchAnalytics() {
       } else {
         window._paq.push(['trackEvent', category, action]);
       }
-    }
-  };
-
-  const trackGoal = (goalId: number, customRevenue?: number) => {
-    if (typeof window !== 'undefined' && window._paq) {
-      if (customRevenue !== undefined) {
-        window._paq.push(['trackGoal', goalId, customRevenue]);
-      } else {
-        window._paq.push(['trackGoal', goalId]);
-      }
-    }
-  };
-
-  const trackDownload = (url: string) => {
-    if (typeof window !== 'undefined' && window._paq) {
-      window._paq.push(['trackLink', url, 'download']);
-    }
-  };
-
-  const trackOutlink = (url: string) => {
-    if (typeof window !== 'undefined' && window._paq) {
-      window._paq.push(['trackLink', url, 'link']);
     }
   };
 
@@ -152,9 +141,6 @@ export function useChurchAnalytics() {
 
   return {
     trackEvent,
-    trackGoal,
-    trackDownload,
-    trackOutlink,
     trackEventRegistration,
     trackPrayerRequest,
     trackDonation,
