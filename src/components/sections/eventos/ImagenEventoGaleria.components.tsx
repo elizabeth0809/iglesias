@@ -5,7 +5,7 @@ import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Button } from "@/components/ui/button";
-import { Camera, Heart, Calendar, ChevronLeft, ChevronRight, Expand, ImageIcon } from "lucide-react";
+import { Camera, Heart, Calendar, ChevronLeft, ChevronRight, Expand, ImageIcon, Play, Video, } from "lucide-react";
 import { BackgroundVariantProps, getVariantClasses } from "@/lib/styles";
 import { ImagenEventosHooks } from "@/hooks/getImagenEventos.hooks";
 
@@ -37,8 +37,12 @@ export const ImagenEventoGaleria = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentImagenEvento, setCurrentImagenEvento] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [visibleImages, setVisibleImages] = useState(3);
+  const [visibleVideos, setVisibleVideos] = useState(2);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<'images' | 'videos'>('images');
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
 
   const { background, text, subtext, isDark, overlay } = getVariantClasses(backgroundVariant);
   const { imagenEventos, error, isLoading } = ImagenEventosHooks({ slug: eventoSlug });
@@ -48,25 +52,45 @@ export const ImagenEventoGaleria = ({
   }, []);
 
   useEffect(() => {
-    const updateVisibleImages = () => {
+    const updateVisibleItems = () => {
       if (window.innerWidth < 768) {
         setVisibleImages(1);
+        setVisibleVideos(1);
       } else if (window.innerWidth < 1024) {
         setVisibleImages(2);
+        setVisibleVideos(1);
       } else {
         setVisibleImages(3);
+        setVisibleVideos(2);
       }
     };
 
-    updateVisibleImages();
-    window.addEventListener("resize", updateVisibleImages);
-    return () => window.removeEventListener("resize", updateVisibleImages);
+    updateVisibleItems();
+    window.addEventListener("resize", updateVisibleItems);
+    return () => window.removeEventListener("resize", updateVisibleItems);
   }, []);
+
+
+  useEffect(() => {
+    if (imagenEventos && imagenEventos.length > 0) {
+      const currentData = imagenEventos[currentImagenEvento];
+      const hasImages = currentData?.imagenes && currentData.imagenes.length > 0;
+      const hasVideos = currentData?.videosimple && currentData.videosimple.length > 0;
+      console.log("hasImages:", hasImages, "hasVideos:", hasVideos);
+
+      if (!hasImages && hasVideos) {
+        setActiveTab('videos');
+      } else {
+        setActiveTab('images');  
+      }
+    }
+  }, [imagenEventos, currentImagenEvento]);
 
   const nextImagenEvento = () => {
     if (imagenEventos && currentImagenEvento < imagenEventos.length - 1) {
       setCurrentImagenEvento(currentImagenEvento + 1);
       setCurrentImageIndex(0);
+      setCurrentVideoIndex(0);
     }
   };
 
@@ -74,6 +98,7 @@ export const ImagenEventoGaleria = ({
     if (currentImagenEvento > 0) {
       setCurrentImagenEvento(currentImagenEvento - 1);
       setCurrentImageIndex(0);
+      setCurrentVideoIndex(0);
     }
   };
 
@@ -89,6 +114,28 @@ export const ImagenEventoGaleria = ({
     setCurrentImageIndex((prevIndex) =>
       prevIndex - 1 >= 0 ? prevIndex - 1 : currentImages.length - visibleImages
     );
+  };
+
+  const nextVideo = () => {
+    const currentVideos = imagenEventos?.[currentImagenEvento]?.videosimple || [];
+    setCurrentVideoIndex((prevIndex) =>
+      prevIndex + 1 < currentVideos.length - (visibleVideos - 1) ? prevIndex + 1 : 0
+    );
+  };
+
+  const prevVideo = () => {
+    const currentVideos = imagenEventos?.[currentImagenEvento]?.videosimple || [];
+    setCurrentVideoIndex((prevIndex) =>
+      prevIndex - 1 >= 0 ? prevIndex - 1 : currentVideos.length - visibleVideos
+    );
+  };
+
+  const handleVideoPlay = (videoId: string) => {
+    setPlayingVideo(videoId);
+  };
+
+  const handleVideoPause = () => {
+    setPlayingVideo(null);
   };
 
   if (isLoading) {
@@ -130,7 +177,7 @@ export const ImagenEventoGaleria = ({
               <Camera className="w-8 h-8 text-church-blue-600" />
             </div>
             <p className="text-church-blue-600 text-lg">
-              Não há imagens disponíveis para este evento.
+              Não há conteúdo disponível para este evento.
             </p>
           </div>
         </div>
@@ -140,6 +187,9 @@ export const ImagenEventoGaleria = ({
 
   const currentImagenEventoData = imagenEventos[currentImagenEvento];
   const currentImages = currentImagenEventoData?.imagenes || [];
+  const currentVideos = currentImagenEventoData?.videosimple || [];
+  const hasImages = currentImages.length > 0;
+  const hasVideos = currentVideos.length > 0;
 
   return (
     <section className={`py-20 ${background} relative overflow-hidden`}>
@@ -157,7 +207,11 @@ export const ImagenEventoGaleria = ({
         }`}>
           <div className="flex justify-center mb-6">
             <div className="relative bg-church-gold-500 rounded-full p-4 shadow-xl">
-              <Camera className="w-8 h-8 text-white" />
+              {activeTab === 'images' ? (
+                <Camera className="w-8 h-8 text-white" />
+              ) : (
+                <Video className="w-8 h-8 text-white" />
+              )}
               <div className="absolute -top-1 -right-1 w-6 h-6 bg-church-red-500 rounded-full flex items-center justify-center animate-pulse">
                 <Heart className="w-3 h-3 text-white" />
               </div>
@@ -165,7 +219,7 @@ export const ImagenEventoGaleria = ({
           </div>
 
           <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${text}`}>
-            Galeria do Evento
+            {activeTab === 'images' ? 'Galeria do Evento' : 'Vídeos do Evento'}
             <br />
             <span className="text-church-gold-500">{currentImagenEventoData.titulo}</span>
           </h2>
@@ -230,8 +284,53 @@ export const ImagenEventoGaleria = ({
           </div>
         )}
 
+        {/* Tabs para Images/Videos */}
+        {(hasImages || hasVideos) && (
+          <div className={`flex justify-center mb-8 transition-all duration-1000 ease-out delay-400 ${
+            isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
+          }`}>
+            <div className={`flex rounded-lg ${overlay} p-1 shadow-lg`}>
+              {hasImages && (
+                <Button
+                  variant={activeTab === 'images' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setActiveTab('images')}
+                  className={`flex items-center space-x-2 ${
+                    activeTab === 'images' 
+                      ? 'bg-church-gold-500 text-white shadow-md' 
+                      : isDark 
+                        ? 'text-church-sky-200 hover:text-white hover:bg-church-gold-500/20' 
+                        : 'text-church-blue-600 hover:bg-church-gold-500/10'
+                  }`}
+                >
+                  <Camera className="w-4 h-4" />
+                  <span>Fotos ({currentImages.length})</span>
+                </Button>
+              )}
+              
+              {hasVideos && (
+                <Button
+                  variant={activeTab === 'videos' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setActiveTab('videos')}
+                  className={`flex items-center space-x-2 ${
+                    activeTab === 'videos' 
+                      ? 'bg-church-gold-500 text-white shadow-md' 
+                      : isDark 
+                        ? 'text-church-sky-200 hover:text-white hover:bg-church-gold-500/20' 
+                        : 'text-church-blue-600 hover:bg-church-gold-500/10'
+                  }`}
+                >
+                  <Video className="w-4 h-4" />
+                  <span>Vídeos ({currentVideos.length})</span>
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Carousel de imágenes */}
-        {currentImages.length > 0 && (
+        {activeTab === 'images' && hasImages && (
           <div className={`transition-all duration-1000 ease-out delay-500 ${
             isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-12 opacity-0'
           }`}>
@@ -276,15 +375,6 @@ export const ImagenEventoGaleria = ({
                         </Button>
                       </div>
 
-                      <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
-                          <h3 className="font-semibold text-church-blue-900 mb-1">
-                            {currentImagenEventoData.titulo}
-                          </h3>
-                          
-                        </div>
-                      </div>
-
                       <div className={`absolute inset-0 rounded-2xl border-2 transition-all duration-300 ${
                         hoveredIndex === index 
                           ? 'border-church-gold-400 shadow-lg shadow-church-gold-400/25' 
@@ -324,8 +414,8 @@ export const ImagenEventoGaleria = ({
                   </Button>
                 </>
               )}
-
-              {/* Indicadores */}
+    
+              {/* Indicadores para imágenes */}
               {currentImages.length > visibleImages && (
                 <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-3">
                   {Array.from({ length: currentImages.length - (visibleImages - 1) }).map(
@@ -345,18 +435,144 @@ export const ImagenEventoGaleria = ({
                   )}
                 </div>
               )}
+            </div>
+          </div>
+        )}
 
-              {/* Contador de imágenes */}
+        {/* Sección de Videos */}
+        {activeTab === 'videos' && hasVideos && (
+          <div className={`transition-all duration-1000 ease-out delay-500 ${
+            isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-12 opacity-0'
+          }`}>
+            <div className="relative w-full max-w-6xl mx-auto overflow-hidden">
+              <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentVideoIndex * (100 / visibleVideos)}%)`,
+                }}
+              >
+                {currentVideos.map((video, index) => (
+                  <div
+                    key={video.id}
+                    className="px-4 flex-shrink-0"
+                    style={{ width: `${100 / visibleVideos}%` }}
+                  >
+                    <div className="relative h-96 md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl shadow-2xl group">
+                      <video
+                        src={video.url}
+                        controls
+                        className="w-full h-full object-cover rounded-2xl"
+                        poster=""
+                        preload="metadata"
+                        onPlay={() => handleVideoPlay(video.id)}
+                        onPause={handleVideoPause}
+                      >
+                        Tu navegador no soporta el elemento de video.
+                      </video>
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+                      {playingVideo !== video.id && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300 pointer-events-none">
+                          <div className="w-20 h-20 bg-church-gold-500 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                            <Play className="w-8 h-8 text-white ml-1" />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                          <h3 className="font-semibold text-church-blue-900 mb-1">
+                            {video.name || `Vídeo ${index + 1}`}
+                          </h3>
+                          <p className="text-sm text-church-blue-600">
+                            {currentImagenEventoData.titulo}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Navegación de videos */}
+              {currentVideos.length > visibleVideos && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`absolute top-1/2 left-2 transform -translate-y-1/2 transition-all duration-300 z-10 shadow-xl ${
+                      isDark 
+                        ? 'bg-church-blue-800/90 hover:bg-church-gold-500 border-church-blue-600 text-white hover:text-white backdrop-blur-sm' 
+                        : 'bg-white/90 hover:bg-church-gold-500 hover:text-white border-church-gold-300 backdrop-blur-sm'
+                    }`}
+                    onClick={prevVideo}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`absolute top-1/2 right-2 transform -translate-y-1/2 transition-all duration-300 z-10 shadow-xl ${
+                      isDark 
+                        ? 'bg-church-blue-800/90 hover:bg-church-gold-500 border-church-blue-600 text-white hover:text-white backdrop-blur-sm' 
+                        : 'bg-white/90 hover:bg-church-gold-500 hover:text-white border-church-gold-300 backdrop-blur-sm'
+                    }`}
+                    onClick={nextVideo}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
+                </>
+              )}
+
+              {/* Indicadores para videos */}
+              {currentVideos.length > visibleVideos && (
+                <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-3">
+                  {Array.from({ length: currentVideos.length - (visibleVideos - 1) }).map(
+                    (_, index) => (
+                      <button
+                        key={index}
+                        className={`w-4 h-4 rounded-full transition-all duration-300 shadow-lg ${
+                          index === currentVideoIndex 
+                            ? "bg-church-gold-500 scale-125 shadow-church-gold-500/50" 
+                            : isDark 
+                              ? "bg-church-blue-300 hover:bg-church-gold-400" 
+                              : "bg-church-sky-300 hover:bg-church-gold-400"
+                        }`}
+                        onClick={() => setCurrentVideoIndex(index)}
+                      />
+                    )
+                  )}
+                </div>
+              )}
+
+              {/* Contador de videos */}
               <div className={`absolute bottom-6 left-6 px-4 py-2 rounded-full backdrop-blur-sm shadow-lg ${
                 isDark 
                   ? 'bg-church-blue-800/80 text-church-sky-200' 
                   : 'bg-white/80 text-church-blue-700'
               }`}>
                 <span className="text-sm font-medium">
-                  {currentImageIndex + 1} de {currentImages.length - (visibleImages - 1)} grupos
+                  {currentVideoIndex + 1} de {currentVideos.length - (visibleVideos - 1)} grupos
                 </span>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Mensaje cuando no hay contenido en la pestaña activa */}
+        {((activeTab === 'images' && !hasImages) || (activeTab === 'videos' && !hasVideos)) && (
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-church-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              {activeTab === 'images' ? (
+                <Camera className="w-8 h-8 text-church-blue-600" />
+              ) : (
+                <Video className="w-8 h-8 text-church-blue-600" />
+              )}
+            </div>
+            <p className="text-church-blue-600 text-lg">
+              Não há {activeTab === 'images' ? 'imagens' : 'vídeos'} disponíveis para este evento.
+            </p>
           </div>
         )}
 

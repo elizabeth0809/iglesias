@@ -8,6 +8,7 @@ export interface IImagenEventoResponse {
     slug: string;
   };
   imagenes: IImagenFile[];
+  videosimple: IImagenFile[];
 }
 
 export interface IImagenFile {
@@ -31,6 +32,15 @@ export interface IStrapiImagenEventoGraphQL {
       };
     };
     imagenes: {
+      data: Array<{
+        id: string;
+        attributes: {
+          name: string;
+          url: string;
+        };
+      }>;
+    };
+    videosimple: {
       data: Array<{
         id: string;
         attributes: {

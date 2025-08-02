@@ -9,12 +9,13 @@ export const ImagenEventosHooks = (params: ImagenEventosHooksParams) => {
     GetImagenEventosBySlugQuery(params);
   const [imagenEventos, setImagenEventos] = useState<IImagenEventoResponse[]>();
 
+  console.log(imagenEventos, "imagenEventos");
   useEffect(() => {
     if (data) {
       setImagenEventos(data);
     }
   }, [data, refetch]);
-
+  console.log(data, "data");
   return {
     imagenEventos,
     error,

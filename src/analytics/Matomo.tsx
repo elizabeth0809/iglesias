@@ -44,7 +44,7 @@ export function Matomo() {
 
   return (
     <>
-      {/* Script de inicialización */}
+
       <Script
         id="matomo-init"
         strategy="beforeInteractive"
@@ -55,7 +55,7 @@ export function Matomo() {
         }}
       />
       
-      {/* Script principal de Matomo */}
+
       <Script
         id="matomo-analytics"
         strategy="afterInteractive"

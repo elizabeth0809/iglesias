@@ -15,6 +15,11 @@ export class ImagenEventoMappers {
         name: imagen.attributes.name,
         url: imagen.attributes.url,
       })),
+      videosimple: strapiData.attributes.videosimple.data.map((video): IImagenFile => ({
+        id: video.id,
+        name: video.attributes.name,
+        url: video.attributes.url,
+      })),
     };
   }
 }

@@ -35,6 +35,15 @@ export const imagenEventoGetBySlugGraphQLAction = async (
                   }
                 }
               }
+              videosimple {
+                data {
+                  id
+                  attributes {
+                    name
+                    url
+                  }
+                }
+              }
             }
           }
         }
