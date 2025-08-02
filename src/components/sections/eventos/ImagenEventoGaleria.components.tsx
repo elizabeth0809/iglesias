@@ -450,7 +450,7 @@ export const ImagenEventoGaleria = ({
                   transform: `translateX(-${currentVideoIndex * (100 / visibleVideos)}%)`,
                 }}
               >
-                {currentVideos.map((video, index) => (
+                {currentVideos.map((video) => (
                   <div
                     key={video.id}
                     className="px-4 flex-shrink-0"
