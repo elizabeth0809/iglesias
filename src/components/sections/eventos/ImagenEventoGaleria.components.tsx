@@ -76,8 +76,7 @@ export const ImagenEventoGaleria = ({
       const currentData = imagenEventos[currentImagenEvento];
       const hasImages = currentData?.imagenes && currentData.imagenes.length > 0;
       const hasVideos = currentData?.videosimple && currentData.videosimple.length > 0;
-      console.log("hasImages:", hasImages, "hasVideos:", hasVideos);
-
+  
       if (!hasImages && hasVideos) {
         setActiveTab('videos');
       } else {
@@ -481,14 +480,7 @@ export const ImagenEventoGaleria = ({
                       )}
 
                       <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
-                        <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
-                          <h3 className="font-semibold text-church-blue-900 mb-1">
-                            {video.name || `Vídeo ${index + 1}`}
-                          </h3>
-                          <p className="text-sm text-church-blue-600">
-                            {currentImagenEventoData.titulo}
-                          </p>
-                        </div>
+                      
                       </div>
                     </div>
                   </div>
