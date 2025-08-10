@@ -4,10 +4,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Users, Heart, Share2, MapPin } from 'lucide-react';
+import { ArrowLeft, Calendar, Users, Heart, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { IComunidadeResponse } from '@/insfractucture/interfaces/comunidade/comunidades.interfaces';
-
+import { ShareButton } from '@/app/components/shareButton';
 
 interface SingleComunidadeComponentProps {
   comunidade: IComunidadeResponse;
@@ -41,29 +41,12 @@ export const SingleComunidadeComponent = ({ comunidade }: SingleComunidadeCompon
         hour: '2-digit',
         minute: '2-digit'
       });
-    } catch (_error) {
-      console.error("Error formating date:", _error);
+    } catch (error) {
+      console.error("Error al formatear la fecha:", error);
       return 'Data inválida';
     }
   };
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: comunidade.name,
-          text: comunidade.description.slice(0, 100) + '...',
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.log('Error sharing:', error);
-      }
-    } else {
-      // Fallback: copiar URL al clipboard
-      navigator.clipboard.writeText(window.location.href);
-      // Aquí podrías mostrar un toast de "Link copiado"
-    }
-  };
 
   if (!mounted) {
     return (
@@ -99,11 +82,11 @@ export const SingleComunidadeComponent = ({ comunidade }: SingleComunidadeCompon
             isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
           }`}>
             <Link
-              href="/comunidade"
+              href="/comunidades"
               className="inline-flex items-center space-x-2 px-4 py-2 bg-white/80 backdrop-blur-sm hover:bg-white text-church-blue-700 hover:text-church-blue-900 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg border border-church-sky-200"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Voltar </span>
+              <span>Voltar às Comunidades</span>
             </Link>
           </div>
 
@@ -149,15 +132,18 @@ export const SingleComunidadeComponent = ({ comunidade }: SingleComunidadeCompon
                 </span>
               </div>
 
-              {/* Botão de Compartir */}
+              {/* Botão de Compartir usando ShareButton */}
               <div className="absolute top-6 right-6">
-                <button
-                  onClick={handleShare}
-                  className="p-3 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg"
-                  aria-label="Compartilhar"
-                >
-                  <Share2 className="w-5 h-5" />
-                </button>
+                <ShareButton
+                  title={`${comunidade.name} - Nossa Comunidade`}
+                  text={`Conheça mais sobre ${comunidade.name}, uma das nossas comunidades! ${comunidade.description.slice(0, 100)}...`}
+                  variant="floating"
+                  size="md"
+                  toastMessage="Link da comunidade copiado para a área de transferência!"
+                  onSuccess={(shared) => {
+                    console.log(shared ? 'Comunidade compartilhada via aplicativo' : 'Link copiado para área de transferência');
+                  }}
+                />
               </div>
 
               {/* Indicador de video no canto inferior esquerdo */}
@@ -238,13 +224,35 @@ export const SingleComunidadeComponent = ({ comunidade }: SingleComunidadeCompon
                   <p className="text-church-blue-600 mb-6">
                     Venha conhecer mais sobre nossa comunidade e participe conosco!
                   </p>
-                  <Link
-                    href="/contato"
-                    className="inline-flex items-center space-x-2 px-6 py-3 bg-church-blue-500 hover:bg-church-blue-600 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    <span>Entre em Contato</span>
-                    <Heart className="w-4 h-4" />
-                  </Link>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link
+                      href="/contato"
+                      className="inline-flex items-center space-x-2 px-6 py-3 bg-church-blue-500 hover:bg-church-blue-600 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    >
+                      <span>Entre em Contato</span>
+                      <Heart className="w-4 h-4" />
+                    </Link>
+                    
+                    {/* Botão principal de compartir usando ShareButton */}
+                    <ShareButton
+                      title={`${comunidade.name} - Nossa Comunidade`}
+                      text={`Conheça mais sobre ${comunidade.name}, uma das nossas comunidades! ${comunidade.description.slice(0, 100)}...`}
+                      shareText="Compartilhar Comunidade"
+                      copyText="Copiar Link da Comunidade"
+                      loadingText="Compartilhando..."
+                      successText="Comunidade Compartilhada!"
+                      toastMessage="Link da comunidade copiado para a área de transferência!"
+                      variant="primary"
+                      size="md"
+                      className="bg-church-red-500 hover:bg-church-red-600"
+                      onSuccess={(shared) => {
+                        console.log(shared ? 'Comunidade compartilhada via aplicativo nativo' : 'Link copiado para área de transferência');
+                      }}
+                      onError={(error) => {
+                        console.error('Erro ao compartilhar comunidade:', error);
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
