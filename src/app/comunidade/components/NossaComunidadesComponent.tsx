@@ -31,6 +31,7 @@ export const NossaComunidadesComponent = ({ comunidades }: NossaComunidadesCompo
         day: 'numeric'
       });
     } catch (error) {
+      console.error("Erro ao formatar a data:", error);
       return 'Data inválida';
     }
   };

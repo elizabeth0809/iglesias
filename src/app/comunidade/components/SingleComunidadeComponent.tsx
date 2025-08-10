@@ -41,7 +41,8 @@ export const SingleComunidadeComponent = ({ comunidade }: SingleComunidadeCompon
         hour: '2-digit',
         minute: '2-digit'
       });
-    } catch (error) {
+    } catch (_error) {
+      console.error("Error formating date:", _error);
       return 'Data inválida';
     }
   };
