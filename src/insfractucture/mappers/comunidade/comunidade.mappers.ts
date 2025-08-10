@@ -5,6 +5,7 @@ export class ComunidadesMappers {
     return {
       id: parseInt(result.id),
       name: result.attributes.name,
+      slug: result.attributes.slug,
       description: result.attributes.description,
       image: result.attributes.image?.data?.attributes?.url || "",
       created_at: result.attributes.createdAt,

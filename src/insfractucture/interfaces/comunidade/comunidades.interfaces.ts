@@ -5,6 +5,7 @@ export interface IComunidadeResponse {
   name: string;
   description: string;
   image: string;
+  slug : string;
   created_at: string;
   updated_at: string;
 }
@@ -37,6 +38,7 @@ export interface IStrapiGraphQLComunidadeData {
   id: string;
   attributes: {
     name: string;
+    slug: string;
     description: string;
     createdAt: string;
     updatedAt: string;

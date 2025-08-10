@@ -12,7 +12,6 @@ interface ComunidadesGraphQLProps {
   pageSize?: number;
 }
 
-// Respuesta del action que incluye comunidades mapeadas y paginación
 interface ComunidadesGraphQLActionResponse {
   comunidades: IComunidadeResponse[];
   pagination: {
@@ -28,6 +27,7 @@ export const comunidadesGetAllGraphQLAction = async ({
   pageSize = 10,
 }: ComunidadesGraphQLProps): Promise<ComunidadesGraphQLActionResponse> => {
   try {
+    // Query actualizada para manejar Rich Text Blocks
     const query = `
       query GetComunidades($page: Int, $pageSize: Int) {
         nossaComunidades(pagination: { page: $page, pageSize: $pageSize }) {
@@ -35,6 +35,7 @@ export const comunidadesGetAllGraphQLAction = async ({
             id
             attributes {
               name
+              slug
               description
               createdAt
               updatedAt
@@ -60,6 +61,9 @@ export const comunidadesGetAllGraphQLAction = async ({
       }
     `;
 
+    console.log('🚀 Sending GraphQL query:', query);
+    console.log('📝 Variables:', { page, pageSize });
+
     const response = await axios.post(
       strapiGraphQLURL,
       {
@@ -76,21 +80,36 @@ export const comunidadesGetAllGraphQLAction = async ({
       }
     );
 
+    console.log('📡 Raw GraphQL response:', JSON.stringify(response.data, null, 2));
+
     if (response.data.errors) {
-      console.error("GraphQL errors:", response.data.errors);
-      throw new Error("GraphQL query failed");
+      console.error("❌ GraphQL errors:", response.data.errors);
+      throw new Error(`GraphQL query failed: ${JSON.stringify(response.data.errors)}`);
+    }
+
+    if (!response.data.data) {
+      console.error("❌ No data in response:", response.data);
+      throw new Error("No data received from GraphQL");
     }
 
     const mappedResponse = ComunidadesMappers.fromStrapiGraphQLResponseToEntity(response.data);
+    
+    console.log('✅ Mapped response:', mappedResponse);
 
     return mappedResponse;
   } catch (error) {
-    console.error("Error fetching comunidades data from GraphQL:", error);
+    console.error("❌ Error fetching comunidades data from GraphQL:", error);
+    if (axios.isAxiosError(error)) {
+      console.error("🌐 Axios error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+    }
     throw error;
   }
 };
 
-// Action simplificado que devuelve solo el array de comunidades (sin paginación)
 export const comunidadesGetAllGraphQLSimpleAction = async (): Promise<IComunidadeResponse[]> => {
   try {
     const query = `
@@ -100,6 +119,7 @@ export const comunidadesGetAllGraphQLSimpleAction = async (): Promise<IComunidad
             id
             attributes {
               name
+              slug
               description
               createdAt
               updatedAt
@@ -117,6 +137,8 @@ export const comunidadesGetAllGraphQLSimpleAction = async (): Promise<IComunidad
       }
     `;
 
+    console.log('🚀 Sending simple GraphQL query');
+
     const response = await axios.post(
       strapiGraphQLURL,
       { query },
@@ -127,17 +149,22 @@ export const comunidadesGetAllGraphQLSimpleAction = async (): Promise<IComunidad
       }
     );
 
+    console.log('📡 Simple query response:', JSON.stringify(response.data, null, 2));
+
     if (response.data.errors) {
-      console.error("GraphQL errors:", response.data.errors);
+      console.error("❌ GraphQL errors:", response.data.errors);
       throw new Error("GraphQL query failed");
     }
 
-    // Usar el mapper para convertir solo las comunidades
-    const mappedComunidades = ComunidadesMappers.fromStrapiGraphQLArrayToEntity(response.data.data.nossaComunidades.data);
+    const mappedComunidades = ComunidadesMappers.fromStrapiGraphQLArrayToEntity(
+      response.data.data?.nossaComunidades?.data || []
+    );
+
+    console.log('✅ Simple mapped comunidades:', mappedComunidades);
 
     return mappedComunidades;
   } catch (error) {
-    console.error("Error fetching comunidades data from GraphQL:", error);
+    console.error("❌ Error fetching comunidades data from GraphQL:", error);
     throw error;
   }
 };
