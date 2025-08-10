@@ -15,7 +15,7 @@ export const ImagenEventosHooks = (params: ImagenEventosHooksParams) => {
       setImagenEventos(data);
     }
   }, [data, refetch]);
-  console.log(data, "data");
+
   return {
     imagenEventos,
     error,

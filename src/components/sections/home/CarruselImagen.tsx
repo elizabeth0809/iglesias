@@ -46,7 +46,6 @@ export const CarruselImagenComponents = ({
   return (
     <section className={`py-20 ${backgroundClasses[backgroundVariant]}`}>
       <div className="container mx-auto px-4">
-        {/* Header mejorado */}
         <div className={`text-center mb-16 transition-all duration-1000 ease-out ${
           isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
         }`}>

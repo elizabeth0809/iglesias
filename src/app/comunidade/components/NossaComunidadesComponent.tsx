@@ -1,4 +1,3 @@
-// @/app/comunidades/components/NossaComunidadesComponent.tsx
 
 'use client';
 
@@ -21,6 +20,14 @@ export const NossaComunidadesComponent = ({ comunidades }: NossaComunidadesCompo
     setTimeout(() => setIsLoaded(true), 100);
   }, []);
 
+  // Función para detectar si el archivo es video
+  const isVideoFile = (url: string) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.m4v', '.3gp'];
+    const lowerUrl = url.toLowerCase();
+    return videoExtensions.some(ext => lowerUrl.includes(ext));
+  };
+
   const formatDate = (dateString: string) => {
     if (!mounted) return '';
         
@@ -31,7 +38,7 @@ export const NossaComunidadesComponent = ({ comunidades }: NossaComunidadesCompo
         day: 'numeric'
       });
     } catch (error) {
-      console.error("Erro ao formatar a data:", error);
+      console.error("Error al formatear la fecha:", error);
       return 'Data inválida';
     }
   };
@@ -166,23 +173,55 @@ export const NossaComunidadesComponent = ({ comunidades }: NossaComunidadesCompo
                     {/* Línea decorativa superior */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-church-blue-400 via-church-gold-400 to-church-blue-400"></div>
                     
-                    {/* Imagen de la comunidad */}
+                    {/* Imagen/Video de la comunidad */}
                     <div className="relative h-64 overflow-hidden">
-                      <Image
-                        src={comunidade.image || "/placeholder.svg"}
-                        alt={comunidade.name || "Comunidade"}
-                        fill
-                        className="object-cover transition-all duration-500 group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
+                      {isVideoFile(comunidade.image) ? (
+                        // Renderizar video preview si es un archivo de video
+                        <div className="relative w-full h-full">
+                          <video
+                            className="w-full h-full object-cover"
+                            poster="/placeholder.svg"
+                            preload="metadata"
+                            muted
+                            onMouseEnter={(e) => {
+                              const video = e.target as HTMLVideoElement;
+                              video.currentTime = 2; // Ir a 2 segundos para mostrar contenido
+                            }}
+                          >
+                            <source src={comunidade.image} type="video/mp4" />
+                            <source src={comunidade.image} type="video/webm" />
+                            <source src={comunidade.image} type="video/ogg" />
+                          </video>
+                          
+                          {/* Overlay para indicar que es video */}
+                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
+                              <svg className="w-6 h-6 text-church-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        // Renderizar imagen si no es video
+                        <Image
+                          src={comunidade.image || "/placeholder.svg"}
+                          alt={comunidade.name || "Comunidade"}
+                          fill
+                          className="object-cover transition-all duration-500 group-hover:scale-110"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      )}
                       
-                      {/* Overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      {/* Overlay gradient (solo para imágenes) */}
+                      {!isVideoFile(comunidade.image) && (
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      )}
                       
-                      {/* Badge de comunidad */}
+                      {/* Badge de comunidad/video */}
                       <div className="absolute top-4 left-4">
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-church-blue-500 text-white shadow-lg backdrop-blur-sm">
-                          👥 Comunidade
+                          {isVideoFile(comunidade.image) ? '🎥 Vídeo' : '👥 Comunidade'}
                         </span>
                       </div>
 
@@ -193,6 +232,15 @@ export const NossaComunidadesComponent = ({ comunidades }: NossaComunidadesCompo
                           <span className="text-xs text-white font-medium">Ativa</span>
                         </div>
                       </div>
+
+                      {/* Indicador de duración del video (bottom left) */}
+                      {isVideoFile(comunidade.image) && (
+                        <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-black/70 text-white backdrop-blur-sm">
+                            🎬 Clique para assistir
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Contenido de la comunidad */}

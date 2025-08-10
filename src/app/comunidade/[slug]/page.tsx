@@ -115,7 +115,7 @@ export async function generateMetadata({ params }: ComunidadePageProps) {
       images: comunidade.image ? [comunidade.image] : [],
     },
     alternates: {
-      canonical: `/comunidades/${slug}`,
+      canonical: `/comunidade/${slug}`,
     },
   };
 }

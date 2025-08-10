@@ -13,10 +13,7 @@ async function getEventosGraphQL(page: number = 1): Promise<{
 }> {
   try {
     const response = await eventoGetAllGraphQLAction({ page, pageSize: 10 });
-    
-    console.log('🔥 Respuesta completa de GraphQL Eventos:', JSON.stringify(response, null, 2));
-    console.log('📝 Eventos mapeados:', response.eventos);
-    console.log('📊 Paginación:', response.pagination);
+
     
     return { 
       eventos: response.eventos,
@@ -39,7 +36,6 @@ export default async function EventosPage({ searchParams }: EventosPageProps) {
   const resolvedSearchParams = await searchParams;
   const page = Number(resolvedSearchParams.page) || 1;
   
-  console.log('🔄 Usando GraphQL API para Eventos...');
   const { eventos,  error } = await getEventosGraphQL(page);
   
   if (error) {

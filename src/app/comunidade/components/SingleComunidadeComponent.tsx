@@ -82,7 +82,7 @@ export const SingleComunidadeComponent = ({ comunidade }: SingleComunidadeCompon
             isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
           }`}>
             <Link
-              href="/comunidades"
+              href="/comunidade"
               className="inline-flex items-center space-x-2 px-4 py-2 bg-white/80 backdrop-blur-sm hover:bg-white text-church-blue-700 hover:text-church-blue-900 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg border border-church-sky-200"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -263,7 +263,7 @@ export const SingleComunidadeComponent = ({ comunidade }: SingleComunidadeCompon
             isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
           }`}>
             <Link
-              href="/comunidades"
+              href="/comunidade"
               className="inline-flex items-center space-x-2 text-church-blue-600 hover:text-church-blue-800 font-medium transition-colors duration-300"
             >
               <Users className="w-4 h-4" />
