@@ -160,7 +160,7 @@ export const NossaComunidadesComponent = ({ comunidades }: NossaComunidadesCompo
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <Link href={`/comunidades/${comunidade.slug}`} className="block group cursor-pointer">
+                <Link href={`/comunidade/${comunidade.slug}`} className="block group cursor-pointer">
                   <article className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-3 border border-church-sky-200 relative">
                     {/* Línea decorativa superior */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-church-blue-400 via-church-gold-400 to-church-blue-400"></div>
