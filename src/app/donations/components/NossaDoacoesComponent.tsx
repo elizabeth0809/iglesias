@@ -1,9 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { Heart, QrCode, DollarSign, Gift,  CheckCircle } from 'lucide-react';
+import { Heart, QrCode, DollarSign, Gift, CheckCircle, MessageCircle, Send } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { FormularioDoacaoComponent } from './FormularioDoacaoComponent';
 import { toast } from 'sonner';
 
 export const NossaDoacoesComponent = () => {
@@ -14,6 +13,22 @@ export const NossaDoacoesComponent = () => {
     setMounted(true);
     setTimeout(() => setIsLoaded(true), 100);
   }, []);
+
+  // Função para abrir WhatsApp
+  const openWhatsApp = () => {
+    const phoneNumber = "+5511950639225"; 
+   const message = encodeURIComponent(
+      "Ola! Acabei de realizar uma doacao via PIX para a Igreja Batista Renovada Sonho de Deus e gostaria de reportar o pagamento.\n\n" +
+      "Dados da doacao:\n" +
+      "- Valor: R$ [informar valor]\n" +
+      "- Data: [informar data]\n" +
+      "- Chave PIX utilizada: 60.165.460.0001-00\n\n" +
+      "Obrigado(a) por me permitir contribuir com a obra de Deus!"
+    );
+    
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappURL, '_blank');
+  };
 
   if (!mounted) {
     return (
@@ -119,7 +134,7 @@ export const NossaDoacoesComponent = () => {
         </div>
 
         {/* QR Code Section */}
-        <div className={`max-w-2xl mx-auto mb-16 transition-all duration-1000 ease-out delay-500 ${
+        <div className={`max-w-2xl mx-auto mb-12 transition-all duration-1000 ease-out delay-500 ${
           isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-12 opacity-0'
         }`}>
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-church-sky-200 text-center relative overflow-hidden">
@@ -219,8 +234,66 @@ export const NossaDoacoesComponent = () => {
           </div>
         </div>
 
- 
-        <FormularioDoacaoComponent />
+        {/* Botão do WhatsApp - Substitui o formulário comentado */}
+        <div className={`max-w-2xl mx-auto mb-16 transition-all duration-1000 ease-out delay-700 ${
+          isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-12 opacity-0'
+        }`}>
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-church-sky-200 text-center relative overflow-hidden">
+            {/* Linha decorativa superior */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 via-green-500 to-green-400"></div>
+            
+            <div className="flex justify-center mb-6">
+              <div className="bg-green-100 rounded-full p-3 shadow-lg">
+                <MessageCircle className="w-8 h-8 text-green-600" />
+              </div>
+            </div>
+
+            <h3 className="text-xl sm:text-2xl font-bold text-church-blue-900 mb-4">
+              Confirme sua Doação
+            </h3>
+            
+            <p className="text-church-blue-600 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
+              Após realizar sua doação, clique no botão abaixo para nos avisar através do WhatsApp. 
+              Isso nos ajuda a confirmar e agradecer sua generosidade! 🙏
+            </p>
+
+            {/* Botão do WhatsApp */}
+            <button
+              onClick={openWhatsApp}
+              className="group relative inline-flex items-center justify-center w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+            >
+              {/* Efeito de brilho */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+              
+              {/* Conteúdo do botão */}
+              <div className="relative flex items-center justify-center space-x-3">
+                <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="text-base sm:text-lg">Reportar Doação</span>
+                <Send className="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
+              </div>
+            </button>
+
+            {/* Informações adicionais */}
+            <div className="mt-6 pt-6 border-t border-church-sky-200">
+              <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs sm:text-sm text-church-blue-600">
+                <div className="flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
+                  <span>Resposta rápida</span>
+                </div>
+                <div className="hidden sm:block w-1 h-1 bg-church-gold-400 rounded-full"></div>
+                <div className="flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
+                  <span>Confirmação automática</span>
+                </div>
+                <div className="hidden sm:block w-1 h-1 bg-church-gold-400 rounded-full"></div>
+                <div className="flex items-center">
+                  <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
+                  <span>Agradecimento personalizado</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Call to action final */}
         <div className={`text-center mt-12 transition-all duration-1000 ease-out delay-900 ${
