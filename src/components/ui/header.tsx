@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navigation } from "../Navigate";
 import { useState, useEffect } from "react";
-import { Heart, Sparkles } from "lucide-react";
+import { Heart, Sparkles, Facebook, Instagram} from 'lucide-react';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -194,11 +194,63 @@ export function MinimalHeader() {
             </div>
           </div>
         </Link>
-        
-        <div className={`transition-all duration-500 ease-out delay-200 flex-shrink-0 ${
+
+        {/* Redes Sociales - Móvil: Centro, Desktop: Después del Navigation */}
+        <div className={`flex items-center space-x-3 transition-all duration-500 ease-out delay-100 md:hidden ${
+          isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-4 opacity-0'
+        }`}>
+          <Link
+            href="https://www.facebook.com/share/19RS1iXiJo/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative p-2 bg-church-blue-100/70 rounded-lg hover:bg-church-blue-600 transition-all duration-300 transform hover:scale-110"
+            aria-label="Facebook"
+          >
+            <Facebook className="w-4 h-4 text-church-blue-600 group-hover:text-white transition-colors duration-300" />
+            <div className="absolute inset-0 bg-church-gold-500 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+          </Link>
+          
+          <Link
+            href="https://www.instagram.com/ibr_sonhodedeus?igsh=MXY0OWx3Nzk1dGo1NA=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative p-2 bg-church-blue-100/70 rounded-lg hover:bg-church-blue-600 transition-all duration-300 transform hover:scale-110"
+            aria-label="Instagram"
+          >
+            <Instagram className="w-4 h-4 text-church-blue-600 group-hover:text-white transition-colors duration-300" />
+            <div className="absolute inset-0 bg-church-gold-500 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+          </Link>
+        </div>
+
+        <div className={`flex items-center space-x-4 transition-all duration-500 ease-out delay-200 ${
           isLoaded ? '' : 'transform translate-x-8 opacity-0'
         }`}>
           <Navigation />
+          
+          {/* Redes Sociales - Solo Desktop */}
+          <div className="hidden md:flex items-center space-x-2 pl-4 border-l border-church-sky-200">
+            <Link
+              href="https://www.facebook.com/share/19RS1iXiJo/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative p-2 bg-church-blue-100/70 rounded-lg hover:bg-church-blue-600 transition-all duration-300 transform hover:scale-110"
+              aria-label="Facebook"
+            >
+              <Facebook className="w-4 h-4 text-church-blue-600 group-hover:text-white transition-colors duration-300" />
+              <div className="absolute inset-0 bg-church-gold-500 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+            </Link>
+            
+            <Link
+              href="https://www.instagram.com/ibr_sonhodedeus?igsh=MXY0OWx3Nzk1dGo1NA=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative p-2 bg-church-blue-100/70 rounded-lg hover:bg-church-blue-600 transition-all duration-300 transform hover:scale-110"
+              aria-label="Instagram"
+            >
+              <Instagram className="w-4 h-4 text-church-blue-600 group-hover:text-white transition-colors duration-300" />
+              <div className="absolute inset-0 bg-church-gold-500 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+            </Link>
+          </div>
         </div>
       </div>
 
