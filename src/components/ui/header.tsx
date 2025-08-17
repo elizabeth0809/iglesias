@@ -196,7 +196,7 @@ export function MinimalHeader() {
         </Link>
 
         {/* Redes Sociales - Móvil: Centro, Desktop: Después del Navigation */}
-        <div className={`flex items-center space-x-3 transition-all duration-500 ease-out delay-100 md:hidden ${
+        <div className={`flex items-center space-x-3 transition-all duration-500 ease-out delay-100 px-2 md:hidden ${
           isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-4 opacity-0'
         }`}>
           <Link
