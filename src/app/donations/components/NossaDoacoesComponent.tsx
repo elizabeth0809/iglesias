@@ -73,8 +73,8 @@ export const NossaDoacoesComponent = () => {
           }`}>
             <div className="bg-church-blue-50 border-l-4 border-church-gold-500 rounded-lg p-6 shadow-lg">
                 <blockquote className="text-lg md:text-xl font-medium text-church-blue-800 italic text-center leading-relaxed">
-  &ldquo;Que cada um <span className="font-bold text-church-gold-600">dê</span> como propôs em seu coração, não de mala gana nem por obrigação, porque <span className="font-bold text-church-blue-600">Deus ama ao dador alegre</span>.&rdquo;
-</blockquote>
+                  &ldquo;Que cada um <span className="font-bold text-church-gold-600">dê</span> como propôs em seu coração, não de mala gana nem por obrigação, porque <span className="font-bold text-church-blue-600">Deus ama ao dador alegre</span>.&rdquo;
+                </blockquote>
               <cite className="block text-center mt-4 text-church-blue-600 font-semibold">
                 2 Coríntios 9:7
               </cite>
@@ -156,55 +156,55 @@ export const NossaDoacoesComponent = () => {
             </div>
 
             {/* Informações PIX para copiar */}
-            <div className="space-y-4">
-              {/* Chave PIX */}
-              <div className="bg-church-blue-50 border border-church-blue-200 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-church-blue-700 mb-1">Chave PIX (CNPJ):</p>
-                    <p className="text-lg font-mono font-bold text-church-blue-900" id="pix-key">
-                      60.165.460.0001-00
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText('60.165.460.0001-00');
-                      toast.success('Chave PIX copiada!');
-                    }}
-                    className="ml-4 bg-church-blue-500 hover:bg-church-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center space-x-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                    <span>Copiar</span>
-                  </button>
-                </div>
-              </div>
+           <div className="space-y-4">
+  {/* Chave PIX */}
+  <div className="bg-church-blue-50 border border-church-blue-200 rounded-lg p-3 sm:p-4">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-church-blue-700 mb-1">Chave PIX (CNPJ):</p>
+        <p className="text-base sm:text-lg font-mono font-bold text-church-blue-900 break-all" id="pix-key">
+          60.165.460.0001-00
+        </p>
+      </div>
+      <button
+        onClick={() => {
+          navigator.clipboard.writeText('60.165.460.0001-00');
+          toast.success('Chave PIX copiada!');
+        }}
+        className="flex-shrink-0 bg-church-blue-500 hover:bg-church-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center space-x-2 w-full sm:w-auto"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        <span className="text-sm sm:text-base">Copiar</span>
+      </button>
+    </div>
+  </div>
 
-              {/* Nome do beneficiário */}
-              <div className="bg-church-gold-50 border border-church-gold-200 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-church-gold-700 mb-1">Beneficiário:</p>
-                    <p className="text-lg font-semibold text-church-gold-900" id="beneficiary-name">
-                      IGREJA BATISTA RENOVADA SONHO DE DEUS
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText('IGREJA BATISTA RENOVADA SONHO DE DEUS');
-                      toast.success('Nome copiado!');
-                    }}
-                    className="ml-4 bg-church-gold-500 hover:bg-church-gold-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center space-x-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                    <span>Copiar</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+  {/* Nome do beneficiário */}
+  <div className="bg-church-gold-50 border border-church-gold-200 rounded-lg p-3 sm:p-4">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-church-gold-700 mb-1">Beneficiário:</p>
+        <p className="text-sm sm:text-lg font-semibold text-church-gold-900 break-words leading-tight" id="beneficiary-name">
+          IGREJA BATISTA RENOVADA SONHO DE DEUS
+        </p>
+      </div>
+      <button
+        onClick={() => {
+          navigator.clipboard.writeText('IGREJA BATISTA RENOVADA SONHO DE DEUS');
+          toast.success('Nome copiado!');
+        }}
+        className="flex-shrink-0 bg-church-gold-500 hover:bg-church-gold-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center space-x-2 w-full sm:w-auto"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        <span className="text-sm sm:text-base">Copiar</span>
+      </button>
+    </div>
+  </div>
+</div>
 
             <div className="space-y-2 text-sm text-church-blue-600">
               <p className="flex items-center justify-center">
@@ -219,7 +219,7 @@ export const NossaDoacoesComponent = () => {
           </div>
         </div>
 
-        {/* Formulário de reportar pagamento */}
+ 
         <FormularioDoacaoComponent />
 
         {/* Call to action final */}
