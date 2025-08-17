@@ -1,4 +1,3 @@
-// @/app/comunidades/page.tsx
 
 import { IComunidadeResponse } from '@/insfractucture/interfaces/comunidade/comunidades.interfaces';
 import { NossaComunidadesComponent } from './components/NossaComunidadesComponent';
@@ -25,7 +24,7 @@ async function getComunidadesGraphQL(page: number = 1): Promise<{
       pagination: response.pagination
     };
   } catch (error) {
-    console.error('Error fetching comunidades from GraphQL:', error);
+    console.error("Error al cargar las comunidades desde GraphQL:", error);
     return {
       comunidades: [],
       error: 'Error al cargar las comunidades desde GraphQL'
@@ -40,8 +39,6 @@ interface ComunidadesPageProps {
 export default async function ComunidadesPage({ searchParams }: ComunidadesPageProps) {
   const resolvedSearchParams = await searchParams;
   const page = Number(resolvedSearchParams.page) || 1;
-    
-  console.log('🔄 Usando GraphQL API para Comunidades...');
   const { comunidades, error } = await getComunidadesGraphQL(page);
     
   if (error) {

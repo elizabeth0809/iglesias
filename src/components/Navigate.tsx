@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
-import { Menu, X, Home, Calendar, BookOpen, Volume2, Users, ChevronRight } from "lucide-react";
+import { Menu, X, Home, Calendar, BookOpen, Volume2, Users, ChevronRight, Heart } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Início", icon: Home },
@@ -12,8 +12,8 @@ const navItems = [
   { href: "/blog", label: "Blogs", icon: BookOpen },
   { href: "/sermones", label: "Sermões", icon: Volume2 },
   { href: "/comunidade", label: "nossa comunidade", icon: Users },
+  { href: "/donations", label: "Doações", icon: Heart },
 ];
-
 export function Navigation() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
