@@ -78,10 +78,7 @@ export const NossaDoacoesComponent = () => {
             <span className="text-church-gold-500">Doações</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-church-blue-600 max-w-3xl mx-auto leading-relaxed mb-8">
-            Contribua para a obra de Deus e faça parte desta família espiritual
-          </p>
-
+    
           {/* Versículo bíblico */}
           <div className={`max-w-4xl mx-auto mb-12 transition-all duration-1000 ease-out delay-200 ${
             isLoaded ? 'transform translate-y-0 opacity-100' : 'transform translate-y-8 opacity-0'
