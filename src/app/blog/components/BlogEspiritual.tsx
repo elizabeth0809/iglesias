@@ -8,11 +8,45 @@ import { useEffect, useState } from 'react';
 
 interface EntradasBlogsComponentProps {
   blogs: IBlogResponse[];
+  currentLocale?: string; // Añadir locale opcional
 }
 
-export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) => {
+// Traducciones
+const translations = {
+  pt: {
+    blogTitle: 'Blog',
+    blogSubtitle: 'Espiritual',
+    description: 'Reflexões, estudos bíblicos e inspirações para fortalecer sua fé e crescimento espiritual',
+    articlesPublished: 'Artigos Publicados',
+    infiniteInspiration: 'Inspiração Infinita',
+    madeWithLove: 'Feito com Amor',
+    noArticlesTitle: 'Nenhum artigo disponível',
+    noArticlesDescription: 'Os artigos do blog aparecerão aqui quando estiverem disponíveis. Fique atento às nossas publicações!',
+    reflection: 'Reflexão',
+    readFullArticle: 'Ler artigo completo',
+    readingTime: 'min'
+  },
+  es: {
+    blogTitle: 'Blog',
+    blogSubtitle: 'Espiritual',
+    description: 'Reflexiones, estudios bíblicos e inspiraciones para fortalecer tu fe y crecimiento espiritual',
+    articlesPublished: 'Artículos Publicados',
+    infiniteInspiration: 'Inspiración Infinita',
+    madeWithLove: 'Hecho con Amor',
+    noArticlesTitle: 'No hay artículos disponibles',
+    noArticlesDescription: 'Los artículos del blog aparecerán aquí cuando estén disponibles. ¡Mantente atento a nuestras publicaciones!',
+    reflection: 'Reflexión',
+    readFullArticle: 'Leer artículo completo',
+    readingTime: 'min'
+  }
+};
+
+export const EntradasBlogsComponent = ({ blogs, currentLocale = 'pt' }: EntradasBlogsComponentProps) => {
   const [mounted, setMounted] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  // Obtener traducciones según el idioma actual
+  const t = translations[currentLocale as keyof typeof translations] || translations.pt;
 
   useEffect(() => {
     setMounted(true);
@@ -21,8 +55,11 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
 
   const formatDate = (dateString: string) => {
     if (!mounted) return '';
-        
-    return new Date(dateString).toLocaleDateString('pt-BR', {
+    
+    // Formatear fecha según el idioma
+    const locale = currentLocale === 'es' ? 'es-ES' : 'pt-BR';
+    
+    return new Date(dateString).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -81,12 +118,12 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold text-church-blue-900 mb-4">
-            Blog
-            <span className="text-church-blue-500 ml-2">Espiritual</span>
+            {t.blogTitle}
+            <span className="text-church-blue-500 ml-2">{t.blogSubtitle}</span>
           </h1>
           
           <p className="text-lg md:text-xl text-church-blue-600 max-w-3xl mx-auto leading-relaxed">
-            Reflexões, estudos bíblicos e inspirações para fortalecer sua fé e crescimento espiritual
+            {t.description}
           </p>
 
           {/* Stats inspiracionais */}
@@ -98,7 +135,7 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                 {blogs.length}+
               </div>
               <p className="text-sm text-church-blue-600">
-                Artigos Publicados
+                {t.articlesPublished}
               </p>
             </div>
 
@@ -109,7 +146,7 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                 ∞
               </div>
               <p className="text-sm text-church-blue-600">
-                Inspiração Infinita
+                {t.infiniteInspiration}
               </p>
             </div>
 
@@ -120,7 +157,7 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                 💝
               </div>
               <p className="text-sm text-church-blue-600">
-                Feito com Amor
+                {t.madeWithLove}
               </p>
             </div>
           </div>
@@ -135,10 +172,10 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                 <BookOpen className="h-10 w-10 text-church-blue-600" />
               </div>
               <h3 className="text-2xl font-bold text-church-blue-900 mb-3">
-                Nenhum artigo disponível
+                {t.noArticlesTitle}
               </h3>
               <p className="text-church-blue-600 leading-relaxed">
-                Os artigos do blog aparecerão aqui quando estiverem disponíveis. Fique atento às nossas publicações!
+                {t.noArticlesDescription}
               </p>
             </div>
           </div>
@@ -155,7 +192,7 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <Link
-                  href={`/blog/${post.slug}`}
+                  href={`/blog/${post.slug}${currentLocale === 'es' ? '?locale=es' : ''}`}
                   className="block group"
                 >
                   <article className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-3 border border-church-sky-200 relative">
@@ -178,7 +215,7 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                       {/* Badge de categoría */}
                       <div className="absolute top-4 left-4">
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-church-blue-500 text-white shadow-lg backdrop-blur-sm">
-                          📖 Reflexão
+                          📖 {t.reflection}
                         </span>
                       </div>
 
@@ -186,7 +223,7 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                       <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                         <div className="bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
                           <Eye className="w-3 h-3 text-white" />
-                          <span className="text-xs text-white font-medium">5 min</span>
+                          <span className="text-xs text-white font-medium">5 {t.readingTime}</span>
                         </div>
                       </div>
                     </div>
@@ -216,7 +253,7 @@ export const EntradasBlogsComponent = ({ blogs }: EntradasBlogsComponentProps) =
                       <div className="pt-4 border-t border-church-sky-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <div className="flex items-center justify-between">
                           <span className="text-church-blue-500 font-medium text-sm">
-                            Ler artigo completo
+                            {t.readFullArticle}
                           </span>
                           <ArrowRight className="w-4 h-4 text-church-blue-500 group-hover:translate-x-1 transition-transform duration-300" />
                         </div>

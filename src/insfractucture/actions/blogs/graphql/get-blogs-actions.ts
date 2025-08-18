@@ -20,6 +20,99 @@ interface BlogGraphQLActionResponse {
   };
 }
 
+export const blogGetSpanishGraphQLAction = async ({
+  page = 1,
+  pageSize = 10,
+}: BlogGraphQLProps): Promise<BlogGraphQLActionResponse> => {
+  try {
+    const query = `
+      query GetBlogsInSpanish($page: Int, $pageSize: Int) {
+        blogs(locale: "es", pagination: { page: $page, pageSize: $pageSize }) {
+          data {
+            id
+            attributes {
+              name
+              slug
+              description
+              content
+              locale
+              publishedAt
+              createdAt
+              updatedAt
+              localizations {
+                data {
+                  id
+                  attributes {
+                    locale
+                    name
+                    slug
+                  }
+                }
+              }
+              image {
+                data {
+                  attributes {
+                    name
+                    url
+                  }
+                }
+              }
+              category {
+                data {
+                  id
+                  attributes {
+                    name
+                  }
+                }
+              }
+            }
+          }
+          meta {
+            pagination {
+              total
+              page
+              pageSize
+              pageCount
+            }
+          }
+        }
+      }
+    `;
+
+    console.log('🇪🇸 Cargando blogs en español...');
+
+    const response = await axios.post(
+      strapiGraphQLURL,
+      {
+        query,
+        variables: {
+          page,
+          pageSize,
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.data.errors) {
+      console.error("GraphQL errors:", response.data.errors);
+      throw new Error("GraphQL query failed");
+    }
+
+    console.log('✅ Blogs en español cargados:', response.data.data.blogs.data.length);
+
+    const mappedResponse = BlogMappers.fromStrapiGraphQLResponseToEntity(response.data);
+    return mappedResponse;
+  } catch (error) {
+    console.error("Error fetching Spanish blog data from GraphQL:", error);
+    throw error;
+  }
+};
+
+
 export const blogGetAllGraphQLAction = async ({
   page = 1,
   pageSize = 10,
