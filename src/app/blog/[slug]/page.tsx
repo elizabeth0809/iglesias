@@ -21,7 +21,7 @@ import {
   blogGetBySlugSpanishGraphQLAction 
 } from "@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions";
 import { BlogShareWrapper } from "@/app/components/blogShared";
-import { LanguageSelector } from "@/components/selectorIdioma";
+
 
 // Tipos para los componentes de ReactMarkdown
 interface MarkdownComponentProps {
@@ -306,7 +306,7 @@ export default async function BlogDetailPage({ params, searchParams }: BlogDetai
             {t.backToBlog}
           </Link>
 
-          <LanguageSelector currentLocale={locale} />
+      
         </div>
 
         <article className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-church-sky-200">
