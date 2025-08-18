@@ -15,8 +15,13 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
-import { blogGetBySlugGraphQLAction } from "@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions";
+// 🔧 CAMBIO: Importar ambos actions
+import { 
+  blogGetBySlugGraphQLAction,
+  blogGetBySlugSpanishGraphQLAction 
+} from "@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions";
 import { BlogShareWrapper } from "@/app/components/blogShared";
+import { LanguageSelector } from "@/components/selectorIdioma";
 
 // Tipos para los componentes de ReactMarkdown
 interface MarkdownComponentProps {
@@ -36,48 +41,77 @@ interface ImageProps extends MarkdownComponentProps {
   alt?: string;
 }
 
+// 🔧 FUNCIÓN: getBlogDetails usando actions específicos por idioma
 async function getBlogDetails(
-  slug: string
+  slug: string,
+  locale: string = "pt"
 ): Promise<{ blog: IBlogResponse | null; error?: string }> {
   try {
-    console.log("🔄 Obteniendo blog por slug desde GraphQL:", slug);
-    const blog = await blogGetBySlugGraphQLAction(slug);
+    console.log(`🔄 Obteniendo blog por slug desde GraphQL: ${slug} (${locale})`);
+    
+    let blog: IBlogResponse | null = null;
+    
+    // Usar el action correspondiente según el locale
+    if (locale === "es") {
+      console.log("🇪🇸 Usando action para español con locale específico...");
+      try {
+        blog = await blogGetBySlugSpanishGraphQLAction(slug);
+      } catch (spanishError) {
+        console.warn("⚠️ Error al cargar blog en español, intentando fallback a portugués...", spanishError);
+        blog = await blogGetBySlugGraphQLAction(slug);
+      }
+    } else {
+      console.log("🇧🇷 Usando action para portugués...");
+      blog = await blogGetBySlugGraphQLAction(slug);
+    }
 
     if (!blog) {
-      console.log("❌ Blog no encontrado con slug:", slug);
+      console.log(`❌ Blog no encontrado con slug: ${slug} (${locale})`);
       return { blog: null };
     }
 
-    console.log("✅ Blog encontrado:", blog.title);
+    console.log(`✅ Blog encontrado: "${blog.title}" (${locale})`);
     return { blog };
   } catch (error) {
-    console.error("Error fetching blog details from GraphQL:", error);
+    console.error(`Error fetching blog details from GraphQL (${slug}, ${locale}):`, error);
+    
     return {
       blog: null,
-      error: "Error al cargar el blog desde GraphQL",
+      error: locale === 'es' 
+        ? "Error al cargar el blog desde GraphQL"
+        : "Erro ao carregar o blog do GraphQL",
     };
   }
 }
 
+// 🔧 CAMBIO: Interface actualizada para incluir searchParams
 interface BlogDetailPageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ locale?: string }>;
 }
 
-export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
+export default async function BlogDetailPage({ params, searchParams }: BlogDetailPageProps) {
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  
   const { slug } = resolvedParams;
+  const locale = resolvedSearchParams.locale || "pt"; // Por defecto portugués
 
-  const { blog, error } = await getBlogDetails(slug);
+  console.log(`🌐 Cargando blog individual: ${slug} en idioma: ${locale}`);
+  
+  const { blog, error } = await getBlogDetails(slug, locale);
 
   if (error || !blog) {
-    console.log("❌ Blog no encontrado o error:", { slug, error });
+    console.log("❌ Blog no encontrado o error:", { slug, locale, error });
     notFound();
   }
 
+  // 🔧 CAMBIO: Función de formateo de fecha según locale
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString("pt-BR", {
+      const localeCode = locale === "es" ? "es-ES" : "pt-BR";
+      return date.toLocaleDateString(localeCode, {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -88,14 +122,59 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     }
   };
 
+  // 🔧 CAMBIO: Función de tiempo de lectura traducida
   const estimateReadingTime = (content: string) => {
     const wordsPerMinute = 200;
     const wordCount = content.split(/\s+/).length;
     const minutes = Math.ceil(wordCount / wordsPerMinute);
-    return `${minutes} min de leitura`;
+    return locale === "es" 
+      ? `${minutes} min de lectura`
+      : `${minutes} min de leitura`;
   };
 
-  // Componentes personalizados para el markdown
+  // 🔧 CAMBIO: Traducciones para la interfaz
+  const translations = {
+    pt: {
+      backToBlog: "Voltar ao blog",
+      spiritualReflection: "Reflexão Espiritual",
+      publishedOn: "Publicado em",
+      readingTime: "Tempo de leitura",
+      status: "Status",
+      published: "✅ Publicado",
+      draft: "📝 Rascunho",
+      noContent: "Não há conteúdo disponível para esta entrada.",
+      updatedOn: "Atualizado em",
+      likedReflection: "Gostou desta reflexão?",
+      exploreMore: "Explore mais conteúdos espirituais em nosso blog",
+      viewMoreEntries: "Ver mais entradas do blog",
+      share: "Compartilhar Reflexão",
+      copyLink: "Copiar Link do Blog",
+      shared: "Reflexão Compartilhada!",
+      toastMessage: "Link da reflexão copiado para a área de transferência!"
+    },
+    es: {
+      backToBlog: "Volver al blog",
+      spiritualReflection: "Reflexión Espiritual",
+      publishedOn: "Publicado el",
+      readingTime: "Tiempo de lectura",
+      status: "Estado",
+      published: "✅ Publicado",
+      draft: "📝 Borrador",
+      noContent: "No hay contenido disponible para esta entrada.",
+      updatedOn: "Actualizado el",
+      likedReflection: "¿Te gustó esta reflexión?",
+      exploreMore: "Explora más contenidos espirituales en nuestro blog",
+      viewMoreEntries: "Ver más entradas del blog",
+      share: "Compartir Reflexión",
+      copyLink: "Copiar Enlace del Blog",
+      shared: "¡Reflexión Compartida!",
+      toastMessage: "¡Enlace de la reflexión copiado al portapapeles!"
+    }
+  };
+
+  const t = translations[locale as keyof typeof translations] || translations.pt;
+
+  // Componentes personalizados para el markdown (mantenidos igual)
   const markdownComponents = {
     h1: ({ children }: MarkdownComponentProps) => (
       <h1 className="text-3xl font-bold text-church-blue-900 mb-6 mt-8 border-b-2 border-church-gold-500 pb-2">
@@ -217,15 +296,17 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       </div>
 
       <div className="container mx-auto px-4 py-12 max-w-4xl relative z-10">
-        {/* Botón de volver mejorado */}
-        <div className="mb-8">
+        {/* 🔧 CAMBIO: Header con selector de idioma */}
+        <div className="flex justify-between items-center mb-8">
           <Link
-            href="/blog"
+            href={`/blog${locale === 'es' ? '?locale=es' : ''}`}
             className="group inline-flex items-center px-4 py-2 bg-church-blue-500 text-white rounded-lg hover:bg-church-blue-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
             <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
-            Voltar ao blog
+            {t.backToBlog}
           </Link>
+
+          <LanguageSelector currentLocale={locale} />
         </div>
 
         <article className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-church-sky-200">
@@ -247,11 +328,11 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             {/* Badges flotantes */}
             <div className="absolute top-6 left-6">
               <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-church-blue-500 text-white shadow-lg backdrop-blur-sm">
-                📖 Reflexão Espiritual
+                📖 {t.spiritualReflection}
               </span>
             </div>
 
-            {/* ShareButton flotante reemplazando el botón original */}
+            {/* ShareButton flotante */}
             <div className="absolute top-6 right-6">
               <BlogShareWrapper
                 title={blog.title}
@@ -260,9 +341,9 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 variant="floating"
                 size="md"
                 className="bg-church-gold-500/80 hover:bg-church-gold-600"
-                shareText="Compartilhar Reflexão"
-                copyText="Copiar Link do Blog"
-                toastMessage="Link da reflexão copiado para a área de transferência!"
+                shareText={t.share}
+                copyText={t.copyLink}
+                toastMessage={t.toastMessage}
               />
             </div>
 
@@ -319,7 +400,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   </div>
                   <div>
                     <p className="text-sm text-church-blue-600 font-medium">
-                      Publicado em
+                      {t.publishedOn}
                     </p>
                     <p className="text-church-blue-900 font-semibold">
                       {formatDate(blog.created_at)}
@@ -335,7 +416,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   </div>
                   <div>
                     <p className="text-sm text-church-gold-600 font-medium">
-                      Tempo de leitura
+                      {t.readingTime}
                     </p>
                     <p className="text-church-gold-900 font-semibold">
                       {blog.content
@@ -353,12 +434,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   </div>
                   <div>
                     <p className="text-sm text-church-red-600 font-medium">
-                      Status
+                      {t.status}
                     </p>
                     <p className="text-church-red-900 font-semibold">
-                      {blog.status === "published"
-                        ? "✅ Publicado"
-                        : "📝 Rascunho"}
+                      {blog.status === "published" ? t.published : t.draft}
                     </p>
                   </div>
                 </div>
@@ -398,7 +477,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                         <BookOpen className="w-8 h-8 text-church-blue-600" />
                       </div>
                       <p className="text-church-blue-600 text-lg">
-                        Não há conteúdo disponível para esta entrada.
+                        {t.noContent}
                       </p>
                     </div>
                   )}
@@ -414,14 +493,14 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     <div className="flex items-center space-x-2 mb-2">
                       <div className="w-2 h-2 bg-church-gold-500 rounded-full"></div>
                       <span className="text-sm font-medium">
-                        Publicado em {formatDate(blog.created_at)}
+                        {t.publishedOn} {formatDate(blog.created_at)}
                       </span>
                     </div>
                     {blog.updated_at !== blog.created_at && (
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-church-blue-500 rounded-full"></div>
                         <span className="text-sm">
-                          Atualizado em {formatDate(blog.updated_at)}
+                          {t.updatedOn} {formatDate(blog.updated_at)}
                         </span>
                       </div>
                     )}
@@ -435,9 +514,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                           : "bg-gray-500 text-white"
                       }`}
                     >
-                      {blog.status === "published"
-                        ? "✨ Publicado"
-                        : "📝 Rascunho"}
+                      {blog.status === "published" ? t.published : t.draft}
                     </span>
                   </div>
                 </div>
@@ -451,18 +528,18 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           <div className="bg-gradient-to-r from-church-blue-500 to-church-gold-500 p-8 rounded-2xl text-white shadow-xl">
             <h3 className="text-2xl font-bold mb-3 flex items-center justify-center">
               <Sparkles className="w-6 h-6 mr-2" />
-              Gostou desta reflexão?
+              {t.likedReflection}
             </h3>
             <p className="text-lg mb-6 opacity-90">
-              Explore mais conteúdos espirituais em nosso blog
+              {t.exploreMore}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/blog"
+                href={`/blog${locale === 'es' ? '?locale=es' : ''}`}
                 className="group inline-flex items-center justify-center px-8 py-3 bg-white text-church-blue-600 rounded-lg font-semibold hover:bg-church-sky-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 <BookOpen className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                Ver mais entradas do blog
+                {t.viewMoreEntries}
               </Link>
 
               {/* ShareButton adicional en el CTA */}
@@ -472,10 +549,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 variant="primary"
                 size="md"
                 className="bg-church-gold-500 hover:bg-church-gold-600"
-                shareText="Compartilhar Reflexão"
-                copyText="Copiar Link"
-                successText="Reflexão Compartilhada!"
-                toastMessage="Link da reflexão espiritual copiado!"
+                shareText={t.share}
+                copyText={t.copyLink}
+                successText={t.shared}
+                toastMessage={t.toastMessage}
               />
             </div>
           </div>
@@ -485,33 +562,55 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   );
 }
 
-// Generar metadata dinámico para SEO (mantenido igual)
+// 🔧 CAMBIO: Generar metadata dinámico con soporte para locale
 export async function generateMetadata({
   params,
+  searchParams,
 }: BlogDetailPageProps): Promise<Metadata> {
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  
   const { slug } = resolvedParams;
+  const locale = resolvedSearchParams.locale || "pt";
 
   try {
-    const { blog } = await getBlogDetails(slug);
+    const { blog } = await getBlogDetails(slug, locale);
 
     if (!blog) {
       return {
-        title: "Blog não encontrado - Igreja Batista Renovada Sonho de Deus",
-        description: "A entrada do blog que você procura não existe.",
+        title: locale === "es" 
+          ? "Blog no encontrado - Iglesia Bautista Renovada Sueño de Dios"
+          : "Blog não encontrado - Igreja Batista Renovada Sonho de Deus",
+        description: locale === "es"
+          ? "La entrada del blog que buscas no existe."
+          : "A entrada do blog que você procura não existe.",
       };
     }
 
+    const siteTitle = locale === "es"
+      ? "Blog Espiritual - Iglesia Bautista Renovada Sueño de Dios"
+      : "Blog Espiritual - Igreja Batista Renovada Sonho de Deus";
+
     return {
-      title: `${blog.title} | Blog Espiritual - Igreja Batista Renovada Sonho de Deus`,
+      title: `${blog.title} | ${siteTitle}`,
       description:
-        blog.description || `Leia ${blog.title} em nosso blog espiritual`,
-      keywords: `blog espiritual, reflexão cristã, ${blog.title}, ${blog.category_id}, igreja batista, fé, crescimento espiritual`,
-      authors: [{ name: "Igreja Batista Renovada Sonho de Deus" }],
+        blog.description || (locale === "es" 
+          ? `Lee ${blog.title} en nuestro blog espiritual`
+          : `Leia ${blog.title} em nosso blog espiritual`),
+      keywords: locale === "es"
+        ? `blog espiritual, reflexión cristiana, ${blog.title}, iglesia bautista, fe, crecimiento espiritual`
+        : `blog espiritual, reflexão cristã, ${blog.title}, igreja batista, fé, crescimento espiritual`,
+      authors: [{ 
+        name: locale === "es" 
+          ? "Iglesia Bautista Renovada Sueño de Dios"
+          : "Igreja Batista Renovada Sonho de Deus" 
+      }],
       openGraph: {
         title: blog.title,
         description:
-          blog.description || `Leia ${blog.title} em nosso blog espiritual`,
+          blog.description || (locale === "es"
+            ? `Lee ${blog.title} en nuestro blog espiritual`
+            : `Leia ${blog.title} em nosso blog espiritual`),
         type: "article",
         publishedTime: blog.created_at,
         modifiedTime: blog.updated_at,
@@ -525,13 +624,15 @@ export async function generateMetadata({
               },
             ]
           : [],
-        url: `/blog/${slug}`,
+        url: `/blog/${slug}${locale === 'es' ? '?locale=es' : ''}`,
       },
       twitter: {
         card: "summary_large_image",
         title: blog.title,
         description:
-          blog.description || `Leia ${blog.title} em nosso blog espiritual`,
+          blog.description || (locale === "es"
+            ? `Lee ${blog.title} en nuestro blog espiritual`
+            : `Leia ${blog.title} em nosso blog espiritual`),
         images: blog.image ? [blog.image] : [],
       },
       robots: {
@@ -542,8 +643,12 @@ export async function generateMetadata({
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
-      title: "Erro | Blog Espiritual - Igreja Batista Renovada Sonho de Deus",
-      description: "Erro ao carregar a entrada do blog",
+      title: locale === "es"
+        ? "Error | Blog Espiritual - Iglesia Bautista Renovada Sueño de Dios"
+        : "Erro | Blog Espiritual - Igreja Batista Renovada Sonho de Deus",
+      description: locale === "es"
+        ? "Error al cargar la entrada del blog"
+        : "Erro ao carregar a entrada do blog",
     };
   }
 }

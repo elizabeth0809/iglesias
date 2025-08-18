@@ -198,6 +198,89 @@ export const blogGetAllGraphQLAction = async ({
     throw error;
   }
 };
+export const blogGetBySlugSpanishGraphQLAction = async ({
+  slug
+}: { slug: string }): Promise<BlogGraphQLActionResponse> => {
+  try {
+    const query = `
+      query GetBlogBySlugSpanish($slug: String!) {
+        blogs(locale: "es", filters: { slug: { eq: $slug } }) {
+          data {
+            id
+            attributes {
+              name
+              slug
+              description
+              content
+              locale
+              publishedAt
+              createdAt
+              updatedAt
+              localizations {
+                data {
+                  id
+                  attributes {
+                    locale
+                    name
+                    slug
+                  }
+                }
+              }
+              image {
+                data {
+                  attributes {
+                    name
+                    url
+                  }
+                }
+              }
+              category {
+                data {
+                  id
+                  attributes {
+                    name
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    console.log(`🇪🇸 Cargando blog individual en español por slug: ${slug}`);
+
+    const response = await axios.post(
+      strapiGraphQLURL,
+      {
+        query,
+        variables: { slug },
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (response.data.errors) {
+      console.error("GraphQL errors:", response.data.errors);
+      throw new Error("GraphQL query failed");
+    }
+
+    // Verificar si encontró el blog
+    if (!response.data.data.blogs.data.length) {
+      throw new Error(`Blog en español con slug "${slug}" no encontrado`);
+    }
+
+    console.log(`✅ Blog en español encontrado: "${response.data.data.blogs.data[0].attributes.name}"`);
+
+    const mappedResponse = BlogMappers.fromStrapiGraphQLResponseToEntity(response.data);
+    return mappedResponse;
+  } catch (error) {
+    console.error(`Error fetching Spanish blog by slug (${slug}):`, error);
+    throw error;
+  }
+};
+
 
 // Action simplificado que devuelve solo el array de blogs (sin paginación)
 export const blogGetAllGraphQLSimpleAction = async (): Promise<IBlogResponse[]> => {
