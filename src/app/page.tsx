@@ -157,8 +157,5 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
   },
-  verification: {
-    // google: 'seu-codigo-google-aqui',
-    // bing: 'seu-codigo-bing-aqui',
-  },
+
 };
