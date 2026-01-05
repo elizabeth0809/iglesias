@@ -16,12 +16,12 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { IBlogResponse } from "@/insfractucture/interfaces/blogs/blog.interfaces";
 // 🔧 CAMBIO: Importar ambos actions
-import { 
+import {
   blogGetBySlugGraphQLAction,
-  blogGetBySlugSpanishGraphQLAction 
+  blogGetBySlugSpanishGraphQLAction,
 } from "@/insfractucture/actions/eventos/graphql/get-eventos-by-slugs.actions";
 import { BlogShareWrapper } from "@/app/components/blogShared";
-
+import type { Components } from "react-markdown";
 
 // Tipos para los componentes de ReactMarkdown
 interface MarkdownComponentProps {
@@ -47,17 +47,22 @@ async function getBlogDetails(
   locale: string = "pt"
 ): Promise<{ blog: IBlogResponse | null; error?: string }> {
   try {
-    console.log(`🔄 Obteniendo blog por slug desde GraphQL: ${slug} (${locale})`);
-    
+    console.log(
+      `🔄 Obteniendo blog por slug desde GraphQL: ${slug} (${locale})`
+    );
+
     let blog: IBlogResponse | null = null;
-    
+
     // Usar el action correspondiente según el locale
     if (locale === "es") {
       console.log("🇪🇸 Usando action para español con locale específico...");
       try {
         blog = await blogGetBySlugSpanishGraphQLAction(slug);
       } catch (spanishError) {
-        console.warn("⚠️ Error al cargar blog en español, intentando fallback a portugués...", spanishError);
+        console.warn(
+          "⚠️ Error al cargar blog en español, intentando fallback a portugués...",
+          spanishError
+        );
         blog = await blogGetBySlugGraphQLAction(slug);
       }
     } else {
@@ -73,13 +78,17 @@ async function getBlogDetails(
     console.log(`✅ Blog encontrado: "${blog.title}" (${locale})`);
     return { blog };
   } catch (error) {
-    console.error(`Error fetching blog details from GraphQL (${slug}, ${locale}):`, error);
-    
+    console.error(
+      `Error fetching blog details from GraphQL (${slug}, ${locale}):`,
+      error
+    );
+
     return {
       blog: null,
-      error: locale === 'es' 
-        ? "Error al cargar el blog desde GraphQL"
-        : "Erro ao carregar o blog do GraphQL",
+      error:
+        locale === "es"
+          ? "Error al cargar el blog desde GraphQL"
+          : "Erro ao carregar o blog do GraphQL",
     };
   }
 }
@@ -90,15 +99,18 @@ interface BlogDetailPageProps {
   searchParams: Promise<{ locale?: string }>;
 }
 
-export default async function BlogDetailPage({ params, searchParams }: BlogDetailPageProps) {
+export default async function BlogDetailPage({
+  params,
+  searchParams,
+}: BlogDetailPageProps) {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
-  
+
   const { slug } = resolvedParams;
   const locale = resolvedSearchParams.locale || "pt"; // Por defecto portugués
 
   console.log(`🌐 Cargando blog individual: ${slug} en idioma: ${locale}`);
-  
+
   const { blog, error } = await getBlogDetails(slug, locale);
 
   if (error || !blog) {
@@ -127,7 +139,7 @@ export default async function BlogDetailPage({ params, searchParams }: BlogDetai
     const wordsPerMinute = 200;
     const wordCount = content.split(/\s+/).length;
     const minutes = Math.ceil(wordCount / wordsPerMinute);
-    return locale === "es" 
+    return locale === "es"
       ? `${minutes} min de lectura`
       : `${minutes} min de leitura`;
   };
@@ -150,7 +162,7 @@ export default async function BlogDetailPage({ params, searchParams }: BlogDetai
       share: "Compartilhar Reflexão",
       copyLink: "Copiar Link do Blog",
       shared: "Reflexão Compartilhada!",
-      toastMessage: "Link da reflexão copiado para a área de transferência!"
+      toastMessage: "Link da reflexão copiado para a área de transferência!",
     },
     es: {
       backToBlog: "Volver al blog",
@@ -168,14 +180,15 @@ export default async function BlogDetailPage({ params, searchParams }: BlogDetai
       share: "Compartir Reflexión",
       copyLink: "Copiar Enlace del Blog",
       shared: "¡Reflexión Compartida!",
-      toastMessage: "¡Enlace de la reflexión copiado al portapapeles!"
-    }
+      toastMessage: "¡Enlace de la reflexión copiado al portapapeles!",
+    },
   };
 
-  const t = translations[locale as keyof typeof translations] || translations.pt;
+  const t =
+    translations[locale as keyof typeof translations] || translations.pt;
 
   // Componentes personalizados para el markdown (mantenidos igual)
-  const markdownComponents = {
+  const markdownComponents: Components = {
     h1: ({ children }: MarkdownComponentProps) => (
       <h1 className="text-3xl font-bold text-church-blue-900 mb-6 mt-8 border-b-2 border-church-gold-500 pb-2">
         {children}
@@ -264,17 +277,22 @@ export default async function BlogDetailPage({ params, searchParams }: BlogDetai
       </td>
     ),
     hr: () => <hr className="my-8 border-t-2 border-church-gold-300" />,
-    img: ({ src, alt }: ImageProps) => (
-      <div className="my-6">
-        <Image
-          src={src || ""}
-          alt={alt || "Imagen del blog"}
-          width={800}
-          height={400}
-          className="rounded-lg shadow-lg mx-auto"
-        />
-      </div>
-    ),
+    img: ({ src, alt }) => {
+      // Manejar el caso donde src puede ser Blob
+      const imageSrc = typeof src === "string" ? src : "";
+
+      return (
+        <div className="my-6">
+          <Image
+            src={imageSrc || "/placeholder.svg"}
+            alt={alt || "Imagen del blog"}
+            width={800}
+            height={400}
+            className="rounded-lg shadow-lg mx-auto"
+          />
+        </div>
+      );
+    },
   };
 
   return (
@@ -299,14 +317,12 @@ export default async function BlogDetailPage({ params, searchParams }: BlogDetai
         {/* 🔧 CAMBIO: Header con selector de idioma */}
         <div className="flex justify-between items-center mb-8">
           <Link
-            href={`/blog${locale === 'es' ? '?locale=es' : ''}`}
+            href={`/blog${locale === "es" ? "?locale=es" : ""}`}
             className="group inline-flex items-center px-4 py-2 bg-church-blue-500 text-white rounded-lg hover:bg-church-blue-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
             <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
             {t.backToBlog}
           </Link>
-
-      
         </div>
 
         <article className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-church-sky-200">
@@ -530,12 +546,10 @@ export default async function BlogDetailPage({ params, searchParams }: BlogDetai
               <Sparkles className="w-6 h-6 mr-2" />
               {t.likedReflection}
             </h3>
-            <p className="text-lg mb-6 opacity-90">
-              {t.exploreMore}
-            </p>
+            <p className="text-lg mb-6 opacity-90">{t.exploreMore}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href={`/blog${locale === 'es' ? '?locale=es' : ''}`}
+                href={`/blog${locale === "es" ? "?locale=es" : ""}`}
                 className="group inline-flex items-center justify-center px-8 py-3 bg-white text-church-blue-600 rounded-lg font-semibold hover:bg-church-sky-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 <BookOpen className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
@@ -569,7 +583,7 @@ export async function generateMetadata({
 }: BlogDetailPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
-  
+
   const { slug } = resolvedParams;
   const locale = resolvedSearchParams.locale || "pt";
 
@@ -578,37 +592,46 @@ export async function generateMetadata({
 
     if (!blog) {
       return {
-        title: locale === "es" 
-          ? "Blog no encontrado - Iglesia Bautista Renovada Sueño de Dios"
-          : "Blog não encontrado - Igreja Batista Renovada Sonho de Deus",
-        description: locale === "es"
-          ? "La entrada del blog que buscas no existe."
-          : "A entrada do blog que você procura não existe.",
+        title:
+          locale === "es"
+            ? "Blog no encontrado - Iglesia Bautista Renovada Sueño de Dios"
+            : "Blog não encontrado - Igreja Batista Renovada Sonho de Deus",
+        description:
+          locale === "es"
+            ? "La entrada del blog que buscas no existe."
+            : "A entrada do blog que você procura não existe.",
       };
     }
 
-    const siteTitle = locale === "es"
-      ? "Blog Espiritual - Iglesia Bautista Renovada Sueño de Dios"
-      : "Blog Espiritual - Igreja Batista Renovada Sonho de Deus";
+    const siteTitle =
+      locale === "es"
+        ? "Blog Espiritual - Iglesia Bautista Renovada Sueño de Dios"
+        : "Blog Espiritual - Igreja Batista Renovada Sonho de Deus";
 
     return {
       title: `${blog.title} | ${siteTitle}`,
       description:
-        blog.description || (locale === "es" 
+        blog.description ||
+        (locale === "es"
           ? `Lee ${blog.title} en nuestro blog espiritual`
           : `Leia ${blog.title} em nosso blog espiritual`),
-      keywords: locale === "es"
-        ? `blog espiritual, reflexión cristiana, ${blog.title}, iglesia bautista, fe, crecimiento espiritual`
-        : `blog espiritual, reflexão cristã, ${blog.title}, igreja batista, fé, crescimento espiritual`,
-      authors: [{ 
-        name: locale === "es" 
-          ? "Iglesia Bautista Renovada Sueño de Dios"
-          : "Igreja Batista Renovada Sonho de Deus" 
-      }],
+      keywords:
+        locale === "es"
+          ? `blog espiritual, reflexión cristiana, ${blog.title}, iglesia bautista, fe, crecimiento espiritual`
+          : `blog espiritual, reflexão cristã, ${blog.title}, igreja batista, fé, crescimento espiritual`,
+      authors: [
+        {
+          name:
+            locale === "es"
+              ? "Iglesia Bautista Renovada Sueño de Dios"
+              : "Igreja Batista Renovada Sonho de Deus",
+        },
+      ],
       openGraph: {
         title: blog.title,
         description:
-          blog.description || (locale === "es"
+          blog.description ||
+          (locale === "es"
             ? `Lee ${blog.title} en nuestro blog espiritual`
             : `Leia ${blog.title} em nosso blog espiritual`),
         type: "article",
@@ -624,13 +647,14 @@ export async function generateMetadata({
               },
             ]
           : [],
-        url: `/blog/${slug}${locale === 'es' ? '?locale=es' : ''}`,
+        url: `/blog/${slug}${locale === "es" ? "?locale=es" : ""}`,
       },
       twitter: {
         card: "summary_large_image",
         title: blog.title,
         description:
-          blog.description || (locale === "es"
+          blog.description ||
+          (locale === "es"
             ? `Lee ${blog.title} en nuestro blog espiritual`
             : `Leia ${blog.title} em nosso blog espiritual`),
         images: blog.image ? [blog.image] : [],
@@ -643,12 +667,14 @@ export async function generateMetadata({
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
-      title: locale === "es"
-        ? "Error | Blog Espiritual - Iglesia Bautista Renovada Sueño de Dios"
-        : "Erro | Blog Espiritual - Igreja Batista Renovada Sonho de Deus",
-      description: locale === "es"
-        ? "Error al cargar la entrada del blog"
-        : "Erro ao carregar a entrada do blog",
+      title:
+        locale === "es"
+          ? "Error | Blog Espiritual - Iglesia Bautista Renovada Sueño de Dios"
+          : "Erro | Blog Espiritual - Igreja Batista Renovada Sonho de Deus",
+      description:
+        locale === "es"
+          ? "Error al cargar la entrada del blog"
+          : "Erro ao carregar a entrada do blog",
     };
   }
 }
