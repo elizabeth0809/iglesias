@@ -1,4 +1,4 @@
-// app/eventos/[slug]/page.tsx
+
 import { IEventoResponse } from '@/insfractucture/interfaces/eventos/eventos.interfaces';
 import { notFound } from 'next/navigation';
 import { EventoDetailComponent } from '../components/evento-details.components';
